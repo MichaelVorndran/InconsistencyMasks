@@ -37,7 +37,7 @@ max_blurs = [0,1,1,2,3]
 max_noises = [5, 10, 15, 20, 25]
 brightness_range_alphas = [(0.9, 1.1), (0.8, 1.2), (0.7, 1.3), (0.6, 1.4), (0.5, 1.5)]  
 brightness_range_betas = [(-5, 5), (-10, 10), (-15, 15), (-20, 20), (-25, 25)]
-free_rotation=True
+free_rotation = config['ISIC_2018']['FREE_ROTATION'].lower() == 'true'
 
 
 
