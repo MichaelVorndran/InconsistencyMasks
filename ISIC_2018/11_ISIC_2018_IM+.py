@@ -67,7 +67,7 @@ with tf.device('/gpu:0'):
                 train_unlabeled_pseudo_label_dir_im_images = os.path.join(train_unlabeled_pseudo_label_dir_im, 'images')
                 train_unlabeled_pseudo_label_dir_im_masks = os.path.join(train_unlabeled_pseudo_label_dir_im, 'masks')
 
-                train_unlabeled_pseudo_label_dir_ims_plus = os.path.join(paths.ISIC_2018_BASE_DIR, 'train_unlabeled_predictions', approach, modelname)
+                train_unlabeled_pseudo_label_dir_im_plus = os.path.join(paths.ISIC_2018_BASE_DIR, 'train_unlabeled_predictions', approach, modelname)
                 train_unlabeled_pseudo_label_dir_im_plus_images = os.path.join(train_unlabeled_pseudo_label_dir_im_plus, 'images')
                 train_unlabeled_pseudo_label_dir_im_plus_masks = os.path.join(train_unlabeled_pseudo_label_dir_im_plus, 'masks')
 
@@ -83,7 +83,7 @@ with tf.device('/gpu:0'):
                     best_models.append(best_model)
                 
                 val_mean_im_size = create_pseudo_labels_im_ISIC_2018(best_models, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS, paths.ISIC_2018_VAL_IMAGES_DIR, val_pseudo_label_dir_im, True, EK, DK, BI, BO)
-                test_mean_im_size = create_pseudo_labels_im_ISIC_2018(best_models, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS, paths.ISIC_2018_TEST_IMAGES_DIR, test_pseudo_label_dir_ims, True, EK, DK, BI, BO)
+                test_mean_im_size = create_pseudo_labels_im_ISIC_2018(best_models, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS, paths.ISIC_2018_TEST_IMAGES_DIR, test_pseudo_label_dir_im, True, EK, DK, BI, BO)
                 unlabeled_mean_im_size = create_pseudo_labels_im_ISIC_2018(best_models, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS, paths.ISIC_2018_TRAIN_UNLABELED_IMAGES_DIR, train_unlabeled_pseudo_label_dir_im, True, EK, DK, BI, BO)
 
                 blur = max_blurs[gen]
@@ -91,7 +91,7 @@ with tf.device('/gpu:0'):
                 brightness_range_alpha = brightness_range_alphas[gen]
                 brightness_range_beta = brightness_range_betas[gen]
 
-                create_augment_images_and_masks_ISIC_2018(train_unlabeled_pseudo_label_dir_ims_images, 
+                create_augment_images_and_masks_ISIC_2018(train_unlabeled_pseudo_label_dir_im_images, 
                                                              train_unlabeled_pseudo_label_dir_im_masks, 
                                                              train_unlabeled_pseudo_label_dir_im_plus,
                                                              NUM_IMAGES_IM_PLUS,
@@ -175,6 +175,6 @@ with tf.device('/gpu:0'):
                 with open(os.path.join(paths.ISIC_2018_CSV_DIR, f'mean_im_size_{modelname}.csv'), 'w', encoding='utf-8', newline='') as f:
                     writer = csv.writer(f, delimiter=';')
                     writer.writerow(['val_mean_im_size', 'test_mean_im_size', 'unlabeled_mean_im_size'])
-                    writer.writerow([val_mean_im_size, test_mean_ims_size, unlabeled_mean_im_size])
+                    writer.writerow([val_mean_im_size, test_mean_im_size, unlabeled_mean_im_size])
     
     
