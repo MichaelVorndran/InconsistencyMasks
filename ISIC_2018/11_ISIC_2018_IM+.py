@@ -44,7 +44,7 @@ max_blurs = [0,1,1,2,3]
 max_noises = [5, 10, 15, 20, 25]
 brightness_range_alphas = [(0.9, 1.1), (0.8, 1.2), (0.7, 1.3), (0.6, 1.4), (0.5, 1.5)]  
 brightness_range_betas = [(-5, 5), (-10, 10), (-15, 15), (-20, 20), (-25, 25)]
-free_rotation = config['ISIC_2018']['FREE_ROTATION'].lower() == 'true'
+FREE_ROTATION = config['ISIC_2018']['FREE_ROTATION'].lower() == 'true'
 
 
 with tf.device('/gpu:0'):
@@ -99,7 +99,8 @@ with tf.device('/gpu:0'):
                                                              brightness_range_alpha,
                                                              brightness_range_beta,
                                                              blur,
-                                                             noise)
+                                                             noise,
+                                                             FREE_ROTATION)
 
                
                 for imagename in tqdm(os.listdir(paths.ISIC_2018_TRAIN_LABELED_IMAGES_DIR)):
