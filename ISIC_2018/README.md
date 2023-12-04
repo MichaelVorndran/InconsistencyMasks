@@ -15,11 +15,11 @@ Now go to https://challenge.isic-archive.com/data/#2018 and download all zip-fil
 ## Step 3: Specify the Base Directory and Extract the Downloaded Files
 First, ensure that you've specified your base directory in your config.ini file. For example:
 
-    BASE_DIR = C:/IBAs/ISIC_2018/
+    BASE_DIR = C:/IM/ISIC_2018/
 
 Inside the base directory you've specified, create a folder named original_data. Using the example above, this would be:
 
-    C:/IBAs/ISIC_2018/original_data/
+    C:/IM/ISIC_2018/original_data/
 
 Once the files are downloaded, extract the data into the original_data folder. This can be done using built-in OS tools or third-party tools like 7-Zip or WinRAR.
 
