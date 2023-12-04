@@ -105,8 +105,8 @@ with tf.device('/gpu:0'):
 
                 mse, mae = train_evalnet_ISIC_2018(evalnet_model, 
                                                     main_output_evalnet_im_dir_train, 
-                                                    main_output_evalnet_ims_dir_val, 
-                                                    evalnet_ims_model_filepath_h5, 
+                                                    main_output_evalnet_im_dir_val, 
+                                                    evalnet_im_model_filepath_h5, 
                                                     BATCH_SIZE_EVALNET,
                                                     NUM_EPOCHS_EVALNET)  
 
