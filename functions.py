@@ -2395,7 +2395,7 @@ def get_model_ensemble_prediction_multiclass_soft(models, prepared_image):
 
 
 
-def create_augment_images_and_masks_ISIC_2018(images_path, masks_path, main_output_path, num_images=9, copy_org=True, brightness_range_alpha=(0.5, 1.5), brightness_range_beta=(-25, 25), max_blur=3, max_noise=25):
+def create_augment_images_and_masks_ISIC_2018(images_path, masks_path, main_output_path, num_images=9, copy_org=True, brightness_range_alpha=(0.5, 1.5), brightness_range_beta=(-25, 25), max_blur=3, max_noise=25, free_rotation):
     '''
     Creates augmented versions of images and their corresponding ground truth masks, and saves them to specified output directories.
 
@@ -2446,7 +2446,7 @@ def create_augment_images_and_masks_ISIC_2018(images_path, masks_path, main_outp
 
         for n in range(0,num_images):
 
-            aug_image, aug_mask = augment_image_and_mask(image, mask, brightness_range_alpha, brightness_range_beta, max_blur, max_noise)        
+            aug_image, aug_mask = augment_image_and_mask(image, mask, brightness_range_alpha, brightness_range_beta, max_blur, max_noise, free_rotation)        
     
             cv2.imwrite(os.path.join(images_path_out, f'{imagename[:-4]}_aug_{n}.png'), aug_image)
             cv2.imwrite(os.path.join(masks_path_out, f'{imagename[:-4]}_aug_{n}.png'), aug_mask)
