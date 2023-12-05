@@ -2,7 +2,7 @@ import os
 import configparser
 
 config = configparser.ConfigParser()
-config.read(os.path.join('IM', 'config.ini'))
+config.read(os.path.join('InconsistencyMasks', 'config.ini'))
 
 ISIC_2018_BASE_DIR = config['ISIC_2018']['BASE_DIR']
 
