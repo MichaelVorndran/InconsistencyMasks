@@ -8,7 +8,7 @@ from tqdm import tqdm
 import configparser
 
 config = configparser.ConfigParser()
-config.read(os.path.join('IM', 'config.ini'))
+config.read(os.path.join('InconsistencyMasks', 'config.ini'))
 
 IMAGE_WIDTH = int(config['ISIC_2018']['IMAGE_WIDTH'])
 IMAGE_HEIGHT = int(config['ISIC_2018']['IMAGE_HEIGHT'])
