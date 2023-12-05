@@ -2,7 +2,7 @@
 
 ## Step 1: Create an Account or Log in at the ISIC Archive
 
-Navigate to "https://isic-archive.com/" in your web browser. If you do not already have an account, click on "Create Account" at the top right of the page and fill in the necessary information. Verify your account via email. 
+Navigate to "https://challenge.isic-archive.com/data/#2018" in your web browser. If you do not already have an account, click on "Create Account" at the top right of the page and fill in the necessary information. Verify your account via email. 
 
 
 ## Step 2: Download the Dataset
