@@ -8,7 +8,7 @@ import paths
 import configparser
 
 config = configparser.ConfigParser()
-config.read(os.path.join('IM', 'config.ini'))
+config.read(os.path.join('InconsistencyMasks', 'config.ini'))
 
 SEED = int(config['DEFAULT']['SEED'])
 
