@@ -40,10 +40,10 @@ STEPS_PER_EPOCH = num_imgs // BATCH_SIZE
 
 
 aug_strenghts = ['low', 'mid', 'high'] 
-max_blurs = [1,2,3]
-max_noises = [10, 17, 25]
-brightness_range_alphas = [(0.85, 1.15), (0.7, 1.3), (0.5, 1.5)]  
-brightness_range_betas = [(-10, 10), (-17, 17), (-25, 25)]
+max_blurs = [0,0,1]
+max_noises = [3, 9, 15]
+brightness_range_alphas = [(0.95, 1.05), (0.8, 1.2), (0.6, 1.4)]  
+brightness_range_betas = [(-3, 3), (-9, 9), (-15, 15)]
 
 
 
