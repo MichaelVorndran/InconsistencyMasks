@@ -9,8 +9,12 @@ import paths
 import configparser
 
 # Configuration reading
+script_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(script_dir)
+config_dir = os.path.join(parent_dir, 'config.ini')
+
 config = configparser.ConfigParser()
-config.read(os.path.join('IBAs', 'config.ini'))
+config.read(config_dir)
 
 SEED = int(config['DEFAULT']['SEED'])
 USE_MOD_POS_SIZE = config['HELA']['USE_MOD_POS_SIZE'].lower() == 'true'

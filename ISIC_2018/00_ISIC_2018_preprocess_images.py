@@ -8,8 +8,12 @@ import paths
 from tqdm import tqdm
 import configparser
 
+script_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(script_dir)
+config_dir = os.path.join(parent_dir, 'config.ini')
+
 config = configparser.ConfigParser()
-config.read(os.path.join('InconsistencyMasks', 'config.ini'))
+config.read(config_dir)
 
 IMAGE_WIDTH = int(config['ISIC_2018']['IMAGE_WIDTH'])
 IMAGE_HEIGHT = int(config['ISIC_2018']['IMAGE_HEIGHT'])

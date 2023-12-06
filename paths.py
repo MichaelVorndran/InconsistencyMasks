@@ -1,17 +1,20 @@
+import sys
 import os
 import configparser
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 
 config = configparser.ConfigParser()
-config.read(os.path.join('InconsistencyMasks', 'config.ini'))
+config.read(os.path.join('config.ini'))
 
 ISIC_2018_BASE_DIR = config['ISIC_2018']['BASE_DIR']
 
-ISIC_2018_ORG_TRAIN_IMAGES_DIR = os.path.join(ISIC_2018_BASE_DIR, 'original_data', 'train', 'Images')
-ISIC_2018_ORG_TRAIN_MASKS_DIR = os.path.join(ISIC_2018_BASE_DIR, 'original_data', 'train', 'GT')
-ISIC_2018_ORG_VAL_IMAGES_DIR = os.path.join(ISIC_2018_BASE_DIR, 'original_data', 'val', 'Images')
-ISIC_2018_ORG_VAL_MASKS_DIR = os.path.join(ISIC_2018_BASE_DIR, 'original_data', 'val', 'GT')
-ISIC_2018_ORG_TEST_IMAGES_DIR = os.path.join(ISIC_2018_BASE_DIR, 'original_data', 'test', 'Images')
-ISIC_2018_ORG_TEST_MASKS_DIR = os.path.join(ISIC_2018_BASE_DIR, 'original_data', 'test', 'GT')
+ISIC_2018_ORG_TRAIN_IMAGES_DIR = os.path.join(ISIC_2018_BASE_DIR, 'original_data', 'ISIC2018_Task1-2_Training_Input')
+ISIC_2018_ORG_TRAIN_MASKS_DIR = os.path.join(ISIC_2018_BASE_DIR, 'original_data', 'ISIC2018_Task1_Training_GroundTruth')
+ISIC_2018_ORG_VAL_IMAGES_DIR = os.path.join(ISIC_2018_BASE_DIR, 'original_data', 'ISIC2018_Task1-2_Validation_Input')
+ISIC_2018_ORG_VAL_MASKS_DIR = os.path.join(ISIC_2018_BASE_DIR, 'original_data', 'ISIC2018_Task1_Validation_GroundTruth')
+ISIC_2018_ORG_TEST_IMAGES_DIR = os.path.join(ISIC_2018_BASE_DIR, 'original_data', 'ISIC2018_Task1-2_Test_Input')
+ISIC_2018_ORG_TEST_MASKS_DIR = os.path.join(ISIC_2018_BASE_DIR, 'original_data', 'ISIC2018_Task1_Test_GroundTruth')
 
 ISIC_2018_TRAIN_FULL_IMAGES_DIR = os.path.join(ISIC_2018_BASE_DIR, 'train_full', 'images')        
 ISIC_2018_TRAIN_FULL_MASKS_DIR = os.path.join(ISIC_2018_BASE_DIR, 'train_full', 'masks')       

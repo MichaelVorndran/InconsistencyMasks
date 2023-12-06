@@ -21,7 +21,7 @@ import pandas as pd
 from tqdm import tqdm
 
 config = configparser.ConfigParser()
-config.read(os.path.join('InconsistencyMasks', 'config.ini'))
+config.read(os.path.join('config.ini'))
 
 
 SEED = int(config['DEFAULT']['SEED'])
@@ -2395,7 +2395,7 @@ def get_model_ensemble_prediction_multiclass_soft(models, prepared_image):
 
 
 
-def create_augment_images_and_masks_ISIC_2018(images_path, masks_path, main_output_path, num_images=9, copy_org=True, brightness_range_alpha=(0.5, 1.5), brightness_range_beta=(-25, 25), max_blur=3, max_noise=25, free_rotation):
+def create_augment_images_and_masks_ISIC_2018(images_path, masks_path, main_output_path, num_images=9, copy_org=True, brightness_range_alpha=(0.5, 1.5), brightness_range_beta=(-25, 25), max_blur=3, max_noise=25, free_rotation=True):
     '''
     Creates augmented versions of images and their corresponding ground truth masks, and saves them to specified output directories.
 

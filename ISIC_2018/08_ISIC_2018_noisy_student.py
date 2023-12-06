@@ -15,8 +15,12 @@ import configparser
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 mixed_precision.set_global_policy('mixed_float16')
 
+script_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(script_dir)
+config_dir = os.path.join(parent_dir, 'config.ini')
+
 config = configparser.ConfigParser()
-config.read(os.path.join('InconsistencyMasks', 'config.ini'))
+config.read(config_dir)
 
 IMAGE_WIDTH = int(config['ISIC_2018']['IMAGE_WIDTH'])
 IMAGE_HEIGHT = int(config['ISIC_2018']['IMAGE_HEIGHT'])

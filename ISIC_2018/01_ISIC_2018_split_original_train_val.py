@@ -7,8 +7,12 @@ import cv2
 import paths
 import configparser
 
+script_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(script_dir)
+config_dir = os.path.join(parent_dir, 'config.ini')
+
 config = configparser.ConfigParser()
-config.read(os.path.join('InconsistencyMasks', 'config.ini'))
+config.read(config_dir)
 
 SEED = int(config['DEFAULT']['SEED'])
 

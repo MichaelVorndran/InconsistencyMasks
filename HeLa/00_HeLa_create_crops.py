@@ -9,8 +9,12 @@ import paths
 from functions import get_pos_contours, get_min_dist
 import configparser
 
+script_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(script_dir)
+config_dir = os.path.join(parent_dir, 'config.ini')
+
 config = configparser.ConfigParser()
-config.read(os.path.join('IBAs', 'config.ini'))
+config.read(config_dir)
 
 
 class ImagePreprocessor:
