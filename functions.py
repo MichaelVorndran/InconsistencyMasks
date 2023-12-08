@@ -2777,7 +2777,7 @@ def create_pseudo_labels_im_ISIC_2018(models, h, w, c, images_path, main_output_
         write_images = False
 
         if filter_bad_predictions:
-            if predsize > im and predsize > 0:
+            if predsize > im_size and predsize > 0:
                 write_images = True
         else:
             write_images = True
@@ -2787,7 +2787,7 @@ def create_pseudo_labels_im_ISIC_2018(models, h, w, c, images_path, main_output_
             cv2.imwrite(os.path.join(masks_path_out, imagename), pred_mask_sum)
         cv2.imwrite(os.path.join(im_path_out, imagename), im)
 
-    mean_im_size = round(sum(im.values()) / len(im),0)
+    mean_im_size = round(sum(im_sizes.values()) / len(im_sizes),0)
 
     return mean_im_size
 
