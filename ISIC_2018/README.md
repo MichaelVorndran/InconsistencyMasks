@@ -23,6 +23,8 @@ Inside the base directory you've specified, create a folder named original_data.
 
 Once the files are downloaded, extract the data into the original_data folder. This can be done using built-in OS tools or third-party tools like 7-Zip or WinRAR.
 
+![My Image](original_data_isic2018.png)
+
 
 ## Reference
  
