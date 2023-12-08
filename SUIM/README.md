@@ -34,5 +34,6 @@ For those who wish to test specific approaches, you must at least generate the t
 
 
 ## Reference
-https://arxiv.org/pdf/2004.01241.pdf
+M. J. Islam u. a., „Semantic Segmentation of Underwater Imagery: Dataset and Benchmark“, 2020, doi: 10.48550/ARXIV.2004.01241.
+
 https://github.com/xahidbuffon/SUIM
