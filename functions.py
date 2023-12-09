@@ -5441,10 +5441,12 @@ def get_min_dist(xy, positions):
     distances = distances[distances > 0]
 
     if distances.size == 0:
-        raise ValueError("No other points or positions list is empty.")
+        print("No other points or positions list is empty.")
+        min_dist = 0
 
-    # Find minimum distance
-    min_dist = np.min(distances)
+    else:
+        # Find minimum distance
+        min_dist = np.min(distances)
 
     return min_dist
 
