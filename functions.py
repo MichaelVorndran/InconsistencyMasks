@@ -49,6 +49,23 @@ def delta_metric(threshold=1.25):
 
 
 class MeanIoU(tf.keras.metrics.Metric):
+    '''
+    This class represents a Mean Intersection over Union (IoU) metric for evaluating segmentation models.
+
+    The Mean IoU is a common evaluation metric for semantic image segmentation, which calculates the mean of IoU scores over multiple classes.
+
+    Attributes:
+        num_classes (int): The number of classes in the segmentation task.
+    
+    Methods:
+        compute_iou: Computes the IoU between the ground truth and predicted masks for a single class.
+        update_state: Updates the state of the metric with new predictions and ground truths.
+        result: Returns the current value of the metric.
+        reset_state: Resets all state variables of the metric.
+        get_config: Returns the configuration of the metric.
+        from_config: Creates a new instance from the given configuration.
+    '''
+    
     def __init__(self, num_classes, **kwargs):
         super(MeanIoU, self).__init__(**kwargs)
         self.num_classes = num_classes
@@ -86,6 +103,13 @@ class MeanIoU(tf.keras.metrics.Metric):
 
 
 class ignore_im_categorical_crossentropy(tf.keras.losses.Loss):
+    '''
+    This class is a custom loss function for categorical cross-entropy that ignores the inconsistency mask.
+
+    Methods:
+        call: Calculates the loss, ignoring the IM class.
+    '''
+    
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.cce = tf.keras.losses.CategoricalCrossentropy(reduction=tf.keras.losses.Reduction.NONE)
@@ -93,7 +117,7 @@ class ignore_im_categorical_crossentropy(tf.keras.losses.Loss):
     def call(self, y_true, y_pred):
         loss = self.cce(y_true, y_pred)
         
-        # Erstelle eine Maske, um den Verlust für die Klasse 0 zu entfernen
+        # Create a mask to remove the loss for class 0
         mask = 1. - y_true[:, 0]
         loss *= mask
             
@@ -103,7 +127,7 @@ class ignore_im_categorical_crossentropy(tf.keras.losses.Loss):
 
 class ignore_im_dice_loss_multiclass(tf.keras.losses.Loss):
     '''
-    ignore_im_dice_loss_multiclass loss function that ignores the contribution of class 0.
+    This class is a custom loss function that ignores the contribution of the inconsistency mask.
     
     Assumes that the segmentation masks are given in one-hot encoded format.
     
@@ -811,6 +835,21 @@ def train_depth_map_consistency_loss(train_images_dir,
 
 
 def load_labeled_data_single_mask(labeled_images_dir, labeled_masks_dir):
+    '''
+    Load labeled data consisting of images and their corresponding single-channel masks.
+
+    This function reads images and masks from specified directories, processes them, and returns them as numpy arrays.
+
+    Args:
+        labeled_images_dir (str): Directory containing labeled images.
+        labeled_masks_dir (str): Directory containing corresponding masks for the images.
+
+    Returns:
+        tuple: A tuple containing two numpy arrays:
+               - images: RGB images as numpy arrays.
+               - binary_masks: Binary masks corresponding to the images.
+    '''
+    
     image_filenames = sorted(os.listdir(labeled_images_dir))
     mask_filenames = sorted(os.listdir(labeled_masks_dir))
 
@@ -832,6 +871,22 @@ def load_labeled_data_single_mask(labeled_images_dir, labeled_masks_dir):
 
 
 def load_labeled_data_multiclass_mask(labeled_images_dir, labeled_masks_dir, num_classes):
+    '''
+    Load labeled data consisting of images and their corresponding multiclass masks.
+
+    This function reads images and masks from specified directories, processes them for multiclass segmentation tasks, and returns them as numpy arrays. Masks are converted to one-hot encoded format based on the number of classes.
+
+    Args:
+        labeled_images_dir (str): Directory containing labeled images.
+        labeled_masks_dir (str): Directory containing corresponding masks for the images.
+        num_classes (int): The number of classes for segmentation.
+
+    Returns:
+        tuple: A tuple containing two numpy arrays:
+               - images: RGB images as numpy arrays.
+               - masks: One-hot encoded masks corresponding to the images.
+    '''
+    
     image_filenames = sorted(os.listdir(labeled_images_dir))
     mask_filenames = sorted(os.listdir(labeled_masks_dir))
 
@@ -850,6 +905,21 @@ def load_labeled_data_multiclass_mask(labeled_images_dir, labeled_masks_dir, num
 
 
 def load_labeled_data_depth_map(labeled_images_dir, labeled_depth_maps_dir):
+    '''
+    Load labeled data consisting of images and their corresponding depth maps.
+
+    This function reads images and depth maps from specified directories, processes them, and returns them as numpy arrays. Depth maps are normalized to float values between 0 and 1.
+
+    Args:
+        labeled_images_dir (str): Directory containing labeled images.
+        labeled_depth_maps_dir (str): Directory containing corresponding depth maps for the images.
+
+    Returns:
+        tuple: A tuple containing two numpy arrays:
+               - images: Images as numpy arrays.
+               - depth_maps_normalized: Normalized depth maps corresponding to the images.
+    '''
+    
     image_filenames = sorted(os.listdir(labeled_images_dir))
     mask_filenames = sorted(os.listdir(labeled_depth_maps_dir))
 
@@ -864,6 +934,19 @@ def load_labeled_data_depth_map(labeled_images_dir, labeled_depth_maps_dir):
 
 
 def load_unlabeled_images(unlabeled_images_dir, read_as_grayscale=False):
+    '''
+    Load unlabeled images from a specified directory.
+
+    This function reads images from the given directory and can optionally convert them to grayscale. The images are returned as a numpy array.
+
+    Args:
+        unlabeled_images_dir (str): Directory containing unlabeled images.
+        read_as_grayscale (bool, optional): Flag to indicate whether the images should be read in grayscale. Defaults to False.
+
+    Returns:
+        np.array: Array of images read from the directory.
+    '''
+    
     image_filenames = os.listdir(unlabeled_images_dir)
 
     if read_as_grayscale:
@@ -877,7 +960,21 @@ def load_unlabeled_images(unlabeled_images_dir, read_as_grayscale=False):
 
 
 
-def parse_image_ISIC_2018(image_dir, IMG_CHANNELS=3):          
+def parse_image_ISIC_2018(image_dir, IMG_CHANNELS=3): 
+    '''
+    Parse an image and its corresponding mask from the ISIC 2018 dataset.
+
+    This function reads an image and its mask from given directories, decodes them, and processes the mask for use in segmentation tasks.
+
+    Args:
+        image_dir (str): Directory of the image file.
+        IMG_CHANNELS (int, optional): Number of channels in the image (e.g., 3 for RGB). Defaults to 3.
+
+    Returns:
+        tuple: A tuple containing:
+               - image: The decoded image tensor.
+               - mask: The corresponding binary mask tensor.
+    '''
 
     image = tf.io.read_file(image_dir)
     image = tf.image.decode_png(image, channels = IMG_CHANNELS)
@@ -890,7 +987,22 @@ def parse_image_ISIC_2018(image_dir, IMG_CHANNELS=3):
     return image, mask
 
 
-def parse_image_hela(path_brightfield, IMG_CHANNELS=1, Position_weight=3):          
+def parse_image_hela(path_brightfield, IMG_CHANNELS=1, Position_weight=3):  
+    '''
+    Parse brightfield and labeled images for HeLa cells.
+
+    This function reads a brightfield image along with its corresponding 'alive', 'dead', and 'position' labeled images. It processes these images and returns them in a suitable format for image analysis tasks.
+
+    Args:
+        path_brightfield (str): Path to the brightfield image.
+        IMG_CHANNELS (int, optional): Number of channels in the brightfield image. Defaults to 1.
+        Position_weight (int, optional): Weighting factor for the position image. Defaults to 3.
+
+    Returns:
+        tuple: A tuple containing:
+               - bf_img: The brightfield image tensor.
+               - comb_outputs: Combined tensor of 'alive', 'dead', and weighted 'position' images.
+    '''
 
     bf_img = tf.io.read_file(path_brightfield)
     bf_img = tf.image.decode_png(bf_img, channels = IMG_CHANNELS)
@@ -918,7 +1030,22 @@ def parse_image_hela(path_brightfield, IMG_CHANNELS=1, Position_weight=3):
     return bf_img, comb_outputs
 
 
-def parse_image_multiclass(image_dir, n_classes, image_channels=3):          
+def parse_image_multiclass(image_dir, n_classes, image_channels=3):      
+    '''
+    Parse an image and its corresponding multiclass mask.
+
+    This function reads an image and its mask from given directories, decodes them, and processes the mask for multiclass segmentation tasks using one-hot encoding.
+
+    Args:
+        image_dir (str): Directory of the image file.
+        n_classes (int): The number of classes for segmentation.
+        image_channels (int, optional): Number of channels in the image (e.g., 3 for RGB). Defaults to 3.
+
+    Returns:
+        tuple: A tuple containing:
+               - image: The decoded image tensor.
+               - mask: The corresponding one-hot encoded mask tensor.
+    '''
 
     image = tf.io.read_file(image_dir)
     image = tf.image.decode_png(image, channels = image_channels)
@@ -935,7 +1062,21 @@ def parse_image_multiclass(image_dir, n_classes, image_channels=3):
     return image, mask
 
 
-def parse_image_depth_map(image_dir, IMG_CHANNELS=3):          
+def parse_image_depth_map(image_dir, IMG_CHANNELS=3):    
+    '''
+    Parse an image and its corresponding depth map.
+
+    This function reads an image and its depth map from given directories, decodes them, and processes the depth map to be used in applications such as 3D reconstruction or depth estimation.
+
+    Args:
+        image_dir (str): Directory of the image file.
+        IMG_CHANNELS (int, optional): Number of channels in the image (e.g., 3 for RGB). Defaults to 3.
+
+    Returns:
+        tuple: A tuple containing:
+               - image: The decoded image tensor.
+               - depth_map: The corresponding depth map tensor, normalized and converted to the appropriate data type.
+    '''
 
     image = tf.io.read_file(image_dir)
     image = tf.image.decode_png(image, channels = IMG_CHANNELS)
@@ -951,6 +1092,27 @@ def parse_image_depth_map(image_dir, IMG_CHANNELS=3):
 
 
 def benchmark_ISIC2018(model, images_dir, masks_dir, pred_path, h, w, c, batch_size=64, create_images=True, print_results=False):
+    '''
+    Benchmark a model on the ISIC 2018 dataset.
+
+    This function evaluates a given model on the ISIC 2018 dataset by computing Intersection over Union (IoU) and Dice scores. It also optionally saves the predicted masks and prints the results.
+
+    Args:
+        model: The model to be benchmarked.
+        images_dir (str): Directory containing images.
+        masks_dir (str): Directory containing corresponding ground truth masks.
+        pred_path (str): Directory to save predicted masks.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        batch_size (int, optional): Size of the batch for model prediction. Defaults to 64.
+        create_images (bool, optional): Flag to indicate whether to save predicted masks. Defaults to True.
+        print_results (bool, optional): Flag to indicate whether to print the results. Defaults to False.
+
+    Returns:
+        tuple: A tuple containing mean IoU and mean Dice score.
+    '''
+    
     ious = []
     dice_scores = []
     batch_images = []
@@ -1010,6 +1172,28 @@ def benchmark_ISIC2018(model, images_dir, masks_dir, pred_path, h, w, c, batch_s
 
 
 def benchmark_hela(model, gt_main_dir, pred_dir, h, w, c, threshold=0.5, batch_size=64, save_output=True, benchmark=True, mod_position=True):
+    '''
+    Benchmark a model on HeLa cell images.
+
+    This function evaluates a given model on HeLa cell images by computing mean Intersection over Union (mIoU) for 'alive', 'dead', and 'position' cells. It also saves the predicted masks and optionally benchmarks cell count accuracy.
+
+    Args:
+        model: The model to be benchmarked.
+        gt_main_dir (str): Directory containing ground truth data.
+        pred_dir (str): Directory to save predicted masks.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        threshold (float, optional): Threshold to apply for binary classification. Defaults to 0.5.
+        batch_size (int, optional): Size of the batch for model prediction. Defaults to 64.
+        save_output (bool, optional): Flag to indicate whether to save predicted masks. Defaults to True.
+        benchmark (bool, optional): Flag to indicate whether to benchmark against ground truth. Defaults to True.
+        mod_position (bool, optional): Flag to modify position mask size. Defaults to True.
+
+    Returns:
+        tuple: A tuple containing mean IoU for all classes, mean IoU for 'alive' and 'dead' classes, and mean cell count error.
+    '''
+    
     mIoUs = []
     mIoUs_ad = []
     cell_count_delta = 0
@@ -1099,6 +1283,28 @@ def benchmark_hela(model, gt_main_dir, pred_dir, h, w, c, threshold=0.5, batch_s
 
 
 def benchmark_multiclass(model, image_path, gt_path, pred_path, h, w, c, class_to_color_mapping, batch_size=64, create_images=True, print_results=True):
+    '''
+    Benchmark a model on multiclass segmentation tasks.
+
+    This function evaluates a given model on a set of images by computing mean Intersection over Union (mIoU) and mean Pixel Accuracy (mPA). It also optionally saves the predicted masks both in class label and color-coded formats.
+
+    Args:
+        model: The model to be benchmarked.
+        image_path (str): Path to the directory containing the images.
+        gt_path (str): Path to the directory containing the ground truth masks.
+        pred_path (str): Path to the directory where predicted masks will be saved.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        class_to_color_mapping (dict): A mapping from class labels to colors.
+        batch_size (int, optional): Size of the batch for model prediction. Defaults to 64.
+        create_images (bool, optional): Flag to indicate whether to save predicted masks. Defaults to True.
+        print_results (bool, optional): Flag to indicate whether to print the results. Defaults to True.
+
+    Returns:
+        tuple: A tuple containing mean Pixel Accuracy (mPA) and mean IoU (mIoU).
+    '''
+    
     ious = []
     PAs = []    # Pixel Accuracy
     batch_images = []
@@ -1159,6 +1365,20 @@ def benchmark_multiclass(model, image_path, gt_path, pred_path, h, w, c, class_t
 
 
 def benchmark_depth_map(model, dataset, input_dir, output_dir):
+    '''
+    Benchmark a model on a depth map prediction task.
+
+    This function evaluates a given model using a dataset, computes Root Mean Square Error (RMSE) and Mean Square Error (MSE), and saves the predicted depth maps.
+
+    Args:
+        model: The model to be benchmarked.
+        dataset: The dataset used for evaluation.
+        input_dir (str): Directory containing input images for prediction.
+        output_dir (str): Directory to save the predicted depth maps.
+
+    Returns:
+        tuple: A tuple containing RMSE and MSE of the model evaluation.
+    '''
     
     os.makedirs(output_dir, exist_ok=True)
 
@@ -1187,7 +1407,24 @@ def benchmark_depth_map(model, dataset, input_dir, output_dir):
 
     return rmse, mse
 
-def load_and_preprocess_image(image_dir, IMG_CHANNELS=3):          
+
+
+def load_and_preprocess_image(image_dir, IMG_CHANNELS=3):  
+    '''
+    Load and preprocess an image from a given directory.
+
+    This function reads an image file, decodes it, and preprocesses it for further use in machine learning models or image processing tasks.
+
+    Args:
+        image_dir (str): Directory of the image file.
+        IMG_CHANNELS (int, optional): Number of channels to use in the image. Defaults to 3 (for RGB images).
+
+    Returns:
+        tuple: A tuple containing:
+               - image_dir: The directory of the image.
+               - image: The decoded and preprocessed image tensor.
+    '''
+    
     image = tf.io.read_file(image_dir)
     image = tf.image.decode_png(image, channels=IMG_CHANNELS)
     return image_dir, image
@@ -1196,6 +1433,26 @@ def load_and_preprocess_image(image_dir, IMG_CHANNELS=3):
 
 
 def input_ensemble_prediction(model, image, h, w, c, threshold, max_blur=3, max_noise=25, brightness_range_alpha=(0.5, 1.5), brightness_range_beta=(-25, 25), n=2, use_n_rnd_transformations=False):
+    '''
+    This function applies a set of transformations to the input image, uses a model to predict on these transformed images, and then combines these predictions into a single mask. 
+
+    Args:
+        model: The model used for prediction.
+        image: The input image.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        threshold (float): Threshold for binary classification.
+        max_blur (int, optional): Maximum blur to apply. Defaults to 3.
+        max_noise (int, optional): Maximum noise to add. Defaults to 25.
+        brightness_range_alpha (tuple, optional): Range for alpha in brightness adjustment. Defaults to (0.5, 1.5).
+        brightness_range_beta (tuple, optional): Range for beta in brightness adjustment. Defaults to (-25, 25).
+        n (int, optional): Number of random transformations if 'use_n_rnd_transformations' is True. Defaults to 2.
+        use_n_rnd_transformations (bool, optional): Flag to use N random transformations instead of all. Defaults to False.
+
+    Returns:
+        np.array: The predicted mask after combining the predictions from the transformed images.
+    '''
 
     if use_n_rnd_transformations == True:
         transformed_images, transformations_applied = generate_random_transformations(image, n, max_blur, max_noise, brightness_range_alpha, brightness_range_beta)
@@ -1231,24 +1488,18 @@ def input_ensemble_prediction(model, image, h, w, c, threshold, max_blur=3, max_
 
 def add_noise(image, max_noise=25):
     '''
-    Adds random noise to an image.
+    Add random noise to an image.
 
-    This function adds noise generated from a uniform random distribution to the input image.
+    This function introduces random noise to a given image. The noise is generated within a specified range and added to the image. The function ensures that the pixel values remain within the valid range [0, 255].
 
-    Parameters
-    ----------
-    image : numpy.array
-        The original image to which the noise is to be added.
-    max_noise : int, optional
-        The maximum intensity of the noise to be added. It defines the range of the uniform distribution 
-        from which the noise is generated. Defaults to 25.
+    Args:
+        image (np.array): The input image.
+        max_noise (int, optional): The maximum magnitude of noise to add. Defaults to 25.
 
-    Returns
-    -------
-    image : numpy.array
-        The image after noise has been added.
+    Returns:
+        np.array: The noisy image.
     '''
-
+    
     noise = np.random.randint(max_noise*-1, max_noise, size=image.shape)
     image = np.clip(image.astype(np.int16) + noise, 0, 255)
 
@@ -1257,24 +1508,17 @@ def add_noise(image, max_noise=25):
 
 def add_noise_and_blur(image, max_blur=3, max_noise=25):
     '''
-    Adds both noise and Gaussian blur to an image.
+    Add random noise and blur to an image.
 
-    This function first applies a Gaussian blur to the image and then adds noise. 
-    The level of blurring and noise can be controlled by the parameters.
+    This function applies Gaussian blur and random noise to a given image. The level of blur and noise can be controlled by the parameters.
 
-    Parameters
-    ----------
-    image : numpy.array
-        The original image to be transformed.
-    max_blur : int, optional
-        The maximum size of the Gaussian kernel to be used for the blur. Defaults to 3.
-    max_noise : int, optional
-        The maximum intensity of the noise to be added. Defaults to 25.
+    Args:
+        image (np.array): The input image.
+        max_blur (int, optional): The maximum kernel size for Gaussian blur. Defaults to 3.
+        max_noise (int, optional): The maximum magnitude of noise to add. Defaults to 25.
 
-    Returns
-    -------
-    image : numpy.array
-        The image after Gaussian blur and noise have been added.
+    Returns:
+        np.array: The modified image with noise and blur.
     '''
 
     rndint = random.randint(0,max_blur)
