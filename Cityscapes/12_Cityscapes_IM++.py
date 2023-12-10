@@ -3,7 +3,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from Cityscapes_class_mapping import COLOR_TO_CLASS_MAPPING_CITYSCAPES
-from functions import train_multiclass, create_pseudo_labels_ibas_multiclass, create_augment_images_and_masks_with_evalnet_ensemble_multiclass, train_evalnet_miou_model_multiclass, create_training_data_evalnet_miou_ibas_multiclass
+from functions import train_multiclass, create_pseudo_labels_im_multiclass, create_augment_images_and_masks_with_evalnet_ensemble_multiclass, train_evalnet_miou_model_multiclass, create_training_data_evalnet_miou_im_multiclass
 from unet import get_unet
 from evalnet import get_evalnet_miou
 import tensorflow as tf
@@ -66,8 +66,8 @@ with tf.device('/gpu:0'):
 
         if train_new_evalnet == True:
         
-            main_output_evalnet_ibas_dir_train = os.path.join(paths.CITYSCAPES_BASE_DIR, 'evalnet_ibas', f'run_{runid}', 'train')
-            main_output_evalnet_ibas_dir_val = os.path.join(paths.CITYSCAPES_BASE_DIR, 'evalnet_ibas', f'run_{runid}', 'val')
+            main_output_evalnet_im_dir_train = os.path.join(paths.CITYSCAPES_BASE_DIR, 'evalnet_im', f'run_{runid}', 'train')
+            main_output_evalnet_im_dir_val = os.path.join(paths.CITYSCAPES_BASE_DIR, 'evalnet_im', f'run_{runid}', 'val')
         
             subset_models = []
 
@@ -81,20 +81,20 @@ with tf.device('/gpu:0'):
                     subset_models.append(model)
             
             
-            create_training_data_evalnet_miou_ibas_multiclass(subset_models,
+            create_training_data_evalnet_miou_im_multiclass(subset_models,
                                                          IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS, 
                                                          NUM_CLASSES,
                                                          paths.CITYSCAPES_TRAIN_LABELED_IMAGES_DIR, 
                                                          paths.CITYSCAPES_TRAIN_LABELED_MASKS_DIR, 
-                                                         main_output_evalnet_ibas_dir_train,
+                                                         main_output_evalnet_im_dir_train,
                                                          NUM_LOOPS_TRAIN)
             
-            create_training_data_evalnet_miou_ibas_multiclass(subset_models,
+            create_training_data_evalnet_miou_im_multiclass(subset_models,
                                                          IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS, 
                                                          NUM_CLASSES,
                                                          paths.CITYSCAPES_VAL_IMAGES_DIR, 
                                                          paths.CITYSCAPES_VAL_MASKS_DIR, 
-                                                         main_output_evalnet_ibas_dir_val,
+                                                         main_output_evalnet_im_dir_val,
                                                          NUM_LOOPS_VAL)
             
             del model
@@ -105,21 +105,21 @@ with tf.device('/gpu:0'):
 
             for i in range(0,5):
 
-                modelname_evalnet_ibas = f'CITYSCAPES_evalnet_miou_ibas_{runid}_{i}'
-                model_filepath_h5 = os.path.join(paths.CITYSCAPES_MODEL_DIR , f'{modelname_evalnet_ibas}.h5')
+                modelname_evalnet_im = f'CITYSCAPES_evalnet_miou_im_{runid}_{i}'
+                model_filepath_h5 = os.path.join(paths.CITYSCAPES_MODEL_DIR , f'{modelname_evalnet_im}.h5')
                 
                 evalnet_model = get_evalnet_miou(IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS, NUM_CLASSES, ALPHA_EVALNET)
                 #evalnet_model.summary()
                 total_loss, iou_loss, conf_loss, iou_mae, conf_mae = train_evalnet_miou_model_multiclass(evalnet_model, 
                                                                                                    IMAGE_HEIGHT, IMAGE_WIDTH, 
-                                                                                                   main_output_evalnet_ibas_dir_train, 
-                                                                                                   main_output_evalnet_ibas_dir_val, 
+                                                                                                   main_output_evalnet_im_dir_train, 
+                                                                                                   main_output_evalnet_im_dir_val, 
                                                                                                    model_filepath_h5, 
                                                                                                    BATCH_SIZE_EVALNET, 
                                                                                                    NUM_CLASSES, 
                                                                                                    NUM_EPOCHS_EVALNET)  
 
-                modelname_evalnet_benchmarks.append((modelname_evalnet_ibas, total_loss, iou_loss, conf_loss, iou_mae, conf_mae))
+                modelname_evalnet_benchmarks.append((modelname_evalnet_im, total_loss, iou_loss, conf_loss, iou_mae, conf_mae))
 
                 del evalnet_model
                 tf.keras.backend.clear_session()
@@ -144,7 +144,7 @@ with tf.device('/gpu:0'):
             
             os.makedirs(paths.CITYSCAPES_CSV_DIR, exist_ok=True)
             
-            with open(os.path.join(paths.CITYSCAPES_CSV_DIR, f'results_{modelname_evalnet_ibas}.csv'), 'w', encoding='utf-8', newline='') as f:
+            with open(os.path.join(paths.CITYSCAPES_CSV_DIR, f'results_{modelname_evalnet_im}.csv'), 'w', encoding='utf-8', newline='') as f:
                 writer = csv.writer(f, delimiter=';')
                 writer.writerow(Header)
                 for row in modelname_evalnet_benchmarks:
@@ -164,15 +164,15 @@ with tf.device('/gpu:0'):
                 
                 modelname = f'CITYSCAPES_{approach}_{runid}_n{n}_gen{gen}_e{EK}_d{DK}_bi_{BI}_bo_{BO}'
 
-                val_pseudo_label_dir_ibas = os.path.join(paths.CITYSCAPES_BASE_DIR, 'val_predictions', approach, 'temp', modelname)
-                test_pseudo_label_dir_ibas = os.path.join(paths.CITYSCAPES_BASE_DIR, 'test_predictions', approach, 'temp', modelname)
-                train_unlabeled_pseudo_label_dir_ibas = os.path.join(paths.CITYSCAPES_BASE_DIR, 'train_unlabeled_predictions', approach, 'temp', modelname)
-                train_unlabeled_pseudo_label_dir_ibas_images = os.path.join(train_unlabeled_pseudo_label_dir_ibas, 'images')
-                train_unlabeled_pseudo_label_dir_ibas_masks = os.path.join(train_unlabeled_pseudo_label_dir_ibas, 'masks')
+                val_pseudo_label_dir_im = os.path.join(paths.CITYSCAPES_BASE_DIR, 'val_predictions', approach, 'temp', modelname)
+                test_pseudo_label_dir_im = os.path.join(paths.CITYSCAPES_BASE_DIR, 'test_predictions', approach, 'temp', modelname)
+                train_unlabeled_pseudo_label_dir_im = os.path.join(paths.CITYSCAPES_BASE_DIR, 'train_unlabeled_predictions', approach, 'temp', modelname)
+                train_unlabeled_pseudo_label_dir_im_images = os.path.join(train_unlabeled_pseudo_label_dir_im, 'images')
+                train_unlabeled_pseudo_label_dir_im_masks = os.path.join(train_unlabeled_pseudo_label_dir_im, 'masks')
 
-                train_unlabeled_pseudo_label_dir_ibas_plus_plus = os.path.join(paths.CITYSCAPES_BASE_DIR, 'train_unlabeled_predictions', approach, modelname)
-                train_unlabeled_pseudo_label_dir_ibas_plus_plus_images = os.path.join(train_unlabeled_pseudo_label_dir_ibas_plus_plus, 'images')
-                train_unlabeled_pseudo_label_dir_ibas_plus_plus_masks = os.path.join(train_unlabeled_pseudo_label_dir_ibas_plus_plus, 'masks')
+                train_unlabeled_pseudo_label_dir_im_plus_plus = os.path.join(paths.CITYSCAPES_BASE_DIR, 'train_unlabeled_predictions', approach, modelname)
+                train_unlabeled_pseudo_label_dir_im_plus_plus_images = os.path.join(train_unlabeled_pseudo_label_dir_im_plus_plus, 'images')
+                train_unlabeled_pseudo_label_dir_im_plus_plus_masks = os.path.join(train_unlabeled_pseudo_label_dir_im_plus_plus, 'masks')
 
 
                 if gen == 0:
@@ -186,9 +186,9 @@ with tf.device('/gpu:0'):
                     best_model = tf.keras.models.load_model(best_model_filepath_h5)
                     best_models.append(best_model)
                 
-                val_mean_im_size = create_pseudo_labels_ibas_multiclass(best_models, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS, paths.CITYSCAPES_VAL_IMAGES_DIR, val_pseudo_label_dir_ibas, True, EK, DK, BI, BO)
-                test_mean_im_size = create_pseudo_labels_ibas_multiclass(best_models, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS, paths.CITYSCAPES_TEST_IMAGES_DIR, test_pseudo_label_dir_ibas, True, EK, DK, BI, BO)
-                unlabeled_mean_im_size = create_pseudo_labels_ibas_multiclass(best_models, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS, paths.CITYSCAPES_TRAIN_UNLABELED_IMAGES_DIR, train_unlabeled_pseudo_label_dir_ibas, True, EK, DK, BI, BO)
+                val_mean_im_size = create_pseudo_labels_im_multiclass(best_models, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS, paths.CITYSCAPES_VAL_IMAGES_DIR, val_pseudo_label_dir_im, True, EK, DK, BI, BO)
+                test_mean_im_size = create_pseudo_labels_im_multiclass(best_models, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS, paths.CITYSCAPES_TEST_IMAGES_DIR, test_pseudo_label_dir_im, True, EK, DK, BI, BO)
+                unlabeled_mean_im_size = create_pseudo_labels_im_multiclass(best_models, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS, paths.CITYSCAPES_TRAIN_UNLABELED_IMAGES_DIR, train_unlabeled_pseudo_label_dir_im, True, EK, DK, BI, BO)
 
                 blur = max_blurs[gen]
                 noise = max_noises[gen]
@@ -197,7 +197,7 @@ with tf.device('/gpu:0'):
 
 
                 for j in range(1,n+1):
-                    best_evalnet_filepaths_h5.append(os.path.join(paths.CITYSCAPES_MODEL_DIR, f'CITYSCAPES_evalnet_miou_ibas_{runid}_topK_{j}.h5'))
+                    best_evalnet_filepaths_h5.append(os.path.join(paths.CITYSCAPES_MODEL_DIR, f'CITYSCAPES_evalnet_miou_im_{runid}_topK_{j}.h5'))
                 
                 for best_evalnet_filepath_h5 in best_evalnet_filepaths_h5:
                     best_model = tf.keras.models.load_model(best_evalnet_filepath_h5)
@@ -208,8 +208,8 @@ with tf.device('/gpu:0'):
                                                                                  NUM_CLASSES,
                                                                                  MIN_THRESHOLD,
                                                                                  MAX_THRESHOLD,
-                                                                                 train_unlabeled_pseudo_label_dir_ibas,
-                                                                                 train_unlabeled_pseudo_label_dir_ibas_plus_plus,
+                                                                                 train_unlabeled_pseudo_label_dir_im,
+                                                                                 train_unlabeled_pseudo_label_dir_im_plus_plus,
                                                                                  brightness_range_alpha,
                                                                                  brightness_range_beta,
                                                                                  blur,
@@ -219,10 +219,10 @@ with tf.device('/gpu:0'):
 
 
                 for imagename in tqdm(os.listdir(paths.CITYSCAPES_TRAIN_LABELED_IMAGES_DIR)):
-                    shutil.copy(os.path.join(paths.CITYSCAPES_TRAIN_LABELED_IMAGES_DIR, imagename), os.path.join(train_unlabeled_pseudo_label_dir_ibas_plus_plus_images, imagename))
-                    shutil.copy(os.path.join(paths.CITYSCAPES_TRAIN_LABELED_MASKS_DIR, imagename), os.path.join(train_unlabeled_pseudo_label_dir_ibas_plus_plus_masks, imagename))
+                    shutil.copy(os.path.join(paths.CITYSCAPES_TRAIN_LABELED_IMAGES_DIR, imagename), os.path.join(train_unlabeled_pseudo_label_dir_im_plus_plus_images, imagename))
+                    shutil.copy(os.path.join(paths.CITYSCAPES_TRAIN_LABELED_MASKS_DIR, imagename), os.path.join(train_unlabeled_pseudo_label_dir_im_plus_plus_masks, imagename))
                
-                num_imgs = len(os.listdir(train_unlabeled_pseudo_label_dir_ibas_plus_plus_images))
+                num_imgs = len(os.listdir(train_unlabeled_pseudo_label_dir_im_plus_plus_images))
                 STEPS_PER_EPOCH = num_imgs // BATCH_SIZE
         
                 for i in range(0,5):
@@ -235,7 +235,7 @@ with tf.device('/gpu:0'):
         
                     model = get_unet(IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS, NUM_CLASSES, alphas[gen], ACTIFU, ACTIFU_OUTPUT) 
         
-                    mPA_val, mPA_test, mPA_train_unlabeled, mIoU_val, mIoU_test, mIoU_train_unlabeled = train_multiclass(train_unlabeled_pseudo_label_dir_ibas_plus_plus_images, 
+                    mPA_val, mPA_test, mPA_train_unlabeled, mIoU_val, mIoU_test, mIoU_train_unlabeled = train_multiclass(train_unlabeled_pseudo_label_dir_im_plus_plus_images, 
                                                                                                                          paths.CITYSCAPES_VAL_IMAGES_DIR, 
                                                                                                                          paths.CITYSCAPES_VAL_MASKS_DIR,
                                                                                                                          paths.CITYSCAPES_TEST_IMAGES_DIR,
