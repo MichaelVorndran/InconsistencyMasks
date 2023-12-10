@@ -2407,7 +2407,20 @@ def get_input_ensemble_prediction_multiclass_soft(model, image, h, w, c, n=2, ma
 
 
 def get_model_ensemble_prediction_ISIC_2018(models, prepared_image, image_width, image_height, threshold):
+    '''
+    Generate a binary mask prediction using an ensemble of models for the ISIC 2018 dataset.
 
+    Args:
+        models (list): List of models for ensemble prediction.
+        prepared_image (np.array): Preprocessed image ready for prediction.
+        image_width (int): Width of the image.
+        image_height (int): Height of the image.
+        threshold (float): Threshold for binary classification.
+
+    Returns:
+        np.array: The ensemble prediction mask.
+    '''
+    
     pred_sum = np.zeros((image_width, image_height))
 
     for model in models:
@@ -2424,6 +2437,16 @@ def get_model_ensemble_prediction_ISIC_2018(models, prepared_image, image_width,
 
 
 def get_model_ensemble_prediction_multiclass_hard(models, prepared_image):
+    '''
+    Generate a multiclass mask prediction using a hard voting ensemble of models.
+
+    Args:
+        models (list): List of models for ensemble prediction.
+        prepared_image (np.array): Preprocessed image ready for prediction.
+
+    Returns:
+        np.array: The ensemble prediction multiclass mask.
+    '''
 
     pred_masks = []
 
@@ -2446,7 +2469,7 @@ def get_model_ensemble_prediction_multiclass_hard(models, prepared_image):
 
 
 def get_model_ensemble_prediction_hela_soft(models, prepared_image, threshold=0.5, max_pos_circle_size=8, min_pos_circle_size=3):
-    """
+    '''
     Get ensemble predictions for the HeLa dataset.
     
     Args:
@@ -2456,7 +2479,7 @@ def get_model_ensemble_prediction_hela_soft(models, prepared_image, threshold=0.
     
     Returns:
     - tuple of numpy arrays: Binary masks (values 0 or 255) for each of the three classes: alive, dead, and pos.
-    """
+    '''
     
     # Extract image dimensions
     img_height, img_width = prepared_image.shape[2], prepared_image.shape[1]
@@ -2508,6 +2531,16 @@ def get_model_ensemble_prediction_hela_soft(models, prepared_image, threshold=0.
 
 
 def get_model_ensemble_prediction_multiclass_soft(models, prepared_image):
+    '''
+    Generate a multiclass mask prediction using a soft voting ensemble of models.
+
+    Args:
+        models (list): List of models for ensemble prediction.
+        prepared_image (np.array): Preprocessed image ready for prediction.
+
+    Returns:
+        np.array: The ensemble prediction multiclass mask based on soft voting.
+    '''
 
     pred_masks_prob = []
 
@@ -2533,37 +2566,24 @@ def get_model_ensemble_prediction_multiclass_soft(models, prepared_image):
 
 def create_augment_images_and_masks_ISIC_2018(images_path, masks_path, main_output_path, num_images=9, copy_org=True, brightness_range_alpha=(0.5, 1.5), brightness_range_beta=(-25, 25), max_blur=3, max_noise=25, free_rotation=True):
     '''
-    Creates augmented versions of images and their corresponding ground truth masks, and saves them to specified output directories.
+    Augment images and masks in the ISIC 2018 dataset and save them to a specified output path.
 
-    The function applies data augmentation to images found in the provided image path. The augmentation includes adding noise, blur, 
-    and adjusting the brightness of the images. The ground truth masks associated with the images are also augmented accordingly.
+    Args:
+        images_path (str): Directory containing original images.
+        masks_path (str): Directory containing corresponding masks.
+        main_output_path (str): Directory to save augmented images and masks.
+        num_images (int, optional): Number of augmented images to create for each original image. Defaults to 9.
+        copy_org (bool, optional): Flag to copy original images to output path. Defaults to True.
+        brightness_range_alpha (tuple, optional): Range for alpha in brightness adjustment. Defaults to (0.5, 1.5).
+        brightness_range_beta (tuple, optional): Range for beta in brightness adjustment. Defaults to (-25, 25).
+        max_blur (int, optional): Maximum blur to apply. Defaults to 3.
+        max_noise (int, optional): Maximum noise to add. Defaults to 25.
+        free_rotation (bool, optional): Flag to apply free rotation. Defaults to True.
 
-    Parameters
-    ----------
-    images_path : str
-        Path to the directory containing the original images.
-    masks_path : str
-        Path to the directory containing the ground truth masks corresponding to the original images.
-    main_output_path : str
-        Path to the main directory where the augmented images and masks will be saved.
-    num_images : int, optional
-        Number of augmented versions to create for each original image. Defaults to 9.
-    copy_org : bool, optional
-        If set to True, the original images and masks are also copied to the output directories. Defaults to True.
-    brightness_range_alpha : tuple of float, optional
-        The range from which the alpha value for brightness adjustment is selected. Defaults to (0.5, 1.5).
-    brightness_range_beta : tuple of float, optional
-        The range from which the beta value for brightness adjustment is selected. Defaults to (-25, 25).
-    max_blur : int, optional
-        The maximum size of the Gaussian kernel to be used for the blur. Defaults to 3.
-    max_noise : int, optional
-        The maximum intensity of the noise to be added. Defaults to 25.
-
-    Returns
-    -------
-    None
+    Returns:
+        None
     '''
-
+    
     images_path_out = os.path.join(main_output_path, 'images')
     masks_path_out = os.path.join(main_output_path, 'masks')
     
@@ -2592,39 +2612,23 @@ def create_augment_images_and_masks_ISIC_2018(images_path, masks_path, main_outp
 
 def create_augment_images_and_masks_hela(main_input_path, main_output_path, num_images=9, copy_org=True, free_rotation=True, brightness_range_alpha=(0.7, 1.3), brightness_range_beta=(-15, 15), max_blur=3, max_noise=25):
     '''
-    Creates augmented versions of images and their corresponding ground truth masks, and saves them to specified output directories.
+    Augment HeLa cell images and masks and save them to a specified output path.
 
-    The function applies data augmentation to images found in the provided image path. The augmentation includes adding noise, blur, 
-    and adjusting the brightness of the images. The ground truth masks associated with the images are also augmented accordingly.
+    Args:
+        main_input_path (str): Directory containing original HeLa cell images and masks.
+        main_output_path (str): Directory to save augmented images and masks.
+        num_images (int, optional): Number of augmented images to create for each original image. Defaults to 9.
+        copy_org (bool, optional): Flag to copy original images and masks to output path. Defaults to True.
+        free_rotation (bool, optional): Flag to apply free rotation. Defaults to True.
+        brightness_range_alpha (tuple, optional): Range for alpha in brightness adjustment. Defaults to (0.7, 1.3).
+        brightness_range_beta (tuple, optional): Range for beta in brightness adjustment. Defaults to (-15, 15).
+        max_blur (int, optional): Maximum blur to apply. Defaults to 3.
+        max_noise (int, optional): Maximum noise to add. Defaults to 25.
 
-    Parameters
-    ----------
-    images_path : str
-        Path to the directory containing the original images.
-    masks_path : str
-        Path to the directory containing the ground truth masks corresponding to the original images.
-    main_output_path : str
-        Path to the main directory where the augmented images and masks will be saved.
-    num_images : int, optional
-        Number of augmented versions to create for each original image. Defaults to 9.
-    copy_org : bool, optional
-        If set to True, the original images and masks are also copied to the output directories. Defaults to True.
-    free_rotation : bool, optional
-        If set to True, the function applies a random horizontal flip followed by a random rotation (90, 180, or 270 degrees) to the image and mask. Defaults to True.
-    brightness_range_alpha : tuple of float, optional
-        The range from which the alpha value for brightness adjustment is selected. Defaults to (0.5, 1.5).
-    brightness_range_beta : tuple of float, optional
-        The range from which the beta value for brightness adjustment is selected. Defaults to (-25, 25).
-    max_blur : int, optional
-        The maximum size of the Gaussian kernel to be used for the blur. Defaults to 3.
-    max_noise : int, optional
-        The maximum intensity of the noise to be added. Defaults to 25.
-
-    Returns
-    -------
-    None
+    Returns:
+        None
     '''
-
+    
     brightfield_path_in = os.path.join(main_input_path, 'brightfield')
     alive_path_in = os.path.join(main_input_path, 'alive')
     dead_path_in = os.path.join(main_input_path, 'dead')
@@ -2673,39 +2677,24 @@ def create_augment_images_and_masks_hela(main_input_path, main_output_path, num_
 
 def create_augment_images_and_masks_multiclass(images_path, masks_path, main_output_path, num_images=9, copy_org=True, free_rotation=False, brightness_range_alpha=(0.5, 1.5), brightness_range_beta=(-25, 25), max_blur=3, max_noise=25):
     '''
-    Creates augmented versions of images and their corresponding ground truth masks, and saves them to specified output directories.
+    Augment multiclass images and masks and save them to a specified output path.
 
-    The function applies data augmentation to images found in the provided image path. The augmentation includes adding noise, blur, 
-    and adjusting the brightness of the images. The ground truth masks associated with the images are also augmented accordingly.
+    Args:
+        images_path (str): Directory containing original images.
+        masks_path (str): Directory containing corresponding masks.
+        main_output_path (str): Directory to save augmented images and masks.
+        num_images (int, optional): Number of augmented images to create for each original image. Defaults to 9.
+        copy_org (bool, optional): Flag to copy original images and masks to output path. Defaults to True.
+        free_rotation (bool, optional): Flag to apply free rotation. Defaults to False.
+        brightness_range_alpha (tuple, optional): Range for alpha in brightness adjustment. Defaults to (0.5, 1.5).
+        brightness_range_beta (tuple, optional): Range for beta in brightness adjustment. Defaults to (-25, 25).
+        max_blur (int, optional): Maximum blur to apply. Defaults to 3.
+        max_noise (int, optional): Maximum noise to add. Defaults to 25.
 
-    Parameters
-    ----------
-    images_path : str
-        Path to the directory containing the original images.
-    masks_path : str
-        Path to the directory containing the ground truth masks corresponding to the original images.
-    main_output_path : str
-        Path to the main directory where the augmented images and masks will be saved.
-    num_images : int, optional
-        Number of augmented versions to create for each original image. Defaults to 9.
-    copy_org : bool, optional
-        If set to True, the original images and masks are also copied to the output directories. Defaults to True.
-    free_rotation : bool, optional
-        If set to True, the function applies a random horizontal flip followed by a random rotation (90, 180, or 270 degrees) to the image and mask. Defaults to False.
-    brightness_range_alpha : tuple of float, optional
-        The range from which the alpha value for brightness adjustment is selected. Defaults to (0.5, 1.5).
-    brightness_range_beta : tuple of float, optional
-        The range from which the beta value for brightness adjustment is selected. Defaults to (-25, 25).
-    max_blur : int, optional
-        The maximum size of the Gaussian kernel to be used for the blur. Defaults to 3.
-    max_noise : int, optional
-        The maximum intensity of the noise to be added. Defaults to 25.
-
-    Returns
-    -------
-    None
+    Returns:
+        None
     '''
-
+    
     images_path_out = os.path.join(main_output_path, 'images')
     masks_path_out = os.path.join(main_output_path, 'masks')
     
@@ -2735,32 +2724,19 @@ def create_augment_images_and_masks_multiclass(images_path, masks_path, main_out
 
 def augment_image_and_masks(image, masks, brightness_range_alpha = (0.5, 1.5), brightness_range_beta = (-25, 25), max_blur=3, max_noise=25, free_rotation=True):
     '''
-    Applies a series of augmentations to a given image and its corresponding masks. 
+    Apply augmentation techniques to an image and its corresponding masks.
 
-    The augmentation includes random horizontal and vertical flips, random rotations (if free_rotation is True), 
-    random brightness adjustments, and addition of noise and blur.
+    Args:
+        image (np.array): The input image to be augmented.
+        masks (list of np.array): List of masks corresponding to the image.
+        brightness_range_alpha (tuple, optional): Range for alpha in brightness adjustment. Defaults to (0.5, 1.5).
+        brightness_range_beta (tuple, optional): Range for beta in brightness adjustment. Defaults to (-25, 25).
+        max_blur (int, optional): Maximum blur to apply. Defaults to 3.
+        max_noise (int, optional): Maximum noise to add. Defaults to 25.
+        free_rotation (bool, optional): Flag to apply random rotation and flips. Defaults to True.
 
-    Parameters
-    ----------
-    image : np.ndarray
-        The original image to be augmented.
-    masks : list of np.ndarray
-        The corresponding masks to be augmented.
-    brightness_range_alpha : tuple of float, optional
-        The range from which the alpha value for brightness adjustment is selected. Defaults to (0.5, 1.5).
-    brightness_range_beta : tuple of float, optional
-        The range from which the beta value for brightness adjustment is selected. Defaults to (-25, 25).
-    max_blur : int, optional
-        The maximum size of the Gaussian kernel to be used for the blur. Defaults to 3.
-    max_noise : int, optional
-        The maximum intensity of the noise to be added. Defaults to 25.
-    free_rotation : bool, optional
-        If set to True, the function applies a random horizontal flip followed by a random rotation (90, 180, or 270 degrees) to the image and masks. Defaults to True.
-
-    Returns
-    -------
-    tuple
-        A tuple containing the augmented image and the list of corresponding augmented masks.
+    Returns:
+        tuple: A tuple containing the augmented image and a list of augmented masks.
     '''
     
     augmented_masks = []
@@ -2802,34 +2778,21 @@ def augment_image_and_masks(image, masks, brightness_range_alpha = (0.5, 1.5), b
 
 def augment_image_and_mask(image, mask, brightness_range_alpha = (0.5, 1.5), brightness_range_beta = (-25, 25), max_blur=3, max_noise=25, free_rotation=True):
     '''
-    Applies a series of augmentations to a given image and its corresponding mask. 
-
-    The augmentation includes random horizontal and vertical flips, random rotations (if free_rotation is True), 
-    random brightness adjustments, and addition of noise and blur.
-
-    Parameters
-    ----------
-    image : np.ndarray
-        The original image to be augmented.
-    mask : np.ndarray
-        The corresponding mask to be augmented.
-    brightness_range_alpha : tuple of float, optional
-        The range from which the alpha value for brightness adjustment is selected. Defaults to (0.5, 1.5).
-    brightness_range_beta : tuple of float, optional
-        The range from which the beta value for brightness adjustment is selected. Defaults to (-25, 25).
-    max_blur : int, optional
-        The maximum size of the Gaussian kernel to be used for the blur. Defaults to 3.
-    max_noise : int, optional
-        The maximum intensity of the noise to be added. Defaults to 25.
-    free_rotation : bool, optional
-        If set to True, the function applies a random horizontal flip followed by a random rotation (90, 180, or 270 degrees) to the image and mask. Defaults to True.
-
-    Returns
-    -------
-    tuple
-        A tuple containing the augmented image and the corresponding mask.
+    Apply augmentation techniques to an image and its corresponding mask.
+    
+    Args:
+        image (np.array): The input image to be augmented.
+        mask (np.array): The corresponding mask to be augmented.
+        brightness_range_alpha (tuple, optional): Range for alpha in brightness adjustment. Defaults to (0.5, 1.5).
+        brightness_range_beta (tuple, optional): Range for beta in brightness adjustment. Defaults to (-25, 25).
+        max_blur (int, optional): Maximum blur to apply. Defaults to 3.
+        max_noise (int, optional): Maximum noise to add. Defaults to 25.
+        free_rotation (bool, optional): Flag to apply random rotation and flips. Defaults to True.
+    
+    Returns:
+        tuple: A tuple containing the augmented image and mask.
     '''
-
+    
     if free_rotation:
         if random.randint(0,1) == 1:
             image = cv2.flip(image, 0)
@@ -2930,7 +2893,27 @@ def create_pseudo_labels_im_ISIC_2018(models, h, w, c, images_path, main_output_
 
 
 def create_pseudo_labels_im_hela(models, h, w, c, images_path, main_output_path, erode_kernel=5, dilate_kernel=5, block_input=True, block_output=True, max_pos_circle_size=8, min_pos_circle_size=3):
- 
+    '''
+    Create pseudo labels for ISIC 2018 dataset images using IM predictions.
+
+    Args:
+        models (list): List of models for ensemble prediction.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        images_path (str): Directory containing input images.
+        main_output_path (str): Main directory to save the processed images and pseudo labels.
+        rgb (bool, optional): Flag to convert images to RGB. Defaults to True.
+        erode_kernel (int, optional): Size of the kernel used for erosion. Defaults to 5.
+        dilate_kernel (int, optional): Size of the kernel used for dilation. Defaults to 5.
+        block_input (bool, optional): Flag to block certain areas in input images. Defaults to True.
+        block_output (bool, optional): Flag to block certain areas in output masks. Defaults to True.
+        filter_bad_predictions (bool, optional): Flag to filter out bad predictions. Defaults to True.
+
+    Returns:
+        float: The average size of the inconsistency masks.
+    '''
+    
     brightfield_path_out = os.path.join(main_output_path, 'brightfield')
     alive_path_out = os.path.join(main_output_path, 'alive')
     dead_path_out = os.path.join(main_output_path, 'dead')
@@ -2968,7 +2951,6 @@ def create_pseudo_labels_im_hela(models, h, w, c, images_path, main_output_path,
             combined_im = cv2.dilate(combined_im, kernel, iterations=1)
 
         positions = get_pos_contours(final_pos_mask_raw)
-        #h, w = final_pos_mask_raw.shape
         final_pos_mask = np.zeros((h, w, 3), np.uint8)
         
         
@@ -2981,14 +2963,7 @@ def create_pseudo_labels_im_hela(models, h, w, c, images_path, main_output_path,
             circle_size = int(min_dist // 4)
             circle_size = max(min(circle_size, max_pos_circle_size), min_pos_circle_size)
             cv2.circle(final_pos_mask, (pos[0], pos[1]), circle_size, (255, 255, 255), -1)
-            
-            #final_pos_mask = cv2.erode(final_pos_mask, (2, 2))
-            #final_pos_mask[final_pos_mask < 254] = 0
-
-            #final_pos_mask = dilate_mask(final_pos_mask)
-
         
-
 
         if block_input == True:
             image_gray[combined_im > 0] = 0
@@ -3011,7 +2986,27 @@ def create_pseudo_labels_im_hela(models, h, w, c, images_path, main_output_path,
 
 
 def create_pseudo_labels_im_multiclass(models, h, w, c, images_path, main_output_path, rgb=True, erode_kernel=5, dilate_kernel=5, block_input=True, block_output=True, filter_unequal_class_pred=False):
+    '''
+    Create pseudo labels for multiclass segmentation using IM predictions.
 
+    Args:
+        models (list): List of models for ensemble prediction.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        images_path (str): Directory containing input images.
+        main_output_path (str): Main directory to save the processed images and pseudo labels.
+        rgb (bool, optional): Flag to convert images to RGB. Defaults to True.
+        erode_kernel (int, optional): Size of the kernel used for erosion. Defaults to 5.
+        dilate_kernel (int, optional): Size of the kernel used for dilation. Defaults to 5.
+        block_input (bool, optional): Flag to block certain areas in input images. Defaults to True.
+        block_output (bool, optional): Flag to block certain areas in output masks. Defaults to True.
+        filter_unequal_class_pred (bool, optional): Flag to filter out predictions where class distributions are unequal. Defaults to False.
+
+    Returns:
+        float: The average size of the inconsistency masks.
+    '''
+    
     images_path_out = os.path.join(main_output_path, 'images')
     masks_path_out = os.path.join(main_output_path, 'masks')
     im_path_out = os.path.join(main_output_path, 'im')
@@ -3078,38 +3073,28 @@ def create_pseudo_labels_im_multiclass(models, h, w, c, images_path, main_output
 
 
 def dilate_mask(mask, kernel_size=3, iterations=1):
-    """
-    Dilatiert jede Klasse in der semantischen Segmentierungsmaske separat.
-    
-    Parameters:
-    - mask (np.array): Eine 2D-Array semantische Segmentierungsmaske.
-    - kernel_size (int): Größe des quadratischen Strukturelements für die Dilatation.
-    - iterations (int): Anzahl der Dilatationsdurchläufe.
+    '''
+    Dilate the mask for each class separately in a multiclass mask.
+
+    Args:
+        mask (np.array): The input multiclass mask.
+        kernel_size (int, optional): Size of the dilation kernel. Defaults to 3.
+        iterations (int, optional): Number of dilation iterations. Defaults to 1.
 
     Returns:
-    - np.array: Dilatierte Maske.
-    """
+        np.array: The dilated multiclass mask.
+    '''
     
-    # Erstellen eines quadratischen Strukturelements
     kernel = np.ones((kernel_size, kernel_size),np.uint8)
-    
-    # Finden der einzigartigen Klassen in der Maske
     unique_classes = np.unique(mask)
-    
-    # Erstellen einer leeren Ausgabemaske
     dilated_mask = np.zeros_like(mask)
     
     for u in unique_classes:
-        if u == 0: # Hintergrund überspringen
+        if u == 0:
             continue
             
-        # Erstellen einer Binärmaske für die aktuelle Klasse
         binary_mask = (mask == u).astype(np.uint8)
-        
-        # Dilatieren der Binärmaske
         dilated_binary_mask = cv2.dilate(binary_mask, kernel, iterations=iterations)
-        
-        # Aktualisieren der Ausgabemaske mit der dilatierten Maske
         dilated_mask[dilated_binary_mask == 1] = u
 
     return dilated_mask
@@ -3153,7 +3138,18 @@ def pred_masks_to_im_multiclass(pred_masks):
 
 
 def get_im_prediction_binary(models, prepared_image, threshold=0.5):
+    '''
+    Generate binary predictions and inconsistency mask using an ensemble of models.
 
+    Args:
+        models (list): List of models for ensemble prediction.
+        prepared_image (np.array): Preprocessed image ready for prediction.
+        threshold (float, optional): Threshold for binary classification. Defaults to 0.5.
+
+    Returns:
+        tuple: A tuple containing the final prediction mask, inconsistency mask, size of inconsistency areas, and prediction size.
+    '''
+    
     pred_masks = []
 
     for model in models:
@@ -3167,6 +3163,18 @@ def get_im_prediction_binary(models, prepared_image, threshold=0.5):
 
 
 def get_im_prediction_hela(models, prepared_image, threshold=0.5):
+    '''
+    Generate predictions for alive, dead, and positional masks for the HeLa dataset with inconsistency mask using an ensemble of models.
+
+    Args:
+        models (list): List of models for ensemble prediction.
+        prepared_image (np.array): Preprocessed image ready for prediction.
+        threshold (float, optional): Threshold for binary classification. Defaults to 0.5.
+
+    Returns:
+        tuple: A tuple containing the final masks for alive, dead, and positional predictions, a combined inconsistency mask, and the total inconsistency size.
+    '''
+    
     alive_masks = []
     dead_masks = []
     pos_masks = []
@@ -3196,7 +3204,18 @@ def get_im_prediction_hela(models, prepared_image, threshold=0.5):
 
 
 def get_im_prediction_multiclass(models, prepared_image, filter_unequal_class_pred=False):
+    '''
+    Generate multiclass predictions and inconsistency mask using an ensemble of models.
 
+    Args:
+        models (list): List of models for ensemble prediction.
+        prepared_image (np.array): Preprocessed image ready for prediction.
+        filter_unequal_class_pred (bool, optional): Flag to filter out predictions if class distributions are unequal. Defaults to False.
+
+    Returns:
+        tuple: A tuple containing the final multiclass prediction mask, inconsistency mask, inconsistency size, and a boolean indicating if class distributions are consistent across models.
+    '''
+    
     pred_masks = []
     unique_classes = []
 
@@ -3222,7 +3241,27 @@ def get_im_prediction_multiclass(models, prepared_image, filter_unequal_class_pr
 
 
 def create_pseudo_labels_noisy_student_ISIC_2018(model, h, w, c, images_path, main_output_path, rgb=True, brightness_range_alpha=(0.5, 1.5), brightness_range_beta=(-25, 25), max_blur=3, max_noise=25, free_rotation=True):
+    '''
+    Generate augmented pseudo labels using the Noisy Student approach for ISIC 2018 dataset.
 
+    Args:
+        model: The model used for generating pseudo labels.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        images_path (str): Directory containing input images.
+        main_output_path (str): Main directory to save the augmented images and masks.
+        rgb (bool, optional): Flag to convert images to RGB. Defaults to True.
+        brightness_range_alpha (tuple, optional): Range for alpha in brightness adjustment. Defaults to (0.5, 1.5).
+        brightness_range_beta (tuple, optional): Range for beta in brightness adjustment. Defaults to (-25, 25).
+        max_blur (int, optional): Maximum blur to apply. Defaults to 3.
+        max_noise (int, optional): Maximum noise to add. Defaults to 25.
+        free_rotation (bool, optional): Flag to apply free rotation. Defaults to True.
+
+    Returns:
+        None
+    '''
+    
     images_path_out = os.path.join(main_output_path, 'images')
     masks_path_out = os.path.join(main_output_path, 'masks')
     
@@ -3253,7 +3292,28 @@ def create_pseudo_labels_noisy_student_ISIC_2018(model, h, w, c, images_path, ma
 
 
 def create_pseudo_labels_noisy_student_hela(model, h, w, c, images_path, main_output_path, brightness_range_alpha=(0.5, 1.5), brightness_range_beta=(-25, 25), max_blur=3, max_noise=25, free_rotation=True, max_pos_circle_size=8, min_pos_circle_size=3):
+    '''
+    Generate augmented pseudo labels using the Noisy Student approach for the HeLa dataset.
 
+    Args:
+        model: The model used for generating pseudo labels.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        images_path (str): Directory containing brightfield images.
+        main_output_path (str): Main directory to save the augmented images and masks.
+        brightness_range_alpha (tuple, optional): Range for alpha in brightness adjustment. Defaults to (0.5, 1.5).
+        brightness_range_beta (tuple, optional): Range for beta in brightness adjustment. Defaults to (-25, 25).
+        max_blur (int, optional): Maximum blur to apply. Defaults to 3.
+        max_noise (int, optional): Maximum noise to add. Defaults to 25.
+        free_rotation (bool, optional): Flag to apply free rotation. Defaults to True.
+        max_pos_circle_size (int, optional): Maximum size of circles in positional mask. Defaults to 8.
+        min_pos_circle_size (int, optional): Minimum size of circles in positional mask. Defaults to 3.
+
+    Returns:
+        None
+    '''
+    
     brightfield_path_out = os.path.join(main_output_path, 'brightfield')
     alive_path_out = os.path.join(main_output_path, 'alive')
     dead_path_out = os.path.join(main_output_path, 'dead')
@@ -3304,12 +3364,32 @@ def create_pseudo_labels_noisy_student_hela(model, h, w, c, images_path, main_ou
             cv2.circle(final_pos_mask, (pos[0], pos[1]), circle_size, (255, 255, 255), -1)
         
 
-        cv2.imwrite(os.path.join(pos_path_out, f'{imagename[:-4]}_aug.png'), final_pos_mask)    #(aug_masks[2] >= 0.5).astype(np.int)*255)
+        cv2.imwrite(os.path.join(pos_path_out, f'{imagename[:-4]}_aug.png'), final_pos_mask)   
 
 
 
 def create_pseudo_labels_noisy_student_multiclass(model, h, w, c, images_path, main_output_path, rgb=True, brightness_range_alpha=(0.5, 1.5), brightness_range_beta=(-25, 25), max_blur=3, max_noise=25, free_rotation=True):
+    '''
+    Generate augmented pseudo labels using the Noisy Student approach for multiclass segmentation.
 
+    Args:
+        model: The model used for generating pseudo labels.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        images_path (str): Directory containing input images.
+        main_output_path (str): Main directory to save the augmented images and masks.
+        rgb (bool, optional): Flag to convert images to RGB. Defaults to True.
+        brightness_range_alpha (tuple, optional): Range for alpha in brightness adjustment. Defaults to (0.5, 1.5).
+        brightness_range_beta (tuple, optional): Range for beta in brightness adjustment. Defaults to (-25, 25).
+        max_blur (int, optional): Maximum blur to apply. Defaults to 3.
+        max_noise (int, optional): Maximum noise to add. Defaults to 25.
+        free_rotation (bool, optional): Flag to apply free rotation. Defaults to True.
+
+    Returns:
+        None
+    '''
+    
     images_path_out = os.path.join(main_output_path, 'images')
     masks_path_out = os.path.join(main_output_path, 'masks')
     
@@ -3337,7 +3417,24 @@ def create_pseudo_labels_noisy_student_multiclass(model, h, w, c, images_path, m
 
 
 def create_training_data_evalnet_ISIC_2018(model, h, w, c, images_path, masks_path, main_output_path, i, rgb=True):
+    '''
+    Generate training data for EvalNet using predictions from a model on the ISIC 2018 dataset.
 
+    Args:
+        model: The model used for generating pseudo labels.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        images_path (str): Directory containing input images.
+        masks_path (str): Directory containing corresponding masks.
+        main_output_path (str): Directory to save the generated data and IoU scores.
+        i (int): Iteration number for naming the output files.
+        rgb (bool, optional): Flag to convert images to RGB. Defaults to True.
+
+    Returns:
+        None
+    '''
+    
     imagename_ious = []
 
     images_path_out = os.path.join(main_output_path, 'images')
@@ -3375,9 +3472,6 @@ def create_training_data_evalnet_ISIC_2018(model, h, w, c, images_path, masks_pa
             pred_name = f'{imagename[:-4]}___{i}.png'
         cv2.imwrite(os.path.join(masks_path_out, pred_name), mask)
 
-        #pred_name = f'{imagename[:-4]}___{i}.png'
-        #cv2.imwrite(os.path.join(masks_path, pred_name), mask)
-
         iou = round(get_IoU_binary(mask_gray, mask),4)
 
         imagename_ious.append((pred_name, iou))
@@ -3400,7 +3494,24 @@ def create_training_data_evalnet_ISIC_2018(model, h, w, c, images_path, masks_pa
 
 
 def create_training_data_evalnet_multiclass(model, h, w, c, images_path, masks_path, main_output_path, i, rgb=True):
+    '''
+    Generate training data for a multiclass EvalNet using predictions from a model.
 
+    Args:
+        model: The model used for generating pseudo labels.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        images_path (str): Directory containing input images.
+        masks_path (str): Directory containing corresponding masks.
+        main_output_path (str): Directory to save the generated data and IoU scores.
+        i (int): Iteration number for naming the output files.
+        rgb (bool, optional): Flag to convert images to RGB. Defaults to True.
+
+    Returns:
+        None
+    '''
+    
     imagename_ious = []
 
     images_path_out = os.path.join(main_output_path, 'images')
@@ -3459,7 +3570,31 @@ def create_training_data_evalnet_multiclass(model, h, w, c, images_path, masks_p
 
 
 def create_training_data_evalnet_im_binary(models, h, w, c, images_path, masks_path, main_output_path, num_loops, n_min_models=2, n_max_models=4, rgb=True, brightness_range_alpha=(0.6, 1.4), brightness_range_beta=(-20, 20), max_blur=3, max_noise=20, free_rotation=False):
+    '''
+    Generate training data for EvalNet using binary predictions with inconsistency masks from an ensemble of models.
 
+    Args:
+        models (list): List of models for ensemble prediction.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        images_path (str): Directory containing input images.
+        masks_path (str): Directory containing corresponding masks.
+        main_output_path (str): Directory to save the generated data and IoU scores.
+        num_loops (int): Number of augmentation loops to run.
+        n_min_models (int): Minimum number of models to use in each prediction. Defaults to 2.
+        n_max_models (int): Maximum number of models to use in each prediction. Defaults to 4.
+        rgb (bool, optional): Flag to convert images to RGB. Defaults to True.
+        brightness_range_alpha (tuple, optional): Range for alpha in brightness adjustment. Defaults to (0.6, 1.4).
+        brightness_range_beta (tuple, optional): Range for beta in brightness adjustment. Defaults to (-20, 20).
+        max_blur (int, optional): Maximum blur to apply. Defaults to 3.
+        max_noise (int, optional): Maximum noise to add. Defaults to 20.
+        free_rotation (bool, optional): Flag to apply free rotation. Defaults to False.
+
+    Returns:
+        None
+    '''
+    
     imagename_ious = []
     kernel_list = [0, 3, 5]
 
@@ -3536,7 +3671,31 @@ def create_training_data_evalnet_im_binary(models, h, w, c, images_path, masks_p
 
 
 def create_training_data_evalnet_im_multiclass(models, h, w, c, images_path, masks_path, main_output_path, num_loops, n_min_models=2, n_max_models=4, rgb=True, brightness_range_alpha=(0.6, 1.4), brightness_range_beta=(-20, 20), max_blur=3, max_noise=20, free_rotation=False):
+    '''
+    Generate training data for EvalNet using multiclass predictions with inconsistency masks from an ensemble of models.
 
+    Args:
+        models (list): List of models for ensemble prediction.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        images_path (str): Directory containing input images.
+        masks_path (str): Directory containing corresponding masks.
+        main_output_path (str): Directory to save the generated data and IoU scores.
+        num_loops (int): Number of augmentation loops to run.
+        n_min_models (int): Minimum number of models to use in each prediction. Defaults to 2.
+        n_max_models (int): Maximum number of models to use in each prediction. Defaults to 4.
+        rgb (bool, optional): Flag to convert images to RGB. Defaults to True.
+        brightness_range_alpha (tuple, optional): Range for alpha in brightness adjustment. Defaults to (0.6, 1.4).
+        brightness_range_beta (tuple, optional): Range for beta in brightness adjustment. Defaults to (-20, 20).
+        max_blur (int, optional): Maximum blur to apply. Defaults to 3.
+        max_noise (int, optional): Maximum noise to add. Defaults to 20.
+        free_rotation (bool, optional): Flag to apply free rotation. Defaults to False.
+
+    Returns:
+        None
+    '''
+    
     imagename_ious = []
     kernel_list = [0, 3, 5]
 
@@ -3612,7 +3771,32 @@ def create_training_data_evalnet_im_multiclass(models, h, w, c, images_path, mas
 
 
 def create_training_data_evalnet_miou_im_multiclass(models, h, w, c, num_classes, images_path, masks_path, main_output_path, num_loops, n_min_models=2, n_max_models=4, rgb=True, brightness_range_alpha=(0.8, 1.2), brightness_range_beta=(-10, 10), max_blur=1, max_noise=10, free_rotation=False):
+    '''
+    Generate training data for an multiclass EvalNet with mIoU scores for each class, using predictions with inconsistency masks from an ensemble of models.
 
+    Args:
+        models (list): List of models for ensemble prediction.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        num_classes (int): Number of classes in the segmentation.
+        images_path (str): Directory containing input images.
+        masks_path (str): Directory containing corresponding masks.
+        main_output_path (str): Directory to save the generated data, mIoU scores, and class detection.
+        num_loops (int): Number of augmentation loops to run.
+        n_min_models (int): Minimum number of models to use in each prediction. Defaults to 2.
+        n_max_models (int): Maximum number of models to use in each prediction. Defaults to 4.
+        rgb (bool, optional): Flag to convert images to RGB. Defaults to True.
+        brightness_range_alpha (tuple, optional): Range for alpha in brightness adjustment. Defaults to (0.8, 1.2).
+        brightness_range_beta (tuple, optional): Range for beta in brightness adjustment. Defaults to (-10, 10).
+        max_blur (int, optional): Maximum blur to apply. Defaults to 1.
+        max_noise (int, optional): Maximum noise to add. Defaults to 10.
+        free_rotation (bool, optional): Flag to apply free rotation. Defaults to False.
+
+    Returns:
+        None
+    '''
+    
     imagename_ious_conf = []
     kernel_list = [0, 3, 5]
 
@@ -3695,7 +3879,30 @@ def create_training_data_evalnet_miou_im_multiclass(models, h, w, c, num_classes
 
 
 def create_training_data_evalnet_miou_im_hela(models, h, w, c, main_input_path, main_output_path, num_loops, n_min_models=2, n_max_models=4, brightness_range_alpha=(0.8, 1.2), brightness_range_beta=(-10, 10), max_blur=1, max_noise=10, free_rotation=False):
+    '''
+    Generate training data for EvalNet with mIoU scores and class detection for the HeLa dataset using multiclass predictions with inconsistency masks from an ensemble of models.
 
+    Args:
+        models (list): List of models for ensemble prediction.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        main_input_path (str): Directory containing input HeLa cell images and masks.
+        main_output_path (str): Directory to save the generated data, mIoU scores, and class detection.
+        num_loops (int): Number of augmentation loops to run.
+        n_min_models (int): Minimum number of models to use in each prediction. Defaults to 2.
+        n_max_models (int): Maximum number of models to use in each prediction. Defaults to 4.
+        rgb (bool, optional): Flag to convert images to RGB. Defaults to True.
+        brightness_range_alpha (tuple, optional): Range for alpha in brightness adjustment. Defaults to (0.8, 1.2).
+        brightness_range_beta (tuple, optional): Range for beta in brightness adjustment. Defaults to (-10, 10).
+        max_blur (int, optional): Maximum blur to apply. Defaults to 1.
+        max_noise (int, optional): Maximum noise to add. Defaults to 10.
+        free_rotation (bool, optional): Flag to apply free rotation. Defaults to False.
+
+    Returns:
+        None
+    '''
+    
     imagename_ious_conf = []
     kernel_list = [0, 3, 5]
 
