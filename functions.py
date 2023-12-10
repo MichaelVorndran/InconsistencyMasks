@@ -836,9 +836,7 @@ def train_depth_map_consistency_loss(train_images_dir,
 
 def load_labeled_data_single_mask(labeled_images_dir, labeled_masks_dir):
     '''
-    Load labeled data consisting of images and their corresponding single-channel masks.
-
-    This function reads images and masks from specified directories, processes them, and returns them as numpy arrays.
+    Reads images and masks from specified directories, processes them, and returns them as numpy arrays.
 
     Args:
         labeled_images_dir (str): Directory containing labeled images.
@@ -872,9 +870,7 @@ def load_labeled_data_single_mask(labeled_images_dir, labeled_masks_dir):
 
 def load_labeled_data_multiclass_mask(labeled_images_dir, labeled_masks_dir, num_classes):
     '''
-    Load labeled data consisting of images and their corresponding multiclass masks.
-
-    This function reads images and masks from specified directories, processes them for multiclass segmentation tasks, and returns them as numpy arrays. Masks are converted to one-hot encoded format based on the number of classes.
+    Reads images and masks from specified directories, processes them for multiclass segmentation tasks, and returns them as numpy arrays. Masks are converted to one-hot encoded format based on the number of classes.
 
     Args:
         labeled_images_dir (str): Directory containing labeled images.
@@ -906,9 +902,7 @@ def load_labeled_data_multiclass_mask(labeled_images_dir, labeled_masks_dir, num
 
 def load_labeled_data_depth_map(labeled_images_dir, labeled_depth_maps_dir):
     '''
-    Load labeled data consisting of images and their corresponding depth maps.
-
-    This function reads images and depth maps from specified directories, processes them, and returns them as numpy arrays. Depth maps are normalized to float values between 0 and 1.
+    Reads images and depth maps from specified directories, processes them, and returns them as numpy arrays. Depth maps are normalized to float values between 0 and 1.
 
     Args:
         labeled_images_dir (str): Directory containing labeled images.
@@ -935,9 +929,7 @@ def load_labeled_data_depth_map(labeled_images_dir, labeled_depth_maps_dir):
 
 def load_unlabeled_images(unlabeled_images_dir, read_as_grayscale=False):
     '''
-    Load unlabeled images from a specified directory.
-
-    This function reads images from the given directory and can optionally convert them to grayscale. The images are returned as a numpy array.
+    Reads images from the given directory and can optionally convert them to grayscale. The images are returned as a numpy array.
 
     Args:
         unlabeled_images_dir (str): Directory containing unlabeled images.
@@ -964,8 +956,6 @@ def parse_image_ISIC_2018(image_dir, IMG_CHANNELS=3):
     '''
     Parse an image and its corresponding mask from the ISIC 2018 dataset.
 
-    This function reads an image and its mask from given directories, decodes them, and processes the mask for use in segmentation tasks.
-
     Args:
         image_dir (str): Directory of the image file.
         IMG_CHANNELS (int, optional): Number of channels in the image (e.g., 3 for RGB). Defaults to 3.
@@ -989,9 +979,7 @@ def parse_image_ISIC_2018(image_dir, IMG_CHANNELS=3):
 
 def parse_image_hela(path_brightfield, IMG_CHANNELS=1, Position_weight=3):  
     '''
-    Parse brightfield and labeled images for HeLa cells.
-
-    This function reads a brightfield image along with its corresponding 'alive', 'dead', and 'position' labeled images. It processes these images and returns them in a suitable format for image analysis tasks.
+    Reads a brightfield image along with its corresponding 'alive', 'dead', and 'position' masks.
 
     Args:
         path_brightfield (str): Path to the brightfield image.
@@ -1032,9 +1020,7 @@ def parse_image_hela(path_brightfield, IMG_CHANNELS=1, Position_weight=3):
 
 def parse_image_multiclass(image_dir, n_classes, image_channels=3):      
     '''
-    Parse an image and its corresponding multiclass mask.
-
-    This function reads an image and its mask from given directories, decodes them, and processes the mask for multiclass segmentation tasks using one-hot encoding.
+    Reads an image and its mask from given directories, decodes them, and processes the mask for multiclass segmentation tasks using one-hot encoding.
 
     Args:
         image_dir (str): Directory of the image file.
@@ -1065,9 +1051,7 @@ def parse_image_multiclass(image_dir, n_classes, image_channels=3):
 def parse_image_depth_map(image_dir, IMG_CHANNELS=3):    
     '''
     Parse an image and its corresponding depth map.
-
-    This function reads an image and its depth map from given directories, decodes them, and processes the depth map to be used in applications such as 3D reconstruction or depth estimation.
-
+    
     Args:
         image_dir (str): Directory of the image file.
         IMG_CHANNELS (int, optional): Number of channels in the image (e.g., 3 for RGB). Defaults to 3.
@@ -1093,9 +1077,7 @@ def parse_image_depth_map(image_dir, IMG_CHANNELS=3):
 
 def benchmark_ISIC2018(model, images_dir, masks_dir, pred_path, h, w, c, batch_size=64, create_images=True, print_results=False):
     '''
-    Benchmark a model on the ISIC 2018 dataset.
-
-    This function evaluates a given model on the ISIC 2018 dataset by computing Intersection over Union (IoU) and Dice scores. It also optionally saves the predicted masks and prints the results.
+    Evaluates a given model on the ISIC 2018 dataset by computing Intersection over Union (IoU) and Dice scores. It also optionally saves the predicted masks and prints the results.
 
     Args:
         model: The model to be benchmarked.
@@ -1173,9 +1155,7 @@ def benchmark_ISIC2018(model, images_dir, masks_dir, pred_path, h, w, c, batch_s
 
 def benchmark_hela(model, gt_main_dir, pred_dir, h, w, c, threshold=0.5, batch_size=64, save_output=True, benchmark=True, mod_position=True):
     '''
-    Benchmark a model on HeLa cell images.
-
-    This function evaluates a given model on HeLa cell images by computing mean Intersection over Union (mIoU) for 'alive', 'dead', and 'position' cells. It also saves the predicted masks and optionally benchmarks cell count accuracy.
+    Evaluates a given model on HeLa cell images by computing mean Intersection over Union (mIoU) for 'alive', 'dead', and 'position' cells. It also saves the predicted masks and optionally benchmarks cell count accuracy.
 
     Args:
         model: The model to be benchmarked.
@@ -1284,9 +1264,7 @@ def benchmark_hela(model, gt_main_dir, pred_dir, h, w, c, threshold=0.5, batch_s
 
 def benchmark_multiclass(model, image_path, gt_path, pred_path, h, w, c, class_to_color_mapping, batch_size=64, create_images=True, print_results=True):
     '''
-    Benchmark a model on multiclass segmentation tasks.
-
-    This function evaluates a given model on a set of images by computing mean Intersection over Union (mIoU) and mean Pixel Accuracy (mPA). It also optionally saves the predicted masks both in class label and color-coded formats.
+    Evaluates a given model on a set of images by computing mean Intersection over Union (mIoU) and mean Pixel Accuracy (mPA). It also optionally saves the predicted masks both in class label and color-coded formats.
 
     Args:
         model: The model to be benchmarked.
@@ -1366,9 +1344,7 @@ def benchmark_multiclass(model, image_path, gt_path, pred_path, h, w, c, class_t
 
 def benchmark_depth_map(model, dataset, input_dir, output_dir):
     '''
-    Benchmark a model on a depth map prediction task.
-
-    This function evaluates a given model using a dataset, computes Root Mean Square Error (RMSE) and Mean Square Error (MSE), and saves the predicted depth maps.
+    Evaluates a given model using a dataset, computes Root Mean Square Error (RMSE) and Mean Square Error (MSE), and saves the predicted depth maps.
 
     Args:
         model: The model to be benchmarked.
@@ -1412,9 +1388,7 @@ def benchmark_depth_map(model, dataset, input_dir, output_dir):
 def load_and_preprocess_image(image_dir, IMG_CHANNELS=3):  
     '''
     Load and preprocess an image from a given directory.
-
-    This function reads an image file, decodes it, and preprocesses it for further use in machine learning models or image processing tasks.
-
+    
     Args:
         image_dir (str): Directory of the image file.
         IMG_CHANNELS (int, optional): Number of channels to use in the image. Defaults to 3 (for RGB images).
@@ -1488,9 +1462,7 @@ def input_ensemble_prediction(model, image, h, w, c, threshold, max_blur=3, max_
 
 def add_noise(image, max_noise=25):
     '''
-    Add random noise to an image.
-
-    This function introduces random noise to a given image. The noise is generated within a specified range and added to the image. The function ensures that the pixel values remain within the valid range [0, 255].
+    Add random noise to an image within a specified range.
 
     Args:
         image (np.array): The input image.
@@ -1508,9 +1480,7 @@ def add_noise(image, max_noise=25):
 
 def add_noise_and_blur(image, max_blur=3, max_noise=25):
     '''
-    Add random noise and blur to an image.
-
-    This function applies Gaussian blur and random noise to a given image. The level of blur and noise can be controlled by the parameters.
+    Applies Gaussian blur and random noise to a given image. The level of blur and noise can be controlled by the parameters.
 
     Args:
         image (np.array): The input image.
@@ -1538,20 +1508,13 @@ def add_noise_and_blur(image, max_blur=3, max_noise=25):
 
 def apply_random_flip_and_rotation(image):
     '''
-    Applies random horizontal and vertical flips, as well as random rotations, to the given image.
+    Randomly flips an image vertically and/or horizontally, and applies random rotations (90, 180, or 270 degrees).
 
-    The rotation applied can be either 90, 180, or 270 degrees clockwise, determined randomly. 
-    The function might also flip the image either horizontally, vertically, or both, again determined randomly.
+    Args:
+        image (np.array): The input image.
 
-    Parameters
-    ----------
-    image : np.ndarray
-        The original image to be processed.
-
-    Returns
-    -------
-    np.ndarray
-        The processed image with applied flips and rotations.
+    Returns:
+        np.array: The transformed image.
     '''
 
     if random.randint(0,1) == 1:
@@ -1577,30 +1540,19 @@ def apply_random_flip_and_rotation(image):
 
 def data_augmentation_image2tensor(image, max_blur=3, max_noise=25, brightness_range_alpha=(0.5, 1.5), brightness_range_beta=(-25, 25)):
     '''
-    Applies a series of data augmentation operations to an image and converts it to a TensorFlow tensor.
+    Applies noise, blur, and random brightness adjustments to an image, followed by conversion to a TensorFlow tensor.
 
-    The function first applies noise and blur to the image, and then optionally applies random brightness and contrast adjustments. 
-    After that the image is converted to a TensorFlow tensor.
+    Args:
+        image (np.array): The input image.
+        max_blur (int, optional): The maximum kernel size for Gaussian blur. Defaults to 3.
+        max_noise (int, optional): The maximum magnitude of noise to add. Defaults to 25.
+        brightness_range_alpha (tuple, optional): Range for alpha in brightness adjustment. Defaults to (0.5, 1.5).
+        brightness_range_beta (tuple, optional): Range for beta in brightness adjustment. Defaults to (-25, 25).
 
-    Parameters
-    ----------
-    image : np.ndarray
-        The original image to be processed.
-    max_blur : int
-        The maximum blur level that can be applied to the image.  Defaults to 3.
-    max_noise : int
-        The maximum noise level that can be applied to the image.  Defaults to 25.
-    brightness_range_alpha : tuple of float
-        The range from which to sample the alpha value (contrast adjustment) for brightness and contrast transformations.  Defaults to (0.5, 1.5).
-    brightness_range_beta : tuple of float
-        The range from which to sample the beta value (brightness adjustment) for brightness and contrast transformations.  Defaults to (-25, 25).
-
-    Returns
-    -------
-    tf.Tensor
-        The processed image as a TensorFlow tensor.
+    Returns:
+        tf.Tensor: The augmented image as a TensorFlow tensor.
     '''
-
+    
     image = add_noise_and_blur(image, max_blur, max_noise)
 
     if random.randint(0,1) == 1:
@@ -1617,28 +1569,17 @@ def data_augmentation_image2tensor(image, max_blur=3, max_noise=25, brightness_r
 
 def data_augmentation_image(image, max_blur, max_noise, brightness_range_alpha, brightness_range_beta ):
     '''
-    Applies data augmentation to an image.
+    Apply noise, blur, and random brightness adjustments to an image.
 
-    This function applies noise, blur, and adjusts the brightness of the image. 
-    The levels of each of these transformations can be controlled by the parameters.
+    Args:
+        image (np.array): The input image.
+        max_blur (int): The maximum kernel size for Gaussian blur.
+        max_noise (int): The maximum magnitude of noise to add.
+        brightness_range_alpha (tuple): Range for alpha in brightness adjustment.
+        brightness_range_beta (tuple): Range for beta in brightness adjustment.
 
-    Parameters
-    ----------
-    image : numpy.array
-        The original image to be augmented.
-    max_blur : int
-        The maximum size of the Gaussian kernel to be used for the blur.
-    max_noise : int
-        The maximum intensity of the noise to be added.
-    brightness_range_alpha : tuple of float
-        The range from which the alpha value for brightness adjustment is selected.
-    brightness_range_beta : tuple of float
-        The range from which the beta value for brightness adjustment is selected.
-
-    Returns
-    -------
-    image : numpy.array
-        The image after data augmentation has been applied.
+    Returns:
+        np.array: The augmented image.
     '''
 
     image = add_noise_and_blur(image, max_blur, max_noise)
@@ -1655,20 +1596,13 @@ def data_augmentation_image(image, max_blur, max_noise, brightness_range_alpha, 
 
 def generate_all_transformations(image):
     '''
-    Generates all possible transformations of a given image.
+    Generate all possible transformations of an image with flips and rotations.
 
-    This function creates a list of images with all possible transformations (flip horizontal, flip vertical, and rotations of 90°, 180°, 270°) applied to the original image. 
-    Note that the original image is also included in the list as the first element.
+    Args:
+        image (np.array): The input image.
 
-    Parameters
-    ----------
-    image : numpy.array
-        The original image to be transformed. The array is expected to be in a 2D or 3D (if color) format.
-
-    Returns
-    -------
-    transformed_images : list of numpy.array
-        A list of images with all possible transformations applied, including the original image.
+    Returns:
+        list: A list of transformed images including the original image, flipped, and rotated versions.
     '''
 
     transformed_images = [image.copy()]
@@ -1701,21 +1635,15 @@ def generate_all_transformations(image):
 
 def restore_all_transformations(transformed_images):
     '''
-    Restores the original state of images that were transformed.
+    Restore all transformed images to their original orientation.
 
-    This function applies the reverse of the transformations that were previously applied to the images.
-    The transformations include horizontal flip, vertical flip, and rotation (90° clockwise, 180°, and 270° clockwise).
-    Note that the original image is also included in the list as the first element.
+    This function reverses the transformations applied to a set of images, which includes flips and rotations, bringing them back to their original state.
 
-    Parameters
-    ----------
-    transformed_images : list of numpy.array
-        A list of images that were transformed. The first image is expected to be the original untransformed image.
+    Args:
+        transformed_images (list): A list of transformed images.
 
-    Returns
-    -------
-    restored_images : list of numpy.array
-        A list of images after the reverse transformations have been applied, restoring them to their original state, including the original image.
+    Returns:
+        list: A list of restored images.
     '''
 
     restored_images = [transformed_images.pop(0)]
@@ -1746,32 +1674,20 @@ def restore_all_transformations(transformed_images):
 
 def generate_random_transformations(image, n, max_blur, max_noise, brightness_range_alpha, brightness_range_beta):
     '''
-    Generate a list of random transformations applied on a given image.
+    Generate a set of randomly transformed images.
 
-    This function creates a list of all possible transformations (flip horizontal, flip vertical, rotate 90°, 180°, 270°) applied to an image, and then randomly selects K transformations to apply. Additionally, each selected transformation also undergoes data augmentation via blurring, noise addition, and brightness adjustment.
+    This function applies a random combination of flips, rotations, and other augmentations to create multiple variations of the input image.
 
-    Parameters
-    ----------
-    image : numpy.array
-        The input image to be transformed.
-    n : int
-        The number of random transformations to be selected.
-    max_blur : int
-        The maximum allowable blur in the data augmentation.
-    max_noise : float
-        The maximum allowable noise in the data augmentation.
-    brightness_range_alpha : float
-        Lower limit for random brightness adjustment.
-    brightness_range_beta : float
-        Upper limit for random brightness adjustment.
+    Args:
+        image (np.array): The input image.
+        n (int): Number of random transformations to generate.
+        max_blur (int): Maximum kernel size for Gaussian blur.
+        max_noise (int): Maximum magnitude of noise to add.
+        brightness_range_alpha (tuple): Range for alpha in brightness adjustment.
+        brightness_range_beta (tuple): Range for beta in brightness adjustment.
 
-    Returns
-    -------
-    transformed_images : list of numpy.array
-        A list of K transformed images.
-    transformations_applied : list of tuples
-        A list of K tuples, each representing the transformation parameters applied on the corresponding image.
-        Each tuple contains three values: (flip_horizontal, flip_vertical, rotation_type).
+    Returns:
+        tuple: A tuple containing a list of transformed images and a list of applied transformations.
     '''
 
     all_transformations = []
@@ -1812,24 +1728,14 @@ def generate_random_transformations(image, n, max_blur, max_noise, brightness_ra
 
 def restore_random_transformations(transformed_images, transformations_applied):
     '''
-    Restores the original state of images that were randomly transformed.
+    Reverse transformations on a set of images based on the specified transformation parameters.
 
-    This function applies the reverse of the transformations that were previously applied to the images.
-    The transformations include horizontal flip, vertical flip, and rotation (90° clockwise, 180°, and 270° clockwise).
+    Args:
+        transformed_images (list): List of transformed images to be restored.
+        transformations_applied (list of tuples): List of transformation parameters applied to each image, where each tuple contains flip_horizontal, flip_vertical, and rotation_type indicators.
 
-    Parameters
-    ----------
-    transformed_images : list of numpy.array
-        A list of images that were transformed.
-    transformations_applied : list of tuples
-        A list of tuples, each representing the transformation parameters applied on the corresponding image.
-        Each tuple contains three values: (flip_horizontal, flip_vertical, rotation_type).
-        
-    Returns
-    -------
-    restored_images : list of numpy.array
-        A list of images after the reverse transformations have been applied, restoring them to their original state.
-
+    Returns:
+        list: A list of images restored to their original state before the transformations were applied.
     '''
 
     restored_images = []
@@ -1860,25 +1766,14 @@ def restore_random_transformations(transformed_images, transformations_applied):
 
 def get_IoU_binary(gt, pred):
     '''
-    Calculate the Intersection over Union (IoU) of two binary masks.
+    Calculate the Intersection over Union (IoU) for binary images.
 
-    IoU is a measure of the overlap between two binary masks. It is calculated as the size of the intersection divided by the size of the union of the two masks.
+    Args:
+        gt (np.array): Ground truth binary mask.
+        pred (np.array): Predicted binary mask.
 
-    Parameters
-    ----------
-    gt : array_like
-        The ground truth binary mask. It is a 2D array where each pixel is 0 (background) or 1 (object).
-    pred : array_like
-        The predicted binary mask. It should have the same shape as `gt`.
-
-    Returns
-    -------
-    float
-        The IoU score. It is a value between 0 (no overlap) and 1 (perfect overlap).
-
-    Note
-    ----
-    To prevent division by zero, a small constant (1e-7) is added to the denominator.
+    Returns:
+        float: The IoU score.
     '''
     
     mask_gt = np.array(gt)
@@ -1888,12 +1783,23 @@ def get_IoU_binary(gt, pred):
 
     union = np.logical_or(mask_gt, mask_pred).sum()
 
-    iou = intersection / (union+0.0000001)
+    iou = intersection / (union+1e-7)
 
     return iou
 
 
 def get_IoU_multi_unique(pred, gt):
+    '''
+    Calculate the mean Intersection over Union (IoU) for multiclass segmentation.
+
+    Args:
+        pred (np.array): Predicted segmentation mask.
+        gt (np.array): Ground truth segmentation mask.
+
+    Returns:
+        float: The mean IoU score across all unique classes in the ground truth mask.
+    '''
+    
     unique_classes = np.unique(gt)
     iou_list = []
     for i in unique_classes:
@@ -1912,6 +1818,17 @@ def get_IoU_multi_unique(pred, gt):
 
 
 def pixel_accuracy(pred_mask, gt_mask):
+    '''
+    Calculate the pixel accuracy between the predicted mask and ground truth mask.
+
+    Args:
+        pred_mask (np.array): Predicted segmentation mask.
+        gt_mask (np.array): Ground truth segmentation mask.
+
+    Returns:
+        float: The pixel accuracy score.
+    '''
+    
     correct_pixels = np.sum(pred_mask == gt_mask)
     total_pixels = np.prod(gt_mask.shape)
     return correct_pixels / total_pixels
@@ -1919,20 +1836,16 @@ def pixel_accuracy(pred_mask, gt_mask):
 
 def dice_score_numpy_binary(gt, pred, smooth=1, threshold=128):
     '''
-    Compute the Dice score for binary segmentation tasks using NumPy for single 2D masks.
-
-    This function assumes the inputs `gt` and `pred` are grayscale images with pixel values ranging from 0 to 255.
-    It converts them into binary masks using a threshold value of 128. Pixels with values equal to or above this threshold
-    are considered as 1 (object), and others as 0 (background).
+    Calculate the Dice Score for binary segmentation masks.
 
     Args:
-        gt (np.ndarray): Ground truth segmentation mask in grayscale format, shape (height, width), pixel intensity from 0 to 255.
-        pred (np.ndarray): Predicted segmentation mask in grayscale format, shape (height, width), pixel intensity from 0 to 255.
-        smooth (float, optional): Smoothing factor to prevent division by zero. Defaults to 1.
-        threshold (int, optional): Threshold for converting grayscale masks to binary. Defaults to 128.
+        gt (np.array): Ground truth binary mask.
+        pred (np.array): Predicted binary mask.
+        smooth (float, optional): Smoothing factor to avoid division by zero. Defaults to 1.
+        threshold (int, optional): Threshold to binarize masks. Defaults to 128.
 
     Returns:
-        float: Dice score value. It's a float between 0 (worst) and 1 (best).
+        float: The Dice Score.
     '''
 
     # Threshold the masks to convert them to binary
@@ -1950,34 +1863,22 @@ def dice_score_numpy_binary(gt, pred, smooth=1, threshold=128):
 
 def create_pseudo_labels_model_ensemble_ISIC_2018(models, images_path, main_output_path, h, w, c, rgb=True,  threshold=0.5):
     '''
-    Creates pseudo labels for images using an ensemble of models.
-    
-    This function reads images from the specified path, prepares them for prediction, and obtains predictions
-    using an ensemble of models. These predictions are then written as pseudo ground truth labels.
-    The original images and the corresponding labels are saved in the specified output directory.
+    Create pseudo labels for ISIC 2018 using an ensemble of models.
 
-    Parameters
-    ----------
-    models : list
-        A list of trained models to use for ensemble prediction.
-    images_path : str
-        Path to the directory containing the images for which to create pseudo labels.
-    main_output_path : str
-        Path to the directory where the images and the generated pseudo labels will be saved.
-    h : int
-        The height of the images.
-    w : int
-        The width of the images.
-    c : int
-        The number of channels in the images.
-    rgb : bool, optional
-        If set to True, the function converts the images from BGR to RGB. Defaults to True.
-    threshold : float, optional
-        Threshold for binary classification, values above this threshold will be considered as positive. Defaults to 0.5.
+    This function reads images, processes them, and uses an ensemble of models to generate pseudo labels, saving both the images and the pseudo labels in a specified output path.
 
-    Returns
-    -------
-    None
+    Args:
+        models (list): List of models for ensemble prediction.
+        images_path (str): Directory containing input images.
+        main_output_path (str): Main directory to save the processed images and pseudo labels.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        rgb (bool, optional): Flag to convert images to RGB. Defaults to True.
+        threshold (float, optional): Threshold for binary classification. Defaults to 0.5.
+
+    Returns:
+        None
     '''
 
     images_path_out = os.path.join(main_output_path, 'images')
@@ -2006,7 +1907,20 @@ def create_pseudo_labels_model_ensemble_ISIC_2018(models, images_path, main_outp
 
 
 def create_pseudo_labels_model_ensemble_hela(models, bf_images_path, main_output_path, h, w, c):
+    '''
+    Create pseudo labels for the HeLa dataset using an ensemble of models.
 
+    Args:
+        models (list): List of models for ensemble prediction.
+        bf_images_path (str): Directory containing brightfield images.
+        main_output_path (str): Main directory to save the processed images and pseudo labels.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+
+    Returns:
+        None
+    '''
 
     bf_images_path_out = os.path.join(main_output_path, 'brightfield')
     alive_masks_path_out = os.path.join(main_output_path, 'alive')
@@ -2037,32 +1951,19 @@ def create_pseudo_labels_model_ensemble_hela(models, bf_images_path, main_output
 
 def create_pseudo_labels_model_ensemble_multiclass(models, images_path, main_output_path, h, w, c, rgb=True):
     '''
-    Creates pseudo labels for images using an ensemble of models.
-    
-    This function reads images from the specified path, prepares them for prediction, and obtains predictions
-    using an ensemble of models. These predictions are then written as pseudo ground truth labels.
-    The original images and the corresponding labels are saved in the specified output directory.
+    Generate pseudo labels for multiclass segmentation datasets using an ensemble of models.
 
-    Parameters
-    ----------
-    models : list
-        A list of trained models to use for ensemble prediction.
-    images_path : str
-        Path to the directory containing the images for which to create pseudo labels.
-    main_output_path : str
-        Path to the directory where the images and the generated pseudo labels will be saved.
-    h : int
-        The height of the images.
-    w : int
-        The width of the images.
-    c : int
-        The number of channels in the images.
-    rgb : bool, optional
-        If set to True, the function converts the images from BGR to RGB. Defaults to True.
-   
-    Returns
-    -------
-    None
+    Args:
+        models (list): List of models for ensemble prediction.
+        images_path (str): Directory containing input images.
+        main_output_path (str): Main directory to save the processed images and pseudo labels.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        rgb (bool, optional): Flag to convert images to RGB. Defaults to True.
+
+    Returns:
+        None
     '''
 
     images_path_out = os.path.join(main_output_path, 'images')
@@ -2090,37 +1991,22 @@ def create_pseudo_labels_model_ensemble_multiclass(models, images_path, main_out
 
 def create_pseudo_labels_input_ensemble_ISIC_2018(model, images_path, main_output_path, h, w, c, n=2, rgb=True, use_n_rnd_transformations=True, threshold=0.5):
     '''
-    Generate and save pseudo-labels based on an ensemble of model inputs for the ISIC 2018 dataset.
+    Generate pseudo labels for ISIC 2018 using input ensemble predictions from a single model.
 
-    This function reads images from the provided path, applies transformations to each image, 
-    and uses the provided model to generate predictions for each transformed image. The predictions are then 
-    thresholded and summed to generate the final pseudo-label for each image.
+    Args:
+        model: The model used for predictions.
+        images_path (str): Directory containing input images.
+        main_output_path (str): Main directory to save the processed images and pseudo labels.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        n (int, optional): Number of random transformations for ensemble. Defaults to 2.
+        rgb (bool, optional): Flag to convert images to RGB. Defaults to True.
+        use_n_rnd_transformations (bool, optional): Flag to use N random transformations. Defaults to True.
+        threshold (float, optional): Threshold for binary classification. Defaults to 0.5.
 
-    Parameters
-    ----------
-    model : Model
-        The trained model to use for generating predictions.
-    images_path : str
-        Path to the directory containing the images to be processed.
-    main_output_path : str
-        Path to the directory where the processed images and generated pseudo-labels should be saved.
-    h : int
-        Height of the images.
-    w : int
-        Width of the images.
-    c : int
-        Number of color channels in the images.
-    n : int, optional
-        The number of different transformations to apply to each image in the ensemble. Defaults to 2.
-    rgb : bool, optional
-        If set to True, the function converts the images from BGR to RGB. Defaults to True.
-    threshold : float, optional
-        The threshold for binarizing the model's predictions. Defaults to 0.5.
-
-
-    Returns
-    -------
-    None
+    Returns:
+        None
     '''
 
     images_path_out = os.path.join(main_output_path, 'images')
@@ -2152,6 +2038,22 @@ def create_pseudo_labels_input_ensemble_ISIC_2018(model, images_path, main_outpu
 
 
 def create_pseudo_labels_input_ensemble_hela(model, bf_images_path, main_output_path, h, w, c, n=2, use_soft_voting=False):
+    '''
+    Generate pseudo labels for the HeLa dataset using input ensemble predictions for a single model.
+
+    Args:
+        model: The model used for predictions.
+        bf_images_path (str): Directory containing brightfield images.
+        main_output_path (str): Main directory to save the processed images and pseudo labels.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        n (int, optional): Number of transformations for ensemble. Defaults to 2.
+        use_soft_voting (bool, optional): Flag to use soft voting for ensemble predictions. Defaults to False.
+
+    Returns:
+        None
+    '''
 
     bf_images_path_out = os.path.join(main_output_path, 'brightfield')
     alive_masks_path_out = os.path.join(main_output_path, 'alive')
@@ -2183,7 +2085,22 @@ def create_pseudo_labels_input_ensemble_hela(model, bf_images_path, main_output_
 
 
 def create_pseudo_labels_input_ensemble_multiclass(model, images_path, main_output_path, h, w, c, n=2, rgb=True):
+    '''
+    Generate pseudo labels for multiclass segmentation datasets using input ensemble predictions from a single model.
 
+    Args:
+        model: The model used for predictions.
+        images_path (str): Directory containing input images.
+        main_output_path (str): Main directory to save the processed images and pseudo labels.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        n (int, optional): Number of transformations for ensemble. Defaults to 2.
+        rgb (bool, optional): Flag to convert images to RGB. Defaults to True.
+
+    Returns:
+        None
+    '''
 
     images_path_out = os.path.join(main_output_path, 'images')
     masks_path_out = os.path.join(main_output_path, 'masks')
@@ -2200,8 +2117,7 @@ def create_pseudo_labels_input_ensemble_multiclass(model, images_path, main_outp
         else:
             input_image = image
     
-        ensemble_prediction = get_input_ensemble_prediction_multiclass_soft(model, input_image, h, w, c, n)    
-        #ensemble_prediction = get_input_ensemble_prediction_multiclass(model, input_image, h, w, c, n)    
+        ensemble_prediction = get_input_ensemble_prediction_multiclass_soft(model, input_image, h, w, c, n)      
     
         cv2.imwrite(os.path.join(images_path_out, imagename), image)
         cv2.imwrite(os.path.join(masks_path_out, imagename), ensemble_prediction)
@@ -2210,46 +2126,26 @@ def create_pseudo_labels_input_ensemble_multiclass(model, images_path, main_outp
 
 def get_input_ensemble_prediction_ISIC_2018(model, image, h, w, c, threshold, n=2, max_blur=3, max_noise=25, brightness_range_alpha=(0.5, 1.5), brightness_range_beta=(-25, 25), use_n_rnd_transformations=True):
     '''
-    Generates an ensemble prediction on an image using the provided model and a set of image transformations.
+    Generate an ensemble prediction for an image using a model and input transformations.
 
-    This function applies a set of transformations to the provided image, uses the provided model to 
-    generate predictions for each transformed image, and then combines these predictions into an ensemble 
-    prediction by taking a majority vote among the predictions.
+    Args:
+        model: The model used for prediction.
+        image (np.array): The input image.
+        h (int): Height of the image.
+        w (int): Width of the image.
+        c (int): Number of channels in the image.
+        threshold (float): Threshold for binary classification.
+        n (int, optional): Number of random transformations if 'use_n_rnd_transformations' is True. Defaults to 2.
+        max_blur (int, optional): Maximum blur to apply. Defaults to 3.
+        max_noise (int, optional): Maximum noise to add. Defaults to 25.
+        brightness_range_alpha (tuple, optional): Range for alpha in brightness adjustment. Defaults to (0.5, 1.5).
+        brightness_range_beta (tuple, optional): Range for beta in brightness adjustment. Defaults to (-25, 25).
+        use_n_rnd_transformations (bool, optional): Flag to use N random transformations instead of all. Defaults to True.
 
-    Parameters
-    ----------
-    model : Model
-        The trained model to use for generating predictions.
-    image : np.array
-        The input image.
-    h : int
-        The height of the images.
-    w : int
-        The width of the images.
-    c : int
-        The number of color channels in the images.
-    threshold : float
-        The threshold for binarizing the model's predictions.
-    n : int, optional
-        The number of different transformations to apply to each image in the ensemble. Defaults to 2.
-    max_blur : int, optional
-        The maximum radius for Gaussian blur. Defaults to 3.
-    max_noise : int, optional
-        The maximum amount of random noise to add to the image. Defaults to 25.
-    brightness_range_alpha : tuple, optional
-        The range for scaling the brightness of the image. Defaults to (0.5, 1.5).
-    brightness_range_beta : tuple, optional
-        The range for shifting the brightness of the image. Defaults to (-25, 25).
-    use_n_rnd_transformations : bool, optional
-        Whether to use random transformations or all possible transformations. Defaults to True.
-
-    Returns
-    -------
-    np.array
-        The ensemble prediction for the input image, in the form of a binary mask where 255 indicates the positive class 
-        and 0 indicates the negative class.
+    Returns:
+        np.array: The predicted mask after combining the predictions from the transformed images.
     '''
-
+    
     if use_n_rnd_transformations == True:
         transformed_images, transformations_applied = generate_random_transformations(image, n, max_blur, max_noise, brightness_range_alpha, brightness_range_beta)
     else:
@@ -2284,7 +2180,24 @@ def get_input_ensemble_prediction_ISIC_2018(model, image, h, w, c, threshold, n=
 
 
 def get_input_ensemble_prediction_multiclass(model, image, h, w, c, n=2, max_blur=1, max_noise=15, brightness_range_alpha=(0.7, 1.3), brightness_range_beta=(-15, 15)):
+    '''
+    Generate a multiclass dataset ensemble prediction for an image using a model with input transformations.
 
+    Args:
+        model: The model used for prediction.
+        image (np.array): The input image.
+        h (int): Height of the image.
+        w (int): Width of the image.
+        c (int): Number of channels in the image.
+        n (int, optional): Number of transformations for ensemble. Defaults to 2.
+        max_blur (int, optional): Maximum blur to apply. Defaults to 1.
+        max_noise (int, optional): Maximum noise to add. Defaults to 15.
+        brightness_range_alpha (tuple, optional): Range for alpha in brightness adjustment. Defaults to (0.7, 1.3).
+        brightness_range_beta (tuple, optional): Range for beta in brightness adjustment. Defaults to (-15, 15).
+
+    Returns:
+        np.array: The predicted multiclass mask.
+    '''
     transformed_images= []
     for i in range(n+1):
         image = data_augmentation_image(image, max_blur, max_noise, brightness_range_alpha, brightness_range_beta)
@@ -2306,7 +2219,7 @@ def get_input_ensemble_prediction_multiclass(model, image, h, w, c, n=2, max_blu
 
 
 def get_input_ensemble_prediction_hela_soft(model, image, h, w, c, n=2, max_blur=1, max_noise=15, brightness_range_alpha=(0.7, 1.3), brightness_range_beta=(-15, 15), threshold=0.5, max_pos_circle_size=8, min_pos_circle_size=3):
-    """
+    '''
     Obtain input ensemble predictions for the HeLa dataset by performing multiple data augmentations on a single input image.
     
     Args:
@@ -2324,7 +2237,7 @@ def get_input_ensemble_prediction_hela_soft(model, image, h, w, c, n=2, max_blur
     
     Returns:
     - tuple of numpy arrays: Binary masks (values 0 or 255) for each of the three classes: alive, dead, and pos.
-    """
+    '''
 
     transformed_images= []
     for i in range(n+1):
@@ -2380,7 +2293,7 @@ def get_input_ensemble_prediction_hela_soft(model, image, h, w, c, n=2, max_blur
 
 
 def get_input_ensemble_prediction_hela_hard(model, image, h, w, c, n=2, max_blur=1, max_noise=15, brightness_range_alpha=(0.7, 1.3), brightness_range_beta=(-15, 15), threshold=0.5, max_pos_circle_size=8, min_pos_circle_size=3):
-    """
+    '''
     Obtain input ensemble predictions for the HeLa dataset by performing multiple data augmentations on a single input image.
     
     Args:
@@ -2398,7 +2311,7 @@ def get_input_ensemble_prediction_hela_hard(model, image, h, w, c, n=2, max_blur
     
     Returns:
     - tuple of numpy arrays: Binary masks (values 0 or 255) for each of the three classes: alive, dead, and pos.
-    """
+    '''
 
     transformed_images= []
     for i in range(n+1):
@@ -2430,17 +2343,6 @@ def get_input_ensemble_prediction_hela_hard(model, image, h, w, c, n=2, max_blur
     final_dead_mask = np.where(pred_sum_dead == len(prepared_images), 255, 0).astype(np.uint8)
     temp_pos_mask = np.where(pred_sum_pos == len(prepared_images), 255, 0).astype(np.uint8)
 
-    #pred_sum_alive[pred_sum_alive=len(prepared_images)]
-    ## Average the probabilities
-    #avg_alive = pred_sum_alive / len(prepared_images)
-    #avg_dead = pred_sum_dead / len(prepared_images)
-    #avg_pos = pred_sum_pos / len(prepared_images)
-    #
-    ## Apply threshold and set to values 0 or 255
-    #final_alive_mask = (avg_alive > threshold).astype(np.uint8) * 255
-    #final_dead_mask = (avg_dead > threshold).astype(np.uint8) * 255
-    #temp_pos_mask = (avg_pos > threshold).astype(np.uint8) * 255
-
     positions = get_pos_contours(temp_pos_mask)
 
     final_pos_mask = np.zeros((img_height, img_width, 3), np.uint8)
@@ -2461,6 +2363,24 @@ def get_input_ensemble_prediction_hela_hard(model, image, h, w, c, n=2, max_blur
 
 
 def get_input_ensemble_prediction_multiclass_soft(model, image, h, w, c, n=2, max_blur=1, max_noise=15, brightness_range_alpha=(0.7, 1.3), brightness_range_beta=(-15, 15)):
+    '''
+    Generate a soft multiclass ensemble prediction for an image using a model and input transformations.
+
+    Args:
+        model: The model used for prediction.
+        image (np.array): The input image.
+        h (int): Height of the image.
+        w (int): Width of the image.
+        c (int): Number of channels in the image.
+        n (int, optional): Number of transformations for ensemble. Defaults to 2.
+        max_blur (int, optional): Maximum blur to apply. Defaults to 1.
+        max_noise (int, optional): Maximum noise to add. Defaults to 15.
+        brightness_range_alpha (tuple, optional): Range for alpha in brightness adjustment. Defaults to (0.7, 1.3).
+        brightness_range_beta (tuple, optional): Range for beta in brightness adjustment. Defaults to (-15, 15).
+
+    Returns:
+        np.array: The predicted multiclass mask based on soft voting.
+    '''
 
     transformed_images= []
     for i in range(n+1):
@@ -2487,34 +2407,6 @@ def get_input_ensemble_prediction_multiclass_soft(model, image, h, w, c, n=2, ma
 
 
 def get_model_ensemble_prediction_ISIC_2018(models, prepared_image, image_width, image_height, threshold):
-    '''
-    Generate predictions from an ensemble of models for the ISIC 2018 dataset.
-
-    This function accepts a list of models and a prepared image, and generates an ensemble prediction by summing the binary 
-    predictions of all the models. Each model's prediction is binarized with respect to a given threshold before summing. 
-    The final prediction is made by comparing the summed predictions against the number of models: pixels in the 
-    final mask will be set to 255 if the sum of predictions at that pixel is equal to or greater than the number of models.
-
-    Parameters
-    ----------
-    models : list
-        List of trained models to use for the prediction.
-    prepared_image : numpy.ndarray
-        Image that has been preprocessed and is ready to be fed into the models.
-    image_width : int
-        Width of the prepared image.
-    image_height : int
-        Height of the prepared image.
-    threshold : float
-        The threshold value for binarizing each model's prediction. Values above this threshold will be classified as 1, 
-        and those below as 0.
-
-    Returns
-    -------
-    numpy.ndarray
-        The final ensemble prediction. It is an array of shape (image_width, image_height) where each pixel is 0 or 255, 
-        depending on the model predictions and the number of models in the ensemble.
-    '''
 
     pred_sum = np.zeros((image_width, image_height))
 
