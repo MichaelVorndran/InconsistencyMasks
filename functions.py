@@ -3797,7 +3797,7 @@ def create_training_data_evalnet_miou_im_multiclass(models, h, w, c, num_classes
         None
     '''
     
-    imagename_ious_conf = []
+    imagename_ious_detection = []
     kernel_list = [0, 3, 5]
 
     images_path_out = os.path.join(main_output_path, 'images')
@@ -3854,7 +3854,7 @@ def create_training_data_evalnet_miou_im_multiclass(models, h, w, c, num_classes
             detected_class = compute_classwise_detection_im(mask_gray, num_classes, gt_class_counts, 0.3)
             
             pred_name = f'{imagename[:-4]}_aug_{nl}.png'
-            imagename_ious_conf.append((pred_name, *ious, *detected_class))
+            imagename_ious_detection.append((pred_name, *ious, *detected_class))
 
             image_to_save = image
             mask_to_save = pred_mask_sum
@@ -3872,7 +3872,7 @@ def create_training_data_evalnet_miou_im_multiclass(models, h, w, c, num_classes
     with open(os.path.join(main_output_path, 'labels.csv'), 'a', encoding='utf-8', newline='') as f:
         writer = csv.writer(f, delimiter=';')
 
-        for row in imagename_ious_conf:
+        for row in imagename_ious_detection:
             writer.writerow(row)
 
 
@@ -3880,7 +3880,7 @@ def create_training_data_evalnet_miou_im_multiclass(models, h, w, c, num_classes
 
 def create_training_data_evalnet_miou_im_hela(models, h, w, c, main_input_path, main_output_path, num_loops, n_min_models=2, n_max_models=4, brightness_range_alpha=(0.8, 1.2), brightness_range_beta=(-10, 10), max_blur=1, max_noise=10, free_rotation=False):
     '''
-    Generate training data for EvalNet with mIoU scores and class detection for the HeLa dataset using multiclass predictions with inconsistency masks from an ensemble of models.
+    Generate training data for EvalNet with mIoU scores and class detection for the HeLa dataset using predictions with inconsistency masks from an ensemble of models.
 
     Args:
         models (list): List of models for ensemble prediction.
@@ -3903,7 +3903,7 @@ def create_training_data_evalnet_miou_im_hela(models, h, w, c, main_input_path, 
         None
     '''
     
-    imagename_ious_conf = []
+    imagename_ious_detection = []
     kernel_list = [0, 3, 5]
 
     bf_images_path_in = os.path.join(main_input_path, 'brightfield')
@@ -3978,7 +3978,7 @@ def create_training_data_evalnet_miou_im_hela(models, h, w, c, main_input_path, 
                 detection_pos = 1
 
             imagename_out = f'{imagename[:-4]}_aug_{nl}.png'
-            imagename_ious_conf.append((imagename_out, iou_alive, iou_dead, iou_pos, detection_alive, detection_dead, detection_pos))
+            imagename_ious_detection.append((imagename_out, iou_alive, iou_dead, iou_pos, detection_alive, detection_dead, detection_pos))
 
             # rnd if aug or not
             if random.random() < 0.5:
@@ -4002,15 +4002,31 @@ def create_training_data_evalnet_miou_im_hela(models, h, w, c, main_input_path, 
     with open(os.path.join(main_output_path, 'labels.csv'), 'a', encoding='utf-8', newline='') as f:
         writer = csv.writer(f, delimiter=';')
 
-        for row in imagename_ious_conf:
+        for row in imagename_ious_detection:
             writer.writerow(row)
 
 
 
 
 def create_training_data_evalnet_miou_hela(model, h, w, c, main_input_path, main_output_path, i, threshold=0.5):
+    '''
+    Generate training data for EvalNet with mIoU scores and class detection for the HeLa dataset using predictions from a model.
 
-    imagename_ious_conf = []
+    Args:
+        model: The model used for generating predictions.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        main_input_path (str): Directory containing input HeLa cell images and masks.
+        main_output_path (str): Directory to save the generated data, mIoU scores, and class detection.
+        i (int): Iteration number for naming the output files.
+        threshold (float, optional): Threshold for binary classification. Defaults to 0.5.
+
+    Returns:
+        None
+    '''
+    
+    imagename_ious_detection = []
 
     bf_images_path_in = os.path.join(main_input_path, 'brightfield')
     alive_masks_path_in = os.path.join(main_input_path, 'alive')
@@ -4078,7 +4094,7 @@ def create_training_data_evalnet_miou_hela(model, h, w, c, main_input_path, main
             detection_pos = 1
             iou_pos = get_IoU_binary(pos_mask, final_pos_mask)
 
-        imagename_ious_conf.append((pred_name, iou_alive, iou_dead, iou_pos, detection_alive, detection_dead, detection_pos))
+        imagename_ious_detection.append((pred_name, iou_alive, iou_dead, iou_pos, detection_alive, detection_dead, detection_pos))
 
 
     if i == 0:
@@ -4104,7 +4120,7 @@ def create_training_data_evalnet_miou_hela(model, h, w, c, main_input_path, main
                 detection_pos = 1
                 iou_pos = 1
 
-            imagename_ious_conf.append((imagename, iou_alive, iou_dead, iou_pos, detection_alive, detection_dead, detection_pos))
+            imagename_ious_detection.append((imagename, iou_alive, iou_dead, iou_pos, detection_alive, detection_dead, detection_pos))
 
             shutil.copy(os.path.join(bf_images_path_in, imagename), os.path.join(bf_images_path_out, imagename))
             shutil.copy(os.path.join(alive_masks_path_in, imagename), os.path.join(alive_masks_path_out, imagename))
@@ -4115,14 +4131,30 @@ def create_training_data_evalnet_miou_hela(model, h, w, c, main_input_path, main
     with open(os.path.join(main_output_path, 'labels.csv'), 'a', encoding='utf-8', newline='') as f:
         writer = csv.writer(f, delimiter=';')
 
-        for row in imagename_ious_conf:
+        for row in imagename_ious_detection:
             writer.writerow(row)
 
 
 
 def create_training_data_evalnet_miou_hela_no_pos(model, h, w, c, main_input_path, main_output_path, i, threshold=0.5):
+    '''
+    Generate training data for EvalNet with mIoU scores and class detection for the HeLa dataset excluding positional masks, using predictions from a model.
 
-    imagename_ious_conf = []
+    Args:
+        model: The model used for generating predictions.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        main_input_path (str): Directory containing input HeLa cell images and masks.
+        main_output_path (str): Directory to save the generated data and mIoU scores.
+        i (int): Iteration number for naming the output files.
+        threshold (float, optional): Threshold for binary classification. Defaults to 0.5.
+
+    Returns:
+        None
+    '''
+    
+    imagename_ious_detection = []
 
     bf_images_path_in = os.path.join(main_input_path, 'brightfield')
     alive_masks_path_in = os.path.join(main_input_path, 'alive')
@@ -4178,7 +4210,7 @@ def create_training_data_evalnet_miou_hela_no_pos(model, h, w, c, main_input_pat
             detection_dead = 1
             iou_dead = get_IoU_binary(dead_mask, final_dead_mask)
 
-        imagename_ious_conf.append((pred_name, iou_alive, iou_dead, detection_alive, detection_dead))
+        imagename_ious_detection.append((pred_name, iou_alive, iou_dead, detection_alive, detection_dead))
 
 
     if i == 0:
@@ -4198,7 +4230,7 @@ def create_training_data_evalnet_miou_hela_no_pos(model, h, w, c, main_input_pat
                 detection_dead = 1
                 iou_dead = 1
 
-            imagename_ious_conf.append((imagename, iou_alive, iou_dead, detection_alive, detection_dead))
+            imagename_ious_detection.append((imagename, iou_alive, iou_dead, detection_alive, detection_dead))
 
             shutil.copy(os.path.join(bf_images_path_in, imagename), os.path.join(bf_images_path_out, imagename))
             shutil.copy(os.path.join(alive_masks_path_in, imagename), os.path.join(alive_masks_path_out, imagename))
@@ -4207,15 +4239,33 @@ def create_training_data_evalnet_miou_hela_no_pos(model, h, w, c, main_input_pat
     with open(os.path.join(main_output_path, 'labels.csv'), 'a', encoding='utf-8', newline='') as f:
         writer = csv.writer(f, delimiter=';')
 
-        for row in imagename_ious_conf:
+        for row in imagename_ious_detection:
             writer.writerow(row)
 
 
 
 
 def create_training_data_evalnet_miou_multiclass(model, h, w, c, num_classes, images_path, masks_path, main_output_path, i, rgb=True):
+    '''
+    Generate training data for EvalNet with mIoU scores and class detection for multiclass datasets dataset using predictions from a model.
 
-    imagename_ious_conf = []
+    Args:
+        model: The model used for generating predictions.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        num_classes (int): Number of classes in the segmentation.
+        images_path (str): Directory containing input images.
+        masks_path (str): Directory containing corresponding masks.
+        main_output_path (str): Directory to save the generated data, mIoU scores, and class detection.
+        i (int): Iteration number for naming the output files.
+        rgb (bool, optional): Flag to convert images to RGB. Defaults to True.
+
+    Returns:
+        None
+    '''
+    
+    imagename_ious_detection = []
 
     images_path_out = os.path.join(main_output_path, 'images')
     masks_path_out = os.path.join(main_output_path, 'masks')
@@ -4252,7 +4302,7 @@ def create_training_data_evalnet_miou_multiclass(model, h, w, c, num_classes, im
         ious = compute_classwise_IoU(mask_gt, mask_pred, num_classes)
         detected_class = compute_classwise_detection(mask_gt, num_classes)
 
-        imagename_ious_conf.append((pred_name, *ious, *detected_class))
+        imagename_ious_detection.append((pred_name, *ious, *detected_class))
 
 
     if i == 0:
@@ -4260,7 +4310,7 @@ def create_training_data_evalnet_miou_multiclass(model, h, w, c, num_classes, im
             ious = compute_classwise_IoU(mask_gt, mask_gt, num_classes)
             detected_class = compute_classwise_detection(mask_gt, num_classes)
 
-            imagename_ious_conf.append((imagename, *ious, *detected_class))
+            imagename_ious_detection.append((imagename, *ious, *detected_class))
 
             shutil.copy(os.path.join(images_path, imagename), os.path.join(images_path_out, imagename))
             shutil.copy(os.path.join(masks_path, imagename), os.path.join(masks_path_out, imagename))
@@ -4269,13 +4319,25 @@ def create_training_data_evalnet_miou_multiclass(model, h, w, c, num_classes, im
     with open(os.path.join(main_output_path, 'labels.csv'), 'a', encoding='utf-8', newline='') as f:
         writer = csv.writer(f, delimiter=';')
 
-        for row in imagename_ious_conf:
+        for row in imagename_ious_detection:
             writer.writerow(row)
 
 
 
 
 def compute_classwise_IoU(pred, gt, num_classes):
+    '''
+    Compute class-wise Intersection over Union (IoU) for multiclass segmentation.
+
+    Args:
+        pred (np.array): Predicted segmentation mask.
+        gt (np.array): Ground truth segmentation mask.
+        num_classes (int): Number of classes in the segmentation.
+
+    Returns:
+        list: List containing IoU scores for each class.
+    '''
+    
     iou_list = [0] * num_classes  # prefill list with zeros
 
     if (pred == 0).sum() > 0:
@@ -4296,6 +4358,17 @@ def compute_classwise_IoU(pred, gt, num_classes):
     return iou_list
 
 def compute_classwise_confluence(gt, num_classes):
+    '''
+    Compute class-wise confluence, i.e., the proportion of each class in the total area, for multiclass segmentation.
+
+    Args:
+        gt (np.array): Ground truth segmentation mask.
+        num_classes (int): Number of classes in the segmentation.
+
+    Returns:
+        list: List containing confluence scores for each class, representing their proportion in the total area.
+    '''
+    
     total_pixels = gt.size
     confluence_list = [0] * num_classes  # prefill list with zeros
 
@@ -4306,12 +4379,15 @@ def compute_classwise_confluence(gt, num_classes):
     return confluence_list
 
 def get_confluence_binary(gt):
-    """
-    Compute the confluence (proportion of foreground pixels) for a binary mask.
-    
-    :param gt: Ground truth binary mask
-    :return: Confluence for the binary mask
-    """
+    '''
+    Compute the confluence, i.e., the proportion of foreground pixels to the total pixels, for binary segmentation.
+
+    Args:
+        gt (np.array): Ground truth binary segmentation mask.
+
+    Returns:
+        float: Confluence score representing the proportion of foreground pixels in the total area.
+    '''
     
     total_pixels = gt.size
     foreground_pixel_count = gt.sum()
@@ -4322,6 +4398,16 @@ def get_confluence_binary(gt):
 
 
 def compute_classwise_detection(mask, num_classes):
+    '''
+    Compute class-wise detection for multiclass segmentation, determining if each class is significantly represented.
+
+    Args:
+        mask (np.array): Segmentation mask (either ground truth or predicted).
+        num_classes (int): Number of classes in the segmentation.
+
+    Returns:
+        list: List indicating detection (1) or non-detection (0) for each class, based on a threshold of 1% of total pixels.
+    '''
     
     total_pixels = mask.size
     detected_classes_list = [0] * num_classes
@@ -4336,7 +4422,18 @@ def compute_classwise_detection(mask, num_classes):
 
 
 def compute_classwise_detection_im(pred_mask, num_classes, gt_class_counts, threshold):
+    '''
+    Compute class-wise detection for multiclass segmentation with inconsistency masks based on the proportion of pixels for each class in the predicted mask compared to ground truth class counts.
 
+    Args:
+        pred_mask (np.array): Predicted segmentation mask.
+        num_classes (int): Number of classes in the segmentation.
+        gt_class_counts (list): Counts of pixels for each class in the ground truth mask.
+        threshold (float): Minimum ratio of predicted class pixel count to ground truth class pixel count for class detection.
+
+    Returns:
+        list: List indicating detection (1) or non-detection (0) for each class based on the threshold and an additional check for classes with significant presence.
+    '''
     
     total_pixels = pred_mask.size
     detected_classes_list = [0] * num_classes
@@ -4356,7 +4453,7 @@ def compute_classwise_detection_im(pred_mask, num_classes, gt_class_counts, thre
         else:
             if pixel_ratio >= threshold:
                 detected_classes_list[cls] = 1
-            elif pred_class_pixel_count / total_pixels >= 0.1: # klassen von denen noch weniger als 1/3 zu sehen ist müssen min 10% des bildes ausmachen um trotzdem gezählt zu werden.
+            elif pred_class_pixel_count / total_pixels >= 0.1: 
                 detected_classes_list[cls] = 1
 
     return detected_classes_list
@@ -4365,7 +4462,21 @@ def compute_classwise_detection_im(pred_mask, num_classes, gt_class_counts, thre
 
 
 def train_evalnet_ISIC_2018(model, train_main_path, val_main_path, filepath_h5, batch_size, epochs):
+    '''
+    Train the EvalNet model for ISIC 2018 dataset and evaluate its performance.
 
+    Args:
+        model: The EvalNet model to be trained.
+        train_main_path (str): Directory containing training data, images, masks, and labels.
+        val_main_path (str): Directory containing validation data, images, masks, and labels.
+        filepath_h5 (str): Path to save the best model.
+        batch_size (int): Batch size for training and validation.
+        epochs (int): Number of epochs to train the model.
+
+    Returns:
+        tuple: A tuple containing the mean squared error (mse) and mean absolute error (mae) on the validation dataset.
+    '''
+    
     train_images_path = os.path.join(train_main_path, 'images')
     train_masks_path = os.path.join(train_main_path, 'masks')
 
@@ -4396,7 +4507,22 @@ def train_evalnet_ISIC_2018(model, train_main_path, val_main_path, filepath_h5, 
 
 
 def train_evalnet_multiclass(model, train_main_path, val_main_path, filepath_h5, batch_size, num_classes, epochs):
+    '''
+    Train the EvalNet model for multiclass segmentation and evaluate its performance.
 
+    Args:
+        model: The EvalNet model to be trained for multiclass segmentation.
+        train_main_path (str): Directory containing training data, images, masks, and labels.
+        val_main_path (str): Directory containing validation data, images, masks, and labels.
+        filepath_h5 (str): Path to save the best model.
+        batch_size (int): Batch size for training and validation.
+        num_classes (int): Number of classes in the segmentation.
+        epochs (int): Number of epochs to train the model.
+
+    Returns:
+        tuple: A tuple containing the mean squared error (mse) and mean absolute error (mae) on the validation dataset.
+    '''
+    
     train_images_path = os.path.join(train_main_path, 'images')
     train_masks_path = os.path.join(train_main_path, 'masks')
 
@@ -4445,6 +4571,33 @@ def train_evalnet_miou_multiclass(segnet_models,
                                   runid,
                                   gen):
 
+    '''
+    Train the EvalNet model for multiclass segmentation using mIoU scores and class detection, and save the top performing models.
+
+    Args:
+        segnet_models (list): List of SegNet models for ensemble prediction.
+        evalnet_model: The EvalNet model to be trained for multiclass segmentation.
+        evalnet_name (str): Name of the EvalNet model.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        train_labeled_main_dir_train (str): Directory containing labeled training data.
+        main_dir_evalnet_train (str): Directory for storing EvalNet training data.
+        train_labeled_main_dir_val (str): Directory containing labeled validation data.
+        main_dir_evalnet_val (str): Directory for storing EvalNet validation data.
+        num_loops_train (int): Number of loops for generating training data.
+        num_loops_val (int): Number of loops for generating validation data.
+        model_dir (str): Directory to save trained models.
+        csv_dir (str): Directory to save CSV results.
+        batch_size (int): Batch size for training.
+        num_classes (int): Number of classes in the segmentation.
+        epochs (int): Number of epochs to train the model.
+        runid (str): Unique identifier for the training run.
+        gen (int): Generation number.
+
+    Returns:
+        None
+    '''                                      
 
 
 
@@ -4518,7 +4671,21 @@ def train_evalnet_miou_multiclass(segnet_models,
 
 
 def train_evalnet_miou_model_hela(model, train_main_path, val_main_path, filepath_h5, batch_size, epochs):
+    '''
+    Train the EvalNet model for the HeLa dataset using mIoU scores and class detection, and evaluate its performance.
 
+    Args:
+        model: The EvalNet model to be trained for HeLa cell segmentation.
+        train_main_path (str): Directory containing training data, images, masks, and labels.
+        val_main_path (str): Directory containing validation data, images, masks, and labels.
+        filepath_h5 (str): Path to save the best model.
+        batch_size (int): Batch size for training and validation.
+        epochs (int): Number of epochs to train the model.
+
+    Returns:
+        tuple: A tuple containing total loss, IoU loss, detection loss, IoU mean absolute error, and detection accuracy on the validation dataset.
+    '''
+    
     train_bf_images_path = os.path.join(train_main_path, 'brightfield')
     train_alive_masks_path = os.path.join(train_main_path, 'alive')
     train_dead_masks_path = os.path.join(train_main_path, 'dead')
@@ -4557,7 +4724,24 @@ def train_evalnet_miou_model_hela(model, train_main_path, val_main_path, filepat
 
 
 def train_evalnet_miou_model_multiclass(model, h, w, train_main_path, val_main_path, filepath_h5, batch_size, num_classes, epochs):
+    '''
+    Train the EvalNet model for multiclass segmentation using mIoU scores and class detection, and evaluate its performance.
 
+    Args:
+        model: The EvalNet model to be trained for multiclass segmentation.
+        h (int): Height of the input images.
+        w (int): Width of the input images.
+        train_main_path (str): Directory containing training data, images, masks, and labels.
+        val_main_path (str): Directory containing validation data, images, masks, and labels.
+        filepath_h5 (str): Path to save the best model.
+        batch_size (int): Batch size for training and validation.
+        num_classes (int): Number of classes in the segmentation.
+        epochs (int): Number of epochs to train the model.
+
+    Returns:
+        tuple: A tuple containing total loss, IoU loss, detection loss, IoU mean absolute error, and detection accuracy on the validation dataset.
+    '''
+    
     train_images_path = os.path.join(train_main_path, 'images')
     train_masks_path = os.path.join(train_main_path, 'masks')
 
@@ -4592,6 +4776,19 @@ def train_evalnet_miou_model_multiclass(model, h, w, train_main_path, val_main_p
 
 
 def generate_images_batch_ISIC_2018(dataframe, images_path, masks_path, batch_size=32):
+    '''
+    Generator to yield batches of images and masks from the ISIC 2018 dataset along with their labels for training.
+
+    Args:
+        dataframe (pd.DataFrame): DataFrame containing image names and labels.
+        images_path (str): Path to the directory containing images.
+        masks_path (str): Path to the directory containing corresponding masks.
+        batch_size (int, optional): Size of the batch to generate. Defaults to 32.
+
+    Yields:
+        tuple: A tuple containing a batch of images and masks, and their corresponding labels.
+    '''
+    
     while True:
 
         dataframe = dataframe.sample(frac=1).reset_index(drop=True)
@@ -4624,6 +4821,22 @@ def generate_images_batch_ISIC_2018(dataframe, images_path, masks_path, batch_si
 
 
 def generate_images_batch_evalnet_miou_hela(dataframe, bf_images_path, alive_masks_path, dead_masks_path, pos_masks_path, batch_size=32, num_classes=3):
+    '''
+    Generator to yield batches of the HeLa dataset images and their corresponding masks along with IoU and detection labels for EvalNet training.
+
+    Args:
+        dataframe (pd.DataFrame): DataFrame containing image names and labels.
+        bf_images_path (str): Path to the directory containing brightfield images.
+        alive_masks_path (str): Path to the directory containing alive masks.
+        dead_masks_path (str): Path to the directory containing dead masks.
+        pos_masks_path (str): Path to the directory containing positional masks.
+        batch_size (int, optional): Size of the batch to generate. Defaults to 32.
+        num_classes (int): Number of classes (excluding background) in the segmentation.
+
+    Yields:
+        tuple: A tuple containing a batch of images and masks, and their corresponding IoU and detection labels.
+    '''
+    
     while True:
 
         dataframe = dataframe.sample(frac=1).reset_index(drop=True)
@@ -4671,6 +4884,20 @@ def generate_images_batch_evalnet_miou_hela(dataframe, bf_images_path, alive_mas
 
 
 def generate_images_batch_multiclass(dataframe, images_path, masks_path, num_classes, batch_size=32):
+    '''
+    Generator to yield batches of images and one-hot encoded masks for multiclass segmentation along with their labels.
+
+    Args:
+        dataframe (pd.DataFrame): DataFrame containing image names and labels.
+        images_path (str): Path to the directory containing images.
+        masks_path (str): Path to the directory containing corresponding masks.
+        num_classes (int): Number of classes in the segmentation.
+        batch_size (int, optional): Size of the batch to generate. Defaults to 32.
+
+    Yields:
+        tuple: A tuple containing a batch of images and one-hot encoded masks, and their corresponding labels.
+    '''
+    
     while True:
 
         dataframe = dataframe.sample(frac=1).reset_index(drop=True)
@@ -4706,6 +4933,22 @@ def generate_images_batch_multiclass(dataframe, images_path, masks_path, num_cla
 
 
 def generate_images_batch_evalnet_miou_multiclass(dataframe, h, w, images_path, masks_path, num_classes, batch_size=32):
+    '''
+    Generator to yield batches of images and one-hot encoded masks for multiclass segmentation along with IoU and detection labels for EvalNet training.
+
+    Args:
+        dataframe (pd.DataFrame): DataFrame containing image names and labels.
+        h (int): Height of the input images.
+        w (int): Width of the input images.
+        images_path (str): Path to the directory containing images.
+        masks_path (str): Path to the directory containing corresponding masks.
+        num_classes (int): Number of classes in the segmentation.
+        batch_size (int, optional): Size of the batch to generate. Defaults to 32.
+
+    Yields:
+        tuple: A tuple containing a batch of images and one-hot encoded masks, and their corresponding IoU and detection labels.
+    '''
+    
     while True:
 
         dataframe = dataframe.sample(frac=1).reset_index(drop=True)
@@ -4746,6 +4989,24 @@ def generate_images_batch_evalnet_miou_multiclass(dataframe, h, w, images_path, 
 
 
 def create_training_data_for_segnet_ISIC_2018(evalnet_model, h,w,c , images_path, mask_paths, main_output_path, threshold, last_gen_main_path='', rgb=True):
+    '''
+    Create training data for segnet (Student U-Net) by selecting images and masks with the highest IoU scores predicted by EvalNet.
+
+    Args:
+        evalnet_model: EvalNet model used to predict IoU scores.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        images_path (str): Path to the directory containing images.
+        mask_paths (list[str]): List of paths to directories containing different sets of masks.
+        main_output_path (str): Path to the directory where the selected images and masks will be saved.
+        threshold (float): IoU score threshold for selecting an image-mask pair.
+        last_gen_main_path (str, optional): Path to the directory containing images and masks from the last generation. Defaults to an empty string.
+        rgb (bool, optional): Flag to convert images to RGB. Defaults to True.
+
+    Returns:
+        None
+    '''
 
     images_path_out = os.path.join(main_output_path, 'images')
     masks_path_out = os.path.join(main_output_path, 'masks')
@@ -4776,8 +5037,6 @@ def create_training_data_for_segnet_ISIC_2018(evalnet_model, h,w,c , images_path
             mask = cv2.imread(os.path.join(maskspath, imagename))
             mask_gray = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
             masks.append(mask_gray)
-
-        # check if mask existes in last gen trainingsdata. If it exists, add to list -> Trainingsdaten sollten mit jeder Gen besser und mehr werden.
 
         path_gt_last_gen_mask = os.path.join(masks_path_out, imagename)
         if os.path.isfile(path_gt_last_gen_mask):
@@ -4809,7 +5068,25 @@ def create_training_data_for_segnet_ISIC_2018(evalnet_model, h,w,c , images_path
 
 
 def create_training_data_for_segnet_with_ensemble_binary(evalnets, h,w,c , images_path, mask_paths, main_output_path, threshold, last_gen_main_path='', rgb=True):
+    '''
+    Create training data for segnet (Student U-Net) using an ensemble of EvalNet models to select images and masks with the highest average IoU scores.
 
+    Args:
+        evalnets (list): List of EvalNet models used to predict IoU scores.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        images_path (str): Path to the directory containing images.
+        mask_paths (list[str]): List of paths to directories containing different sets of masks.
+        main_output_path (str): Path to the directory where the selected images and masks will be saved.
+        threshold (float): Average IoU score threshold for selecting an image-mask pair.
+        last_gen_main_path (str, optional): Path to the directory containing images and masks from the last generation. Defaults to an empty string.
+        rgb (bool, optional): Flag to convert images to RGB. Defaults to True.
+
+    Returns:
+        None
+    '''
+    
     images_path_out = os.path.join(main_output_path, 'images')
     masks_path_out = os.path.join(main_output_path, 'masks')
     images_path_last_gen = os.path.join(last_gen_main_path, 'images')
@@ -4839,8 +5116,6 @@ def create_training_data_for_segnet_with_ensemble_binary(evalnets, h,w,c , image
             mask = cv2.imread(os.path.join(maskspath, imagename))
             mask_gray = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
             masks.append(mask_gray)
-
-        # check if mask existes in last gen trainingsdata. If it exists, add to list -> Trainingsdaten sollten mit jeder Gen besser und mehr werden.
 
         path_gt_last_gen_mask = os.path.join(masks_path_out, imagename)
         if os.path.isfile(path_gt_last_gen_mask):
@@ -4881,6 +5156,25 @@ def create_training_data_for_segnet_with_ensemble_binary(evalnets, h,w,c , image
 
 
 def create_training_data_for_segnet_multiclass(evalnet_model, h,w,c, num_classes, images_path, mask_paths, main_output_path, threshold, last_gen_main_path='', rgb=True):
+    '''
+    Create training data for segnet (Student U-Net) for multiclass segmentation by selecting images and masks with the highest IoU scores predicted by EvalNet.
+
+    Args:
+        evalnet_model: EvalNet model used to predict IoU scores for multiclass segmentation.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        num_classes (int): Number of classes in the segmentation.
+        images_path (str): Path to the directory containing images.
+        mask_paths (list[str]): List of paths to directories containing different sets of masks.
+        main_output_path (str): Path to the directory where the selected images and masks will be saved.
+        threshold (float): IoU score threshold for selecting an image-mask pair.
+        last_gen_main_path (str, optional): Path to the directory containing images and masks from the last generation. Defaults to an empty string.
+        rgb (bool, optional): Flag to convert images to RGB. Defaults to True.
+
+    Returns:
+        None
+    '''
 
     images_path_out = os.path.join(main_output_path, 'images')
     masks_path_out = os.path.join(main_output_path, 'masks')
@@ -4940,7 +5234,25 @@ def create_training_data_for_segnet_multiclass(evalnet_model, h,w,c, num_classes
 
 
 def create_training_data_for_segnet_with_ensemble_multiclass(evalnets, h,w,c, num_classes, images_path, mask_paths, main_output_path, threshold, last_gen_main_path='', rgb=True):
+    '''
+    Create training data for segnet (Student U-Net) for multiclass segmentation using an ensemble of EvalNet models to select the best image-mask pairs based on the highest average IoU scores.
 
+    Args:
+        evalnets (list): List of EvalNet models used to predict IoU scores.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        num_classes (int): Number of classes in the segmentation.
+        images_path (str): Path to the directory containing images.
+        mask_paths (list[str]): List of paths to directories containing different sets of masks.
+        main_output_path (str): Path to the directory where the selected images and masks will be saved.
+        threshold (float): Average IoU score threshold for selecting an image-mask pair.
+        last_gen_main_path (str, optional): Path to the directory containing images and masks from the last generation. Defaults to an empty string.
+        rgb (bool, optional): Flag to convert images to RGB. Defaults to True.
+
+    Returns:
+        None
+    '''
     images_path_out = os.path.join(main_output_path, 'images')
     masks_path_out = os.path.join(main_output_path, 'masks')
     images_path_last_gen = os.path.join(last_gen_main_path, 'images')
@@ -5009,7 +5321,27 @@ def create_training_data_for_segnet_with_ensemble_multiclass(evalnets, h,w,c, nu
 
 
 def create_training_data_for_segnet_with_miou_ensemble_hela(evalnets, h,w,c, bf_images_path_in, mask_paths_in, main_output_path, threshold, last_gen_main_path='', max_pos_circle_size=8, min_pos_circle_size=3):
+    '''
+    Create training data for segnet (Student U-Net) for the HeLa dataset using an ensemble of EvalNet models with mean IoU (Intersection over Union) evaluation. 
+    This function selects the best image-mask pairs based on the highest average IoU scores across multiple predictions.
 
+    Args:
+        evalnets (list): List of EvalNet models used to predict IoU scores and detection confidence.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images (typically 1 for grayscale images).
+        bf_images_path_in (str): Path to the directory containing brightfield images.
+        mask_paths_in (list[str]): List of paths to directories containing different sets of masks for alive, dead, and position.
+        main_output_path (str): Path to the directory where the selected images and masks will be saved.
+        threshold (float): Mean IoU score threshold for selecting an image-mask pair.
+        last_gen_main_path (str, optional): Path to the directory containing images and masks from the last generation. Defaults to an empty string.
+        max_pos_circle_size (int, optional): Maximum size of the circle to represent a cell's position. Defaults to 8.
+        min_pos_circle_size (int, optional): Minimum size of the circle to represent a cell's position. Defaults to 3.
+
+    Returns:
+        None: The function saves the selected images and masks in the specified output directory.
+    '''
+    
     bf_images_path_out = os.path.join(main_output_path, 'brightfield')
     alive_masks_path_out = os.path.join(main_output_path, 'alive')
     dead_masks_path_out = os.path.join(main_output_path, 'dead')
@@ -5062,10 +5394,7 @@ def create_training_data_for_segnet_with_miou_ensemble_hela(evalnets, h,w,c, bf_
         prepared_image = (np.array((image_gray).reshape(-1, h, w, c), dtype=np.uint8))
         prepared_images = np.repeat(prepared_image, len(stacked_masks), axis=0)
 
-        prepared_masks = np.array(stacked_masks).reshape(-1, h, w, 3)
-        #prepared_masks_ad = prepared_masks[:, :, :, :2]
-        #preparedMasks_one_hot = np.stack([(masks_array == cls).astype(np.int32) for cls in range(num_classes)], axis=-1).squeeze(axis=-2)
-        
+        prepared_masks = np.array(stacked_masks).reshape(-1, h, w, 3)        
 
         pred_ious_lists = []
         pred_detection_lists = []
@@ -5107,9 +5436,6 @@ def create_training_data_for_segnet_with_miou_ensemble_hela(evalnets, h,w,c, bf_
         
         best_miou_index = np.argmax(mIoU_list)
         best_miou = mIoU_list[best_miou_index]
-
-        #if best_miou < threshold:
-        #    print(round(best_miou,2))
         
         if best_miou >= threshold:
 
@@ -5117,10 +5443,6 @@ def create_training_data_for_segnet_with_miou_ensemble_hela(evalnets, h,w,c, bf_
             best_alive = best_masks[:, :, 0]*255
             best_dead = best_masks[:, :, 1]*255
             best_pos_temp = best_masks[:, :, 2]*255
-
-            #final_alive_mask = np.where(pred_sum_alive == len(prepared_images), 255, 0).astype(np.uint8)
-            #final_dead_mask = np.where(pred_sum_dead == len(prepared_images), 255, 0).astype(np.uint8)
-            #temp_pos_mask = np.where(pred_sum_pos == len(prepared_images), 255, 0).astype(np.uint8)
 
             positions = get_pos_contours(best_pos_temp)
             
@@ -5144,7 +5466,27 @@ def create_training_data_for_segnet_with_miou_ensemble_hela(evalnets, h,w,c, bf_
 
 
 def create_training_data_for_segnet_with_miou_ensemble_multiclass(evalnets, h,w,c, num_classes, images_path, mask_paths, main_output_path, threshold, last_gen_main_path='', rgb=True):
+    '''
+    Create training data for segnet (Student U-Net) for multiclass segmentation using an ensemble of EvalNet models with mean IoU evaluation. 
+    This function selects the best image-mask pairs based on the highest average IoU scores across multiple predictions.
 
+    Args:
+        evalnets (list): List of EvalNet models used to predict IoU scores and detection confidence.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images (typically 1 for grayscale images).
+        num_classes (int): Number of classes for segmentation.
+        images_path (str): Path to the directory containing images.
+        mask_paths (list[str]): List of paths to directories containing different sets of masks.
+        main_output_path (str): Path to the directory where the selected images and masks will be saved.
+        threshold (float): Mean IoU score threshold for selecting an image-mask pair.
+        last_gen_main_path (str, optional): Path to the directory containing images and masks from the last generation. Defaults to an empty string.
+        rgb (bool, optional): True if the images are in RGB format, False if grayscale. Defaults to True.
+
+    Returns:
+        None: The function saves the selected images and masks in the specified output directory.
+    '''
+    
     images_path_out = os.path.join(main_output_path, 'images')
     masks_path_out = os.path.join(main_output_path, 'masks')
     images_path_last_gen = os.path.join(last_gen_main_path, 'images')
@@ -5238,12 +5580,27 @@ def create_training_data_for_segnet_with_miou_ensemble_multiclass(evalnets, h,w,
 
 
 
-
-
-
-
 def create_training_data_by_evalnet_miou_for_segnet_multiclass(evalnet_model, h,w,c, num_classes, images_path, mask_paths, main_output_path, miou_threshold, last_gen_main_path='', rgb=True):
+    '''
+    Create training data for segnet (Student U-Net) for multiclass segmentation by selecting the best image-mask pairs based on mean IoU scores predicted by an EvalNet model.
 
+    Args:
+        evalnet_model (tf.keras.Model): EvalNet model used to predict IoU scores and detection confidence.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images (typically 1 for grayscale, 3 for RGB).
+        num_classes (int): Number of classes for segmentation.
+        images_path (str): Path to the directory containing images.
+        mask_paths (list[str]): List of paths to directories containing different sets of masks.
+        main_output_path (str): Path to the directory where the selected images and masks will be saved.
+        miou_threshold (float): Threshold for mean IoU score to select an image-mask pair.
+        last_gen_main_path (str, optional): Path to the directory containing images and masks from the last generation. Defaults to an empty string.
+        rgb (bool, optional): True if the images are in RGB format, False if grayscale. Defaults to True.
+
+    Returns:
+        None: The function saves the selected images and masks in the specified output directory based on the miou_threshold criteria.
+    '''
+    
     images_path_out = os.path.join(main_output_path, 'images')
     masks_path_out = os.path.join(main_output_path, 'masks')
     images_path_last_gen = os.path.join(last_gen_main_path, 'images')
@@ -5325,7 +5682,30 @@ def create_training_data_by_evalnet_miou_for_segnet_multiclass(evalnet_model, h,
 
 
 def create_augment_images_and_masks_with_evalnet_ensemble_binary(evalnets, h, w, c, min_threshold, max_threshold, main_input_path, main_output_path, brightness_range_alpha=(0.6, 1.4), brightness_range_beta=(-20, 20), max_blur=3, max_noise=20, free_rotation=True, rgb=True):
+    '''
+    Create and augment images and masks using an ensemble of binary EvalNet models.
+    The number of augmentations is determined based on the mean IoU predicted by EvalNets.
 
+    Args:
+        evalnets (list): List of EvalNet models.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        min_threshold (float): Minimum IoU threshold for augmentation.
+        max_threshold (float): Maximum IoU threshold for augmentation.
+        main_input_path (str): Directory containing the original images and masks.
+        main_output_path (str): Output directory for augmented images and masks.
+        brightness_range_alpha (tuple): Range of alpha for brightness adjustment (default (0.6, 1.4)).
+        brightness_range_beta (tuple): Range of beta for brightness adjustment (default (-20, 20)).
+        max_blur (int): Maximum blur to apply (default 3).
+        max_noise (int): Maximum noise to apply (default 20).
+        free_rotation (bool): Flag to allow free rotation (default True).
+        rgb (bool): Flag indicating if images are in RGB format (default True).
+
+    Returns:
+        None: Augmented images and masks are saved in the specified output directory.
+    '''
+    
     images_path_in = os.path.join(main_input_path, 'images')
     masks_path_in = os.path.join(main_input_path, 'masks')
     images_path_out = os.path.join(main_output_path, 'images')
@@ -5380,7 +5760,30 @@ def create_augment_images_and_masks_with_evalnet_ensemble_binary(evalnets, h, w,
 
 
 def create_augment_images_and_masks_with_evalnet_multiclass(evalnet_model, h, w, c, num_classes, min_threshold, max_threshold, main_input_path, main_output_path, brightness_range_alpha=(0.6, 1.4), brightness_range_beta=(-20, 20), max_blur=3, max_noise=20, free_rotation=False, rgb=True):
+    '''
+    Create and augment images and masks using EvalNet model for multiclass segmentation.
+    The number of augmentations is determined based on the IoU predicted by EvalNet.
 
+    Args:
+        evalnet_model (tf.keras.Model): EvalNet model for prediction.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        num_classes (int): Number of classes in segmentation.
+        min_threshold (float): Minimum IoU threshold for augmentation.
+        max_threshold (float): Maximum IoU threshold for augmentation.
+        main_input_path (str): Directory containing the original images and masks.
+        main_output_path (str): Output directory for augmented images and masks.
+        brightness_range_alpha (tuple): Range of alpha for brightness adjustment (default (0.6, 1.4)).
+        brightness_range_beta (tuple): Range of beta for brightness adjustment (default (-20, 20)).
+        max_blur (int): Maximum blur to apply (default 3).
+        max_noise (int): Maximum noise to apply (default 20).
+        free_rotation (bool): Flag to allow free rotation (default False).
+        rgb (bool): Flag indicating if images are in RGB format (default True).
+
+    Returns:
+        None: Augmented images and masks are saved in the specified output directory.
+    '''
 
     images_path_in = os.path.join(main_input_path, 'images')
     masks_path_in = os.path.join(main_input_path, 'masks')
@@ -5432,7 +5835,29 @@ def create_augment_images_and_masks_with_evalnet_multiclass(evalnet_model, h, w,
 
 
 def create_augment_images_and_masks_with_evalnet_ensemble_hela(evalnets, h, w, c, min_threshold, max_threshold, main_input_path, main_output_path, brightness_range_alpha=(0.6, 1.4), brightness_range_beta=(-20, 20), max_blur=3, max_noise=20, free_rotation=True):
+    '''
+    Create and augment images and masks for the Hela dataset using an ensemble of EvalNet models.
+    The number of augmentations is based on the average IoU predicted by the EvalNet ensemble.
 
+    Args:
+        evalnets (list): List of EvalNet models for ensemble prediction.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        min_threshold (float): Minimum IoU threshold for augmentation.
+        max_threshold (float): Maximum IoU threshold for augmentation.
+        main_input_path (str): Directory containing the original images and masks.
+        main_output_path (str): Output directory for augmented images and masks.
+        brightness_range_alpha (tuple): Range of alpha for brightness adjustment (default (0.6, 1.4)).
+        brightness_range_beta (tuple): Range of beta for brightness adjustment (default (-20, 20)).
+        max_blur (int): Maximum blur to apply (default 3).
+        max_noise (int): Maximum noise to apply (default 20).
+        free_rotation (bool): Flag to allow free rotation (default True).
+
+    Returns:
+        None: Augmented images and masks are saved in the specified output directory.
+    '''
+    
     brightfield_path_in = os.path.join(main_input_path, 'brightfield')
     alive_path_in = os.path.join(main_input_path, 'alive')
     dead_path_in = os.path.join(main_input_path, 'dead')
@@ -5519,8 +5944,31 @@ def create_augment_images_and_masks_with_evalnet_ensemble_hela(evalnets, h, w, c
 
 
 def create_augment_images_and_masks_with_evalnet_ensemble_multiclass(evalnets, h, w, c, num_classes, min_threshold, max_threshold, main_input_path, main_output_path, brightness_range_alpha=(0.6, 1.4), brightness_range_beta=(-20, 20), max_blur=3, max_noise=20, free_rotation=False, rgb=True):
+    '''
+    Augments images and masks based on the performance of an ensemble of EvalNet models for multiclass segmentation tasks.
+    The number of augmentations is determined by the mIoU from the ensemble predictions.
 
+    Args:
+        evalnets (list): List of EvalNet models for ensemble prediction.
+        h (int): Height of the images.
+        w (int): Width of the images.
+        c (int): Number of channels in the images.
+        num_classes (int): Number of classes for segmentation.
+        min_threshold (float): Minimum IoU threshold for determining the number of augmentations.
+        max_threshold (float): Maximum IoU threshold for determining the number of augmentations.
+        main_input_path (str): Directory containing the original images and masks.
+        main_output_path (str): Output directory for augmented images and masks.
+        brightness_range_alpha (tuple): Range of alpha for brightness adjustment (default (0.6, 1.4)).
+        brightness_range_beta (tuple): Range of beta for brightness adjustment (default (-20, 20)).
+        max_blur (int): Maximum blur to apply (default 3).
+        max_noise (int): Maximum noise to apply (default 20).
+        free_rotation (bool): Flag to allow free rotation (default False).
+        rgb (bool): Flag to convert images to RGB (default True).
 
+    Returns:
+        None: Augmented images and masks are saved in the specified output directory.
+    '''
+    
     images_path_in = os.path.join(main_input_path, 'images')
     masks_path_in = os.path.join(main_input_path, 'masks')
     images_path_out = os.path.join(main_output_path, 'images')
@@ -5607,7 +6055,27 @@ def create_augment_images_and_masks_with_evalnet_ensemble_multiclass(evalnets, h
 
 
 def create_augment_images_and_masks_with_gt(main_gt_input_path, min_threshold, max_threshold, main_input_path, main_output_path, brightness_range_alpha=(0.6, 1.4), brightness_range_beta=(-20, 20), max_blur=3, max_noise=20, free_rotation=False, rgb=True):
+    '''
+    Augments images and masks based on ground truth masks, simulating a perfect EvalNet. 
+    The number of augmentations is determined by the mean IoU between the predicted masks and ground truth masks.
 
+    Args:
+        main_gt_input_path (str): Directory containing the ground truth masks.
+        min_threshold (float): Minimum IoU threshold for determining the number of augmentations.
+        max_threshold (float): Maximum IoU threshold for determining the number of augmentations.
+        main_input_path (str): Directory containing the original images, masks, and inconsistency masks.
+        main_output_path (str): Output directory for augmented images and masks.
+        brightness_range_alpha (tuple): Range of alpha for brightness adjustment (default (0.6, 1.4)).
+        brightness_range_beta (tuple): Range of beta for brightness adjustment (default (-20, 20)).
+        max_blur (int): Maximum blur to apply (default 3).
+        max_noise (int): Maximum noise to apply (default 20).
+        free_rotation (bool): Flag to allow free rotation (default False).
+        rgb (bool): Flag to convert images to RGB (default True).
+
+    Returns:
+        None: Augmented images and masks are saved in the specified output directory.
+    '''
+    
     im_path_in = os.path.join(main_input_path, 'im')
     images_path_in = os.path.join(main_input_path, 'images')
     masks_path_in = os.path.join(main_input_path, 'masks')
@@ -5657,6 +6125,17 @@ def create_augment_images_and_masks_with_gt(main_gt_input_path, min_threshold, m
 
 
 def convert_class_to_color_mask(class_mask, output_path, class_to_color_mapping):
+    '''
+    Convert a class mask to a color mask based on a given class-to-color mapping and save it.
+
+    Args:
+        class_mask (np.array): The input class mask where each pixel's value represents a class.
+        output_path (str): Path where the color mask image will be saved.
+        class_to_color_mapping (dict): Mapping from class values to colors.
+
+    Returns:
+        None: The function saves the color mask image to the specified output path.
+    '''
     
     # Create a 3-channel output image initialized with zeros
     color_mask = np.zeros(list(class_mask.shape) + [3], dtype=np.uint8)
@@ -5700,33 +6179,17 @@ def get_im_prediction_depth_map(models, prepared_image, threshold_multiplier=2):
 
 
 def get_pos_contours(img, erode_kernel=3):
-    """
-    Compute the positions of contours in the given image.
+    '''
+    Extract position contours from an image.
 
-    This function processes the input image to identify contours and 
-    calculates the positions of these contours. If the image is colored, 
-    it will be converted to grayscale. Optionally, an erosion operation can 
-    be performed to refine the contours, using a specified kernel size.
-
-    Parameters:
-    -----------
-    img : numpy.ndarray
-        Input image, can be either grayscale or BGR.
-    erode_kernel : int, optional
-        The size of the kernel used for the erosion operation. A higher 
-        value will result in more pronounced erosion. If set to 0, the 
-        erosion operation will be skipped. Default is 3.
+    Args:
+        img (np.array): The input image, either grayscale or BGR.
+        erode_kernel (int, optional): Size of the erosion kernel. A value greater than 0 applies erosion to the image. Defaults to 3.
 
     Returns:
-    --------
-    pos : list of tuple
-        A list of positions of contours in the form [(x1, y1), (x2, y2), ...]
-
-    Raises:
-    -------
-    AssertionError
-        If the image dimensions are invalid.
-    """
+        list: A list of tuples representing the (x, y) coordinates of the contour centers.
+    '''
+    
     assert len(img.shape) in [2, 3], "Invalid image dimensions."
 
     grayimg = img
@@ -5757,22 +6220,17 @@ def get_pos_contours(img, erode_kernel=3):
 
 
 def get_min_dist(xy, positions):
-    """
-    Calculate the minimum Euclidean distance between a point and a list of points.
-    
-    Parameters:
-    -----------
-    xy : tuple of float
-        The coordinates of the point as (x, y).
-    positions : list of tuple
-        A list of positions as [(x1, y1), (x2, y2), ...].
-    
-    Returns:
-    --------
-    float
-        The minimum distance.
-    """
+    '''
+    Calculate the minimum distance between a given point and a list of other points.
 
+    Args:
+        xy (tuple): A tuple (x, y) representing the coordinates of the point.
+        positions (list of tuples): A list of tuples where each tuple represents the coordinates of a point.
+
+    Returns:
+        float: The minimum distance between the given point and the points in the list. Returns 0 if the list is empty or only contains the given point.
+    '''
+    
     # Convert input to NumPy arrays
     point = np.array(xy)
     points_array = np.array(positions)
@@ -5796,7 +6254,18 @@ def get_min_dist(xy, positions):
 
 
 def mod_pos_size(gray_img, max_pos_circle_size=8, min_pos_circle_size=3):
+    '''
+    Modify the size of position circles in a grayscale image based on the distance between them.
 
+    Args:
+        gray_img (np.array): The input grayscale image.
+        max_pos_circle_size (int, optional): Maximum size of the position circles. Defaults to 8.
+        min_pos_circle_size (int, optional): Minimum size of the position circles. Defaults to 3.
+
+    Returns:
+        np.array: The modified image with adjusted position circle sizes.
+    '''
+    
     positions = get_pos_contours(gray_img)
 
     h,w = gray_img.shape
@@ -5828,6 +6297,19 @@ def mod_pos_size(gray_img, max_pos_circle_size=8, min_pos_circle_size=3):
 
 
 def get_cell_count(positions, img_alive, img_dead, measuring_range=3):
+    '''
+    Count the number of alive and dead cells in an image based on positions and alive/dead masks.
+
+    Args:
+        positions (list of tuples): A list of tuples representing the (x, y) coordinates of cell positions.
+        img_alive (np.array): Binary or grayscale image representing alive cells.
+        img_dead (np.array): Binary or grayscale image representing dead cells.
+        measuring_range (int, optional): The range around each position to check for alive or dead cells. Defaults to 3.
+
+    Returns:
+        tuple: A tuple (alive_count, dead_count, unclear_count) representing the counts of alive, dead, and unclear cells.
+    '''
+
     alive_count = 0
     dead_count = 0
     unclear_count = 0
@@ -5892,17 +6374,39 @@ def get_cell_count(positions, img_alive, img_dead, measuring_range=3):
 
 
 def load_images_from_dir(dir_path):
+    '''
+    Load all images from a directory as grayscale images.
+
+    Args:
+        dir_path (str): Path to the directory containing images.
+
+    Returns:
+        tuple: A tuple containing two elements. The first element is a NumPy array of images, and the second element is a list of filenames.
+    '''
+    
     filenames = os.listdir(dir_path)
     images = [cv2.imread(os.path.join(dir_path, fname), cv2.IMREAD_GRAYSCALE) for fname in filenames]
     return np.array(images), filenames
 
+
 def normalize_and_threshold(masks):
+    '''
+    Normalize and apply thresholding to a set of masks to create binary masks.
+
+    Args:
+        masks (np.array): Array of masks to be normalized and thresholded.
+
+    Returns:
+        np.array: The resulting binary masks after normalization and thresholding.
+    '''
+    
     masks_normalized = masks.astype(np.float32) / 255.0
     binary_masks = np.where(masks_normalized > 0.5, 1, 0)
     return binary_masks
+    
 
 def load_images_and_masks_hela(main_dir):
-    """
+    '''
     Load brightfield images and corresponding masks from the specified directory.
 
     Parameters:
@@ -5914,7 +6418,8 @@ def load_images_and_masks_hela(main_dir):
         - binary_masks_alive: Binary masks of alive cells.
         - binary_masks_dead: Binary masks of dead cells.
         - binary_masks_pos: Binary masks of mod_position.
-    """
+    '''
+    
     bf_img_dir = os.path.join(main_dir, 'brightfield')
     alive_mask_dir = os.path.join(main_dir, 'alive')
     dead_mask_dir = os.path.join(main_dir, 'dead')
