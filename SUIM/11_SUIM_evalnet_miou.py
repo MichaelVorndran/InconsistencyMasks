@@ -40,7 +40,6 @@ TOP_Ks = int(config['DEFAULT']['TOP_Ks'])
 THRESHOLD = float(config['DEFAULT']['THRESHOLD'])
 
 
-threshold_segnet = 0.427
 train_new_evalnet = True
 
 os.makedirs(paths.SUIM_CSV_DIR, exist_ok=True)
