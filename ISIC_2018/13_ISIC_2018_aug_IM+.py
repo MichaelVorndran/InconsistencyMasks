@@ -51,7 +51,7 @@ brightness_range_betas = [(-5, 5), (-10, 10), (-15, 15), (-20, 20), (-25, 25)]
 FREE_ROTATION = config['ISIC_2018']['FREE_ROTATION'].lower() == 'true'
 
 
-with tf.device('/gpu:1'):
+with tf.device('/gpu:0'):
 
     for runid in range(1,4):
 
