@@ -3,7 +3,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from SUIM_class_mapping import COLOR_TO_CLASS_MAPPING_SUIM
-from functions import train_multiclass, create_pseudo_labels_ibas_multiclass, create_augment_images_and_masks_with_gt
+from functions import train_multiclass, create_pseudo_labels_im_multiclass, create_augment_images_and_masks_with_gt
 from unet import get_unet
 import tensorflow as tf
 from tensorflow.keras import mixed_precision
@@ -73,17 +73,17 @@ with tf.device('/gpu:0'):
                 best_evalnets = []
                 
                 modelname = f'SUIM_{approach}_{runid}_n{n}_gen{gen}_e{EK}_d{DK}_bi_{BI}_bo_{BO}'
-                modelname_evalnet_base = 'SUIM_evalnet_miou_ibas'
+                modelname_evalnet_base = 'SUIM_evalnet_miou_im'
 
-                val_pseudo_label_dir_ibas = os.path.join(paths.SUIM_BASE_DIR, 'val_predictions', approach, 'temp', modelname)
-                test_pseudo_label_dir_ibas = os.path.join(paths.SUIM_BASE_DIR, 'test_predictions', approach, 'temp', modelname)
-                train_unlabeled_pseudo_label_dir_ibas = os.path.join(paths.SUIM_BASE_DIR, 'train_unlabeled_predictions', approach, 'temp', modelname)
-                train_unlabeled_pseudo_label_dir_ibas_images = os.path.join(train_unlabeled_pseudo_label_dir_ibas, 'images')
-                train_unlabeled_pseudo_label_dir_ibas_masks = os.path.join(train_unlabeled_pseudo_label_dir_ibas, 'masks')
+                val_pseudo_label_dir_im = os.path.join(paths.SUIM_BASE_DIR, 'val_predictions', approach, 'temp', modelname)
+                test_pseudo_label_dir_im = os.path.join(paths.SUIM_BASE_DIR, 'test_predictions', approach, 'temp', modelname)
+                train_unlabeled_pseudo_label_dir_im = os.path.join(paths.SUIM_BASE_DIR, 'train_unlabeled_predictions', approach, 'temp', modelname)
+                train_unlabeled_pseudo_label_dir_im_images = os.path.join(train_unlabeled_pseudo_label_dir_im, 'images')
+                train_unlabeled_pseudo_label_dir_im_masks = os.path.join(train_unlabeled_pseudo_label_dir_im, 'masks')
 
-                train_unlabeled_pseudo_label_dir_ibas_plus_plus = os.path.join(paths.SUIM_BASE_DIR, 'train_unlabeled_predictions', approach, modelname)
-                train_unlabeled_pseudo_label_dir_ibas_plus_plus_images = os.path.join(train_unlabeled_pseudo_label_dir_ibas_plus_plus, 'images')
-                train_unlabeled_pseudo_label_dir_ibas_plus_plus_masks = os.path.join(train_unlabeled_pseudo_label_dir_ibas_plus_plus, 'masks')
+                train_unlabeled_pseudo_label_dir_im_plus_plus = os.path.join(paths.SUIM_BASE_DIR, 'train_unlabeled_predictions', approach, modelname)
+                train_unlabeled_pseudo_label_dir_im_plus_plus_images = os.path.join(train_unlabeled_pseudo_label_dir_im_plus_plus, 'images')
+                train_unlabeled_pseudo_label_dir_im_plus_plus_masks = os.path.join(train_unlabeled_pseudo_label_dir_im_plus_plus, 'masks')
 
                 if gen == 0:
                     for j in range(1,n+1):
@@ -97,9 +97,9 @@ with tf.device('/gpu:0'):
                     best_model = tf.keras.models.load_model(best_model_filepath_h5)
                     best_models.append(best_model)
                 
-                val_mean_im_size = create_pseudo_labels_ibas_multiclass(best_models, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS, paths.SUIM_VAL_IMAGES_DIR, val_pseudo_label_dir_ibas, True, EK, DK, BI, BO)
-                test_mean_im_size = create_pseudo_labels_ibas_multiclass(best_models, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS, paths.SUIM_TEST_IMAGES_DIR, test_pseudo_label_dir_ibas, True, EK, DK, BI, BO)
-                unlabeled_mean_im_size = create_pseudo_labels_ibas_multiclass(best_models, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS, paths.SUIM_TRAIN_UNLABELED_IMAGES_DIR, train_unlabeled_pseudo_label_dir_ibas, True, EK, DK, BI, BO)
+                val_mean_im_size = create_pseudo_labels_im_multiclass(best_models, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS, paths.SUIM_VAL_IMAGES_DIR, val_pseudo_label_dir_im, True, EK, DK, BI, BO)
+                test_mean_im_size = create_pseudo_labels_im_multiclass(best_models, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS, paths.SUIM_TEST_IMAGES_DIR, test_pseudo_label_dir_im, True, EK, DK, BI, BO)
+                unlabeled_mean_im_size = create_pseudo_labels_im_multiclass(best_models, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS, paths.SUIM_TRAIN_UNLABELED_IMAGES_DIR, train_unlabeled_pseudo_label_dir_im, True, EK, DK, BI, BO)
 
                 blur = max_blurs[gen]
                 noise = max_noises[gen]
@@ -109,8 +109,8 @@ with tf.device('/gpu:0'):
                 create_augment_images_and_masks_with_gt(paths.SUIM_TRAIN_UNLABELED_MASKS_DIR,    # main_gt_input_path
                                                         MIN_THRESHOLD,
                                                         MAX_THRESHOLD,
-                                                        train_unlabeled_pseudo_label_dir_ibas,
-                                                        train_unlabeled_pseudo_label_dir_ibas_plus_plus,
+                                                        train_unlabeled_pseudo_label_dir_im,
+                                                        train_unlabeled_pseudo_label_dir_im_plus_plus,
                                                         brightness_range_alpha,
                                                         brightness_range_beta,
                                                         blur,
@@ -120,10 +120,10 @@ with tf.device('/gpu:0'):
 
 
                 for imagename in tqdm(os.listdir(paths.SUIM_TRAIN_LABELED_IMAGES_DIR)):
-                    shutil.copy(os.path.join(paths.SUIM_TRAIN_LABELED_IMAGES_DIR, imagename), os.path.join(train_unlabeled_pseudo_label_dir_ibas_plus_plus_images, imagename))
-                    shutil.copy(os.path.join(paths.SUIM_TRAIN_LABELED_MASKS_DIR, imagename), os.path.join(train_unlabeled_pseudo_label_dir_ibas_plus_plus_masks, imagename))
+                    shutil.copy(os.path.join(paths.SUIM_TRAIN_LABELED_IMAGES_DIR, imagename), os.path.join(train_unlabeled_pseudo_label_dir_im_plus_plus_images, imagename))
+                    shutil.copy(os.path.join(paths.SUIM_TRAIN_LABELED_MASKS_DIR, imagename), os.path.join(train_unlabeled_pseudo_label_dir_im_plus_plus_masks, imagename))
                
-                num_imgs = len(os.listdir(train_unlabeled_pseudo_label_dir_ibas_plus_plus_images))
+                num_imgs = len(os.listdir(train_unlabeled_pseudo_label_dir_im_plus_plus_images))
                 PSEUDO_LABEL_STEPS_PER_EPOCH = num_imgs // BATCH_SIZE
 
                 num_imgs = len(os.listdir(paths.SUIM_TRAIN_FULL_IMAGES_DIR))
@@ -141,7 +141,7 @@ with tf.device('/gpu:0'):
         
                     model = get_unet(IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS, NUM_CLASSES, alphas[gen], ACTIFU, ACTIFU_OUTPUT) 
         
-                    mPA_val, mPA_test, mPA_train_unlabeled, mIoU_val, mIoU_test, mIoU_train_unlabeled = train_multiclass(train_unlabeled_pseudo_label_dir_ibas_plus_plus_images, 
+                    mPA_val, mPA_test, mPA_train_unlabeled, mIoU_val, mIoU_test, mIoU_train_unlabeled = train_multiclass(train_unlabeled_pseudo_label_dir_im_plus_plus_images, 
                                                                                                                          paths.SUIM_VAL_IMAGES_DIR, 
                                                                                                                          paths.SUIM_VAL_MASKS_DIR,
                                                                                                                          paths.SUIM_TEST_IMAGES_DIR,
