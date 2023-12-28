@@ -1,7 +1,7 @@
 # Inconsistency Masks
 
 We are excited to introduce Inconsistency Masks (IM), a new SSL approach for image segmentation. A detailed paper, elaborating on IM and our comparative study, is currently in the final stages of refinement. As soon as it becomes publicly available, a link to the paper will be provided here.
-Due to limited hardware resources and the scale of our study, which required training thousands of U-Nets, we could only use small datasets and train tiny U-Nets (0.17 - 2.72 million parameters) compared to modern ViTs. But the uniform training conditions across all approaches ensure that our findings are still valuable and comparable.
+Due to limited hardware resources and the scale of our study, which required training thousands of U-Nets, we could only use small datasets and train tiny U-Nets (0.17 - 2.72 million parameters) compared to modern ViTs. But the uniform training conditions across all approaches ensure that our findings are still comparable.
 
 ![main_results](main_results.png)
 
