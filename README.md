@@ -15,4 +15,4 @@ Among common SSL approaches – Model Ensemble, Input Ensemble, Consistency Loss
 **Combination Approaches:** IM+ combines IM with Noisy Student. In AIM+, the starting point is the best model from ALDT, not LDT, and the Labeled Dataset is replaced by the Augmented Labeled Dataset. In IM++ and AIM++, EvalNet is also integrated.
 
 ## Acknowledgement
-I would like to extend my heartfelt gratitude to the Deep Learning and Open Source Community, particularly to X, Y, and Z,  whose tutorials and shared wisdom have been a big part of my self-education in computer science and deep learning. This work would not exist without these open and free resources.  
+I would like to extend my heartfelt gratitude to the Deep Learning and Open Source Community, particularly to X, Sentdex (https://youtube.com/@sentdex), and Z,  whose tutorials and shared wisdom have been a big part of my self-education in computer science and deep learning. This work would not exist without these open and free resources.  
