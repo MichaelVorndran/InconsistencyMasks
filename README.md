@@ -25,4 +25,4 @@ IM++ beats Full Dataset Training on ISIC 2018 by efficiently balances detailed a
 
 
 ## Acknowledgement
-I would like to extend my heartfelt gratitude to the Deep Learning and Open Source Community, particularly to X, Sentdex (https://youtube.com/@sentdex), and Z,  whose tutorials and shared wisdom have been a big part of my self-education in computer science and deep learning. This work would not exist without these open and free resources.  
+I would like to extend my heartfelt gratitude to the Deep Learning and Open Source Community, particularly to X, Sentdex (https://youtube.com/@sentdex) and Deeplizard (https://www.youtube.com/@deeplizard),  whose tutorials and shared wisdom have been a big part of my self-education in computer science and deep learning. This work would not exist without these open and free resources.  
