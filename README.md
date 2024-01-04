@@ -7,6 +7,10 @@ Due to limited hardware resources and the scale of our study, which required tra
 ![IM_creation](IM_creation.jpg)
 Creation of an Inconsistency Masks with two models: (a) & (b) binary prediction of model 1 and 2 after threshold, (c) sum of the two prediction masks (d) Inconsistency  Mask (e) final prediction mask
 
+## Inconsistency Masks usage
+![IM_over_5_Generations](IM_over_5_Generations.jpg)
+IM is used to remove the uncertainty from the pseudo-label as well as from the input image. Here you can see the changes in an input image and the corresponding pseudo-label on the SUIM dataset for IM+ over all five Generations. Magenta represents reefs, black indicates background or waterbody, gray represents IM, blue for divers, yellow for fish, and turquoise for wrecks.
+
 ## Results
 ![main_results](main_results.png)
 
@@ -25,4 +29,4 @@ IM++ beats Full Dataset Training on ISIC 2018 by efficiently balances detailed a
 
 
 ## Acknowledgement
-I would like to extend my heartfelt gratitude to the Deep Learning and Open Source Community, particularly to X, Sentdex (https://youtube.com/@sentdex) and Deeplizard (https://www.youtube.com/@deeplizard),  whose tutorials and shared wisdom have been a big part of my self-education in computer science and deep learning. This work would not exist without these open and free resources.  
+I would like to extend my heartfelt gratitude to the Deep Learning and Open Source Community, particularly to Dr. Sreenivas Bhattiprolu (https://www.youtube.com/@DigitalSreeni), Sentdex (https://youtube.com/@sentdex) and Deeplizard (https://www.youtube.com/@deeplizard),  whose tutorials and shared wisdom have been a big part of my self-education in computer science and deep learning. This work would not exist without these open and free resources.  
