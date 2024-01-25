@@ -1,7 +1,10 @@
 # Inconsistency Masks
 
-We are excited to introduce Inconsistency Masks (IM), a new SSL approach for image segmentation. A detailed paper, elaborating on IM and our comparative study, is currently in the final stages of refinement. As soon as it becomes publicly available, a link to the paper will be provided here.
-Due to limited hardware resources and the scale of our study, which required training thousands of U-Nets, we could only use small datasets and train tiny U-Nets (0.17 - 2.72 million parameters) compared to modern ViTs. But the uniform training conditions across all approaches ensure that our findings are still comparable.
+Generating sufficient labeled data is a significant hurdle in the efficient execution of deep learning projects, especially in uncharted territories of image segmentation where labeling demands extensive time, unlike classification tasks. Our study confronts this challenge, operating in an environment constrained by limited hardware resources and the lack of extensive datasets or pre-trained models. We introduce the novel use of Inconsistency Masks (IM) to effectively filter uncertainty in image-pseudo-label pairs, substantially elevating segmentation quality beyond traditional semi-supervised learning techniques. By integrating IM with other methods, we demonstrate remarkable binary segmentation performance on the ISIC 2018 dataset, starting with just 10% labeled data. Notably, three of our hybrid models outperform those trained on the fully labeled dataset. Our approach consistently achieves exceptional results across three additional datasets and shows further improvement when combined with other techniques. For comprehensive and robust evaluation, this paper includes an extensive analysis of prevalent semi-supervised learning strategies, all trained under identical starting conditions. 
+
+
+
+
 
 ## Creation of an Inconsistency Masks
 ![IM_creation](IM_creation.jpg)
@@ -12,6 +15,9 @@ Creation of an Inconsistency Masks with two models: (a) & (b) binary prediction 
 IM is used to remove the uncertainty from the pseudo-label as well as from the input image. Here you can see the changes in an input image and the corresponding pseudo-label on the SUIM dataset for IM+ over all five Generations. Magenta represents reefs, black indicates background or waterbody, gray represents IM, blue for divers, yellow for fish, and turquoise for wrecks.
 
 ## Results
+
+Due to limited hardware resources and the scale of our study, which required training thousands of U-Nets, we could only use small datasets and train tiny U-Nets (0.17 - 2.72 million parameters) compared to modern ViTs. But the uniform training conditions across all approaches ensure that our findings are still comparable.
+
 ![main_results](main_results.png)
 
 In this diagram, we focus on results that exceed those of Labeled Dataset Training (LDT) to avoid excessively compressing the representation of other outcomes. For a complete overview, a diagram with all results will be available in the appendix of the paper. The benchmarks used include Full Dataset Training (FDT), Labeled Dataset Training (LDT, randomly selected 10% of the complete dataset), and Augmented Labeled Dataset Training (ALDT, Labeled Dataset with 9 additional augmented versions of each image). The SSL approaches should surpass ALDT to justify their added complexity.
