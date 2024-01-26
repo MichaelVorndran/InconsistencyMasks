@@ -6,7 +6,7 @@ Generating sufficient labeled data is a significant hurdle in the efficient exec
 
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/inconsistency-masks-removing-the-uncertainty/semi-supervised-semantic-segmentation-on-suim)](https://paperswithcode.com/sota/semi-supervised-semantic-segmentation-on-suim?p=inconsistency-masks-removing-the-uncertainty)
 
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/inconsistency-masks-removing-the-uncertainty/semi-supervised-medical-image-segmentation-on-5)](https://paperswithcode.com/sota/semi-supervised-medical-image-segmentation-on-5?p=inconsistency-masks-removing-the-uncertainty)
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/inconsistency-masks-removing-the-uncertainty/semi-supervised-medical-image-segmentation-on-6)](https://paperswithcode.com/sota/semi-supervised-medical-image-segmentation-on-6?p=inconsistency-masks-removing-the-uncertainty)
 	
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/inconsistency-masks-removing-the-uncertainty/lesion-segmentation-on-isic-2018)](https://paperswithcode.com/sota/lesion-segmentation-on-isic-2018?p=inconsistency-masks-removing-the-uncertainty)
 
