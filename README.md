@@ -2,7 +2,13 @@
 
 Generating sufficient labeled data is a significant hurdle in the efficient execution of deep learning projects, especially in uncharted territories of image segmentation where labeling demands extensive time, unlike classification tasks. Our study confronts this challenge, operating in an environment constrained by limited hardware resources and the lack of extensive datasets or pre-trained models. We introduce the novel use of Inconsistency Masks (IM) to effectively filter uncertainty in image-pseudo-label pairs, substantially elevating segmentation quality beyond traditional semi-supervised learning techniques. By integrating IM with other methods, we demonstrate remarkable binary segmentation performance on the ISIC 2018 dataset, starting with just 10% labeled data. Notably, three of our hybrid models outperform those trained on the fully labeled dataset. Our approach consistently achieves exceptional results across three additional datasets and shows further improvement when combined with other techniques. For comprehensive and robust evaluation, this paper includes an extensive analysis of prevalent semi-supervised learning strategies, all trained under identical starting conditions. 
 
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/inconsistency-masks-removing-the-uncertainty/semi-supervised-semantic-segmentation-on-43)](https://paperswithcode.com/sota/semi-supervised-semantic-segmentation-on-43?p=inconsistency-masks-removing-the-uncertainty)
 
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/inconsistency-masks-removing-the-uncertainty/semi-supervised-semantic-segmentation-on-suim)](https://paperswithcode.com/sota/semi-supervised-semantic-segmentation-on-suim?p=inconsistency-masks-removing-the-uncertainty)
+
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/inconsistency-masks-removing-the-uncertainty/semi-supervised-medical-image-segmentation-on-5)](https://paperswithcode.com/sota/semi-supervised-medical-image-segmentation-on-5?p=inconsistency-masks-removing-the-uncertainty)
+	
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/inconsistency-masks-removing-the-uncertainty/lesion-segmentation-on-isic-2018)](https://paperswithcode.com/sota/lesion-segmentation-on-isic-2018?p=inconsistency-masks-removing-the-uncertainty)
 
 
 
@@ -36,3 +42,9 @@ IM++ beats Full Dataset Training on ISIC 2018 by efficiently balances detailed a
 
 ## Acknowledgement
 I would like to extend my heartfelt gratitude to the Deep Learning and Open Source Community, particularly to Dr. Sreenivas Bhattiprolu (https://www.youtube.com/@DigitalSreeni), Sentdex (https://youtube.com/@sentdex) and Deeplizard (https://www.youtube.com/@deeplizard),  whose tutorials and shared wisdom have been a big part of my self-education in computer science and deep learning. This work would not exist without these open and free resources.  
+
+
+## Paper
+https://arxiv.org/abs/2401.14387
+
+
