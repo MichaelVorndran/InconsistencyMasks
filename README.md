@@ -35,7 +35,7 @@ Among common SSL approaches – Model Ensemble, Input Ensemble, Consistency Loss
 
 **Combination Approaches:** IM+ combines IM with Noisy Student. In AIM+, the starting point is the best model from ALDT, not LDT, and the Labeled Dataset is replaced by the Augmented Labeled Dataset. In IM++ and AIM++, EvalNet is also integrated.
 
-## How is it possible that IM++, AIM+ and AIM++ performe better then FDT? 
+## How is it possible that IM++, AIM+ and AIM++ perform better then FDT? 
 ![ISIC_GT_IM++](ISIC_GT_IM++.jpg)
 IM++ beats Full Dataset Training on ISIC 2018 by efficiently balances detailed and coarse annotations in its pseudo-label masks (right column) compared to the Ground Truth (GT) masks (middle column).
 
