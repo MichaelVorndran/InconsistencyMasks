@@ -2894,7 +2894,7 @@ def create_pseudo_labels_im_ISIC_2018(models, h, w, c, images_path, main_output_
 
 def create_pseudo_labels_im_hela(models, h, w, c, images_path, main_output_path, erode_kernel=5, dilate_kernel=5, block_input=True, block_output=True, max_pos_circle_size=8, min_pos_circle_size=3):
     '''
-    Create pseudo labels for ISIC 2018 dataset images using IM predictions.
+    Create pseudo labels for HeLa dataset images using IM predictions.
 
     Args:
         models (list): List of models for ensemble prediction.
