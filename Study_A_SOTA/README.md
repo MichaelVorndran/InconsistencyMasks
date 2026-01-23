@@ -19,3 +19,20 @@ In this study, we demonstrate that Inconsistency Masks (IM) act as a **general e
 ### Installation
 ```bash
 pip install -r requirements.txt
+```
+
+## 📊 Running the Benchmark
+
+### 1. Data Preparation
+1. Download the **Cityscapes dataset** from the [official website](https://www.cityscapes-dataset.com/).
+2. Extract the following archives:
+   - `leftImg8bit_trainvaltest.zip`
+   - `gtFine_trainvaltest.zip`
+3. Update the dataset path in `Study_B_Cityscapes.ipynb` to point to your local directory.
+
+### 2. Execution
+The entire reproduction pipeline is encapsulated in the `Study_B_Cityscapes.ipynb` notebook. This notebook covers:
+
+* **Baseline Training:** Training the base methods (e.g., UniMatch) to generate initial checkpoints.
+* **IM Generation:** Loading checkpoints to generate Inconsistency Masks.
+* **Student Training:** Training the final student model using IM-filtered supervision.
