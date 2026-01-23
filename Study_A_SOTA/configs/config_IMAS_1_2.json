@@ -1,0 +1,223 @@
+{
+    "NUM_GENERATIONS": 10,
+    "DATASET_FRACTION": "1_2",
+    "USE_U2PL_DATA_SPLIT": true,
+    "SEED": 806,
+    "BACKBONE": "resnet50",
+    "NUM_CLASSES": 19,
+    "IGNORE_INDEX": 255,
+    "VALIDATION_MODE": "sliding",
+    "SSL_METHOD": "IMAS",
+    "USE_RCS": false,
+    "SKIP_TEACHER_VAL_SUP": false,
+    "DROPOUT_SCHEDULE": {
+        "GEN0": 0.0,
+        "GENX": 0.3
+    },
+    "SUP_AUG": {
+        "CUTMIX_PROB": 0.0,
+        "CLASSMIX_PROB": 0.5
+    },
+    "OPTIMIZERS": {
+        "SGD": {
+            "LR_HEAD": 0.01,
+            "LR_BACKBONE": 0.01,
+            "WEIGHT_DECAY": 0.0005,
+            "MOMENTUM": 0.9,
+            "NESTEROV": false
+        },
+        "ADAMW": {
+            "LR_HEAD": 0.001,
+            "LR_BACKBONE": 0.0001,
+            "WEIGHT_DECAY": 0.02,
+            "BETAS": [
+                0.9,
+                0.999
+            ]
+        },
+        "ADAMW_V2": {
+            "LR_HEAD": 0.0002,
+            "LR_BACKBONE": 5e-06,
+            "WEIGHT_DECAY": 0.01,
+            "BETAS": [
+                0.9,
+                0.999
+            ]
+        }
+    },
+    "LR_FINETUNE_FACTOR": 0.1,
+    "STUDENTS_GEN0": 1,
+    "NUM_EPOCHS_GEN_0": 150,
+    "WARMUP_PCT_GEN0": 0.0,
+    "NUM_EPOCHS_GEN_X": 30,
+    "VAL_START_EPOCH_GEN0": 1,
+    "VAL_START_EPOCH_GENX": 1,
+    "SNAPSHOT_MODELS_GEN0": 5,
+    "SNAPSHOT_MODELS_GENX": 5,
+    "SNAPSHOT_WARMUP_PCT": 1.0,
+    "EMA_ALPHA_GENX": 0.99,
+    "IM_TEACHERS_TOPK": 2,
+    "IM_ERODE": 3,
+    "IM_DILATE": 5,
+    "IM_TTA": true,
+    "SW_OVERLAP": 0.6666666666666666,
+    "SCALE_MIN": 0.5,
+    "SCALE_MAX": 2.0,
+    "USE_STRONG_PSEUDO_AUG": true,
+    "AUG_SCHEDULE_GEN0": {
+        "ENABLED": true,
+        "MODE": "linear",
+        "SCOPE": "step",
+        "START": {
+            "scale_min": 0.5,
+            "scale_max": 2.0,
+            "cj_mag": 0.3,
+            "cj_hue": 0.1,
+            "cj_p": 0.8,
+            "blur_p": 0.5,
+            "blur_sigma_max": 1.5,
+            "gray_p": 0.0
+        },
+        "END": {
+            "scale_min": 0.5,
+            "scale_max": 2.0,
+            "cj_mag": 0.55,
+            "cj_hue": 0.2,
+            "cj_p": 0.95,
+            "blur_p": 0.75,
+            "blur_sigma_max": 1.5,
+            "gray_p": 0.15
+        }
+    },
+    "AUG_SCHEDULE_GENX": {
+        "ENABLED": true,
+        "MODE": "linear",
+        "SCOPE": "step",
+        "START": {
+            "scale_min": 0.5,
+            "scale_max": 2.0,
+            "cj_mag": 0.3,
+            "cj_hue": 0.1,
+            "cj_p": 0.8,
+            "blur_p": 0.5,
+            "blur_sigma_max": 1.5,
+            "gray_p": 0.0
+        },
+        "END": {
+            "scale_min": 0.5,
+            "scale_max": 2.0,
+            "cj_mag": 0.6,
+            "cj_hue": 0.2,
+            "cj_p": 0.95,
+            "blur_p": 0.8,
+            "blur_sigma_max": 1.5,
+            "gray_p": 0.2
+        }
+    },
+    "AUG_SCHEDULE_GENX_PSEUDO": {
+        "ENABLED": true,
+        "MODE": "linear",
+        "SCOPE": "step",
+        "START": {
+            "scale_min": 0.5,
+            "scale_max": 2.0,
+            "cj_mag": 0.6,
+            "cj_hue": 0.2,
+            "cj_p": 0.9,
+            "blur_p": 0.6,
+            "blur_sigma_max": 1.5,
+            "gray_p": 0.05,
+            "strong_ops_p": 2.0
+        },
+        "END": {
+            "scale_min": 0.5,
+            "scale_max": 2.0,
+            "cj_mag": 0.75,
+            "cj_hue": 0.25,
+            "cj_p": 0.98,
+            "blur_p": 0.9,
+            "blur_sigma_max": 1.8,
+            "gray_p": 0.3,
+            "strong_ops_p": 4.0
+        }
+    },
+    "LOSS_GEN0": "ohem",
+    "LOSS_GENX": "ce_lovasz",
+    "OHEM_KEEP": 0.25,
+    "OHEM_MIN_KEPT": 100000,
+    "OHEM_THRESH": 0.7,
+    "ALGORITHM_CONFIGS": {
+        "SUPERVISED": {
+            "BATCH_SIZE": 16,
+            "VAL_BATCH_SIZE": 16,
+            "CROP_SIZE": 768,
+            "ACTIVE_OPTIMIZER": "ADAMW",
+            "USE_RCS": false,
+            "LOSS_GEN0": "ce_lovasz",
+            "CUTMIX_PROB": 0.0,
+            "CLASSMIX_PROB": 0.0
+        },
+        "IMAS": {
+            "BATCH_SIZE": 16,
+            "VAL_BATCH_SIZE": 16,
+            "CROP_SIZE": 768,
+            "ACTIVE_OPTIMIZER": "ADAMW",
+            "USE_RCS": false,
+            "EMA_ALPHA": 0.996,
+            "LAMBDA_U": 3.0,
+            "CONF_TAU": 0.7,
+            "USE_CUTMIX": true,
+            "LOSS_GEN0": "ohem"
+        },
+        "UNIMATCH": {
+            "BATCH_SIZE": 16,
+            "VAL_BATCH_SIZE": 16,
+            "CROP_SIZE": 768,
+            "ACTIVE_OPTIMIZER": "ADAMW",
+            "USE_RCS": false,
+            "EMA_ALPHA": 0.999,
+            "CONF_THRESH": 0.0,
+            "LAMBDA_U": 1.0,
+            "FP_DROP_RATE": 0.5,
+            "USE_CUTMIX": true,
+            "LOSS_GEN0": "ohem"
+        },
+        "UNIMATCH_V2": {
+            "BATCH_SIZE": 8,
+            "VAL_BATCH_SIZE": 16,
+            "CROP_SIZE": 798,
+            "ACTIVE_OPTIMIZER": "ADAMW_V2",
+            "USE_RCS": false,
+            "NUM_EPOCHS_GEN_0": 150,
+            "VALIDATION_MODE": "sliding",
+            "EMA_ALPHA": 0.996,
+            "CONF_THRESH": 0.0,
+            "LAMBDA_U": 1.0,
+            "USE_CUTMIX": true,
+            "LOSS_GEN0": "ohem"
+        },
+        "U2PL": {
+            "BATCH_SIZE": 8,
+            "VAL_BATCH_SIZE": 16,
+            "CROP_SIZE": 768,
+            "ACTIVE_OPTIMIZER": "ADAMW",
+            "USE_RCS": false,
+            "EMA_ALPHA": 0.999,
+            "LAMBDA_U": 1.0,
+            "LAMBDA_C": 0.1,
+            "DROP_PERCENT": 30.0,
+            "USE_CUTMIX": true,
+            "QUEUE_LEN": 30000,
+            "TEMP": 0.5,
+            "LOSS_GEN0": "ohem"
+        }
+    },
+    "BATCH_SIZE": 16,
+    "VAL_BATCH_SIZE": 16,
+    "CROP_SIZE": 768,
+    "ACTIVE_OPTIMIZER": "ADAMW",
+    "EMA_ALPHA": 0.996,
+    "LAMBDA_U": 3.0,
+    "CONF_TAU": 0.7,
+    "USE_CUTMIX": true
+}
