@@ -40,7 +40,7 @@ create_augment_images_and_masks_ISIC_2018(paths.ISIC_2018_TRAIN_LABELED_IMAGES_D
                                              paths.ISIC_2018_TRAIN_LABELED_AUG_MAIN_DIR)
 
 
-num_imgs = len(os.listdir(paths.ISIC_2018_TRAIN_LABELED_AUG_IMAGES_DIR))
+num_imgs = len(os.listdir(paths.ISIC_2018_TRAIN_FULL_AUG_IMAGES_DIR))
 STEPS_PER_EPOCH = num_imgs // BATCH_SIZE
 
 
@@ -62,7 +62,7 @@ with tf.device('/gpu:0'):
 
             model = get_unet(IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS, NUM_CLASSES, ALPHA, ACTIFU, ACTIFU_OUTPUT)  
 
-            mIoU_val, mIoU_test, mIoU_train_unlabeled, dice_score_val, dice_score_test, dice_score_train_unlabeled = train_ISIC_2018(paths.ISIC_2018_TRAIN_LABELED_AUG_IMAGES_DIR, 
+            mIoU_val, mIoU_test, mIoU_train_unlabeled, dice_score_val, dice_score_test, dice_score_train_unlabeled = train_ISIC_2018(paths.ISIC_2018_TRAIN_FULL_AUG_IMAGES_DIR, 
                                                                                                                                     paths.ISIC_2018_VAL_IMAGES_DIR, 
                                                                                                                                     paths.ISIC_2018_VAL_MASKS_DIR,
                                                                                                                                     paths.ISIC_2018_TEST_IMAGES_DIR,

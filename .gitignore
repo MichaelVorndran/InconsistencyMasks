@@ -1,0 +1,19 @@
+﻿################################################################################
+# Diese .gitignore-Datei wurde von Microsoft(R) Visual Studio automatisch erstellt.
+################################################################################
+
+/__pycache__
+/SUIM/__pycache__
+/Cityscapes/__pycache__
+.vs/
+/Study_B_Scratch/SUIM/__pycache__
+/Study_B_Scratch/__pycache__
+/Study_B_Scratch/Cityscapes/test.py
+/Study_B_Scratch/Cityscapes/test_gemini.py
+/Study_B_Scratch/Cityscapes/__pycache__
+/Study_B_Scratch/Cityscapes/22_Cityscapes_U2PL._oldpy
+/Study_B_Scratch/SUIM/22_SUIM_U2PL Micro Batch.py
+/test_best_weights.h5
+/functions_ALL_WORKING_U2PL_SLOW.py
+/functions_backup_240825.py
+/functions_Backup_before_cleanup_270825.py

@@ -196,8 +196,8 @@ class ImagePreprocessor:
 
 
 def main():
-    base_img_path = paths.HELA_ORG_DIR # 'D:/EBAS/Hela/Original_Data/'
-    base_crop_path = paths.HELA_BASE_DIR    # 'D:/EBAS/Hela/'
+    base_img_path = paths.HELA_ORG_DIR 
+    base_crop_path = paths.HELA_BASE_DIR 
     data_sets = ['train_full', 'val', 'test']
 
     USE_MOD_POS_SIZE = config['HELA']['USE_MOD_POS_SIZE'].lower() == 'true'

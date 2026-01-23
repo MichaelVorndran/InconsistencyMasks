@@ -57,14 +57,14 @@ brightness_range_alphas = [(0.9, 1.1), (0.8, 1.2), (0.7, 1.3), (0.6, 1.4), (0.5,
 brightness_range_betas = [(-5, 5), (-10, 10), (-15, 15), (-20, 20), (-25, 25)]
 
 
-with tf.device('/gpu:0'):
+with tf.device('/gpu:1'):
 
-    for runid in range(1,4):
+    for runid in range(1,2):
 
 
         for n in range(2,3):
 
-            for gen in range(0,5):
+            for gen in range(0,2):
 
                 modelname_benchmarks = []
                 best_model_filepaths_h5 = []

@@ -1,11 +1,21 @@
 import sys
 import os
 import configparser
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+CURRENT_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(CURRENT_SCRIPT_DIR)
+
+config_path = os.path.join(CURRENT_SCRIPT_DIR, 'config.ini')
 
 config = configparser.ConfigParser()
-config.read(os.path.join('config.ini'))
+
+if not os.path.exists(config_path):
+    print(f"Error: Config file not found at {config_path}")
+else:
+    config.read(config_path)
+
+
+
 
 ISIC_2018_BASE_DIR = config['ISIC_2018']['BASE_DIR']
 
@@ -18,6 +28,10 @@ ISIC_2018_ORG_TEST_MASKS_DIR = os.path.join(ISIC_2018_BASE_DIR, 'original_data',
 
 ISIC_2018_TRAIN_FULL_IMAGES_DIR = os.path.join(ISIC_2018_BASE_DIR, 'train_full', 'images')        
 ISIC_2018_TRAIN_FULL_MASKS_DIR = os.path.join(ISIC_2018_BASE_DIR, 'train_full', 'masks')       
+
+ISIC_2018_TRAIN_FULL_AUG_MAIN_DIR = os.path.join(ISIC_2018_BASE_DIR, 'train_full_aug')
+ISIC_2018_TRAIN_FULL_AUG_IMAGES_DIR = os.path.join(ISIC_2018_TRAIN_FULL_AUG_MAIN_DIR, 'images')        
+ISIC_2018_TRAIN_FULL_AUG_MASKS_DIR = os.path.join(ISIC_2018_TRAIN_FULL_AUG_MAIN_DIR, 'masks')    
 
 ISIC_2018_TRAIN_LABELED_MAIN_DIR = os.path.join(ISIC_2018_BASE_DIR, 'train_labeled')
 ISIC_2018_TRAIN_LABELED_IMAGES_DIR = os.path.join(ISIC_2018_TRAIN_LABELED_MAIN_DIR, 'images')
@@ -69,6 +83,13 @@ HELA_TRAIN_FULL_ALIVE_DIR = os.path.join(HELA_TRAIN_FULL_DIR, 'alive')
 HELA_TRAIN_FULL_DEAD_DIR = os.path.join(HELA_TRAIN_FULL_DIR, 'dead')
 HELA_TRAIN_FULL_POS_DIR = os.path.join(HELA_TRAIN_FULL_DIR, 'pos')
 HELA_TRAIN_FULL_MOD_POS_DIR = os.path.join(HELA_TRAIN_FULL_DIR, 'mod_position')
+
+HELA_TRAIN_FULL_AUG_DIR = os.path.join(HELA_BASE_DIR, 'train_full_aug')
+HELA_TRAIN_FULL_AUG_BRIGHTFIELD_DIR = os.path.join(HELA_TRAIN_FULL_AUG_DIR, 'brightfield')
+HELA_TRAIN_FULL_AUG_ALIVE_DIR = os.path.join(HELA_TRAIN_FULL_AUG_DIR, 'alive')
+HELA_TRAIN_FULL_AUG_DEAD_DIR = os.path.join(HELA_TRAIN_FULL_AUG_DIR, 'dead')
+HELA_TRAIN_FULL_AUG_POS_DIR = os.path.join(HELA_TRAIN_FULL_AUG_DIR, 'pos')
+HELA_TRAIN_FULL_AUG_MOD_POS_DIR = os.path.join(HELA_TRAIN_FULL_AUG_DIR, 'mod_position')
 
 HELA_TRAIN_LABELED_DIR = os.path.join(HELA_BASE_DIR, 'train_labeled')
 HELA_TRAIN_LABELED_BRIGHTFIELD_DIR = os.path.join(HELA_TRAIN_LABELED_DIR, 'brightfield')
@@ -136,6 +157,10 @@ SUIM_TRAIN_FULL_MAIN_DIR = os.path.join(SUIM_BASE_DIR, 'train_full')
 SUIM_TRAIN_FULL_IMAGES_DIR = os.path.join(SUIM_TRAIN_FULL_MAIN_DIR, 'images')
 SUIM_TRAIN_FULL_MASKS_DIR = os.path.join(SUIM_TRAIN_FULL_MAIN_DIR, 'masks')
 
+SUIM_TRAIN_FULL_AUG_MAIN_DIR = os.path.join(SUIM_BASE_DIR, 'train_full_aug')
+SUIM_TRAIN_FULL_AUG_IMAGES_DIR = os.path.join(SUIM_TRAIN_FULL_AUG_MAIN_DIR, 'images')
+SUIM_TRAIN_FULL_AUG_MASKS_DIR = os.path.join(SUIM_TRAIN_FULL_AUG_MAIN_DIR, 'masks')
+
 SUIM_TRAIN_LABELED_MAIN_DIR = os.path.join(SUIM_BASE_DIR, 'train_labeled')
 SUIM_TRAIN_LABELED_IMAGES_DIR = os.path.join(SUIM_TRAIN_LABELED_MAIN_DIR, 'images')
 SUIM_TRAIN_LABELED_MASKS_DIR = os.path.join(SUIM_TRAIN_LABELED_MAIN_DIR, 'masks')    
@@ -176,6 +201,10 @@ CITYSCAPES_ORG_VAL_TEST_MASKS_DIR = os.path.join(CITYSCAPES_ORG_DATA_DIR, 'val_t
 CITYSCAPES_TRAIN_FULL_MAIN_DIR = os.path.join(CITYSCAPES_BASE_DIR, 'train_full')
 CITYSCAPES_TRAIN_FULL_IMAGES_DIR = os.path.join(CITYSCAPES_TRAIN_FULL_MAIN_DIR, 'images')
 CITYSCAPES_TRAIN_FULL_MASKS_DIR = os.path.join(CITYSCAPES_TRAIN_FULL_MAIN_DIR, 'masks')
+
+CITYSCAPES_TRAIN_FULL_AUG_MAIN_DIR = os.path.join(CITYSCAPES_BASE_DIR, 'train_full_aug')
+CITYSCAPES_TRAIN_FULL_AUG_IMAGES_DIR = os.path.join(CITYSCAPES_TRAIN_FULL_AUG_MAIN_DIR, 'images')
+CITYSCAPES_TRAIN_FULL_AUG_MASKS_DIR = os.path.join(CITYSCAPES_TRAIN_FULL_AUG_MAIN_DIR, 'masks')
 
 CITYSCAPES_TRAIN_LABELED_MAIN_DIR = os.path.join(CITYSCAPES_BASE_DIR, 'train_labeled')
 CITYSCAPES_TRAIN_LABELED_IMAGES_DIR = os.path.join(CITYSCAPES_TRAIN_LABELED_MAIN_DIR, 'images')
