@@ -1,0 +1,13 @@
+torch>=2.0.0
+torchvision>=0.15.0
+numpy
+pandas
+opencv-python
+matplotlib
+tqdm
+pyyaml
+scikit-learn
+Pillow
+scipy
+# Optional: xformers is often required for efficient DINOv2 training
+xformers
