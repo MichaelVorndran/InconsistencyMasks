@@ -24,7 +24,7 @@ Creation of an Inconsistency Masks with two models: (a) & (b) binary prediction 
 We demonstrate IM's effectiveness as a general performance enhancer. When applied to leading SSL methods, IM consistently boosts accuracy across **ResNet-50** and **DINOv2** backbones.
 
 *   **Codebase:** TensorFlow
-*   **Protocol:** Standard Cityscapes Semi-Supervised Benchmark (1/16, 1/8, 1/4, 1/2 splits).
+*   **Protocol:** Standard Cityscapes Semi-Supervised Benchmark (1/16, 1/8, 1/4, 1/2 splits). We thank the authors of [U<sup>2</sup>PL](https://github.com/Haochen-Wang409/U2PL) for providing these data partitions.
 
 | Method | Backbone | 1/16 Split | 1/8 Split | 1/4 Split | 1/2 Split |
 | :--- | :--- | :---: | :---: | :---: | :---: |
