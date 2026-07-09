@@ -137,13 +137,10 @@ class ignore_im_categorical_crossentropy(tf.keras.losses.Loss):
         self.cce = tf.keras.losses.CategoricalCrossentropy(reduction=tf.keras.losses.Reduction.NONE)
 
     def call(self, y_true, y_pred):
-        loss = self.cce(y_true, y_pred)
-        
-        # Create a mask to remove the loss for class 0
-        mask = 1. - y_true[:, 0]
+        loss = tf.cast(self.cce(y_true, y_pred), tf.float32)
+        mask = tf.cast(1. - y_true[..., 0], tf.float32)
         loss *= mask
-            
-        return tf.reduce_mean(loss)
+        return tf.reduce_sum(loss) / (tf.reduce_sum(mask) + 1e-7)
 
 
 
@@ -328,6 +325,7 @@ def train_multiclass(train_images_dir,
     model.fit(train_dataset, epochs=NUM_EPOCHS, steps_per_epoch=steps_per_epoch, callbacks=callbacks, validation_data=val_dataset)
 
     best_model = tf.keras.models.load_model(filepath_h5, custom_objects={'MeanIoU': MeanIoU})
+    best_model = tf.keras.models.load_model(filepath_h5, custom_objects={'MeanIoU': MeanIoU}, compile=False)
 
     mPA_val, mIoU_val = benchmark_multiclass(best_model, val_images_dir, val_masks_dir, val_pred_dir, h, w, c, class_to_color_mapping, print_results=print_results)
     mPA_test, mIoU_test  = benchmark_multiclass(best_model, test_images_dir, test_masks_dir, test_pred_dir, h, w, c, class_to_color_mapping, print_results=print_results)
