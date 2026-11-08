@@ -53,7 +53,7 @@ with tf.device('/gpu:0'):
     for runid in range(1, 4):
         modelname = f'{dataset_name}_{approach}_{runid}'
         all_run_benchmarks = []
-        base_model_path = os.path.join(paths.HELA_MODEL_DIR, f'HeLa_subset_{runid}_topK_1.h5')
+        base_model_path = os.path.join(paths.HELA_MODEL_DIR, f'HELA_subset_{runid}_topK_1.h5')
         
         for i in range(5):
             print(f"\n--- Running Repetition {i+1}/5 for {modelname} ---")

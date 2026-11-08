@@ -85,7 +85,7 @@ with tf.device('/gpu:0'):
             gc.collect()
 
 
-        sorted_mIoU_val = sorted(modelname_benchmarks, key=lambda x: x[6], reverse=False)
+        sorted_mIoU_val = sorted(modelname_benchmarks, key=lambda x: x[3], reverse=False)
         
         top_K_mIoUs = sorted_mIoU_val[:TOP_Ks]
         

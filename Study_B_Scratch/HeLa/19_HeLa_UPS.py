@@ -65,7 +65,7 @@ SUPERVISED_WARMUP_STEPS = 50
 with tf.device('/gpu:0'):
     for runid in range(1, 4):
         modelname = f'{dataset_name}_{approach}_{runid}'
-        base_model_path = os.path.join(paths.HELA_MODEL_DIR, f'HeLa_subset_{runid}_topK_1.h5')
+        base_model_path = os.path.join(paths.HELA_MODEL_DIR, f'HELA_subset_{runid}_topK_1.h5')
 
         l_imgs_np, lA, lD, lP = load_images_and_masks_hela(paths.HELA_TRAIN_LABELED_DIR)
         lab_masks_np = np.stack([lA, lD, lP], axis=-1).astype(np.float32)
