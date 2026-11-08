@@ -23,25 +23,25 @@ Creation of an Inconsistency Masks with two models: (a) & (b) binary prediction 
 
 We demonstrate IM's effectiveness as a general performance enhancer. When applied to leading SSL methods, IM consistently boosts accuracy across **ResNet-50** and **DINOv2** backbones.
 
-*   **Codebase:** TensorFlow
-*   **Protocol:** Standard Cityscapes Semi-Supervised Benchmark (1/16, 1/8, 1/4, 1/2 splits). We thank the authors of [U<sup>2</sup>PL](https://github.com/Haochen-Wang409/U2PL) for providing these data partitions.
+*   **Codebase:** PyTorch
+*   **Protocol:** Standard Cityscapes Semi-Supervised Benchmark (1/16, 1/8, 1/4, 1/2 splits); mIoU on the Cityscapes validation set, mean ± s.d. over 3 runs. Gains of IM in parentheses; * p < 0.05, ** p < 0.01, *** p < 0.001 (paired t-test, n = 3). We thank the authors of [U<sup>2</sup>PL](https://github.com/Haochen-Wang409/U2PL) for providing these data partitions.
 
 | Method | Backbone | 1/16 Split | 1/8 Split | 1/4 Split | 1/2 Split |
 | :--- | :--- | :---: | :---: | :---: | :---: |
 | **Standard Architectures** | | | | | |
-| Supervised Only | ResNet-50 | 64.93 | 70.20 | 74.22 | 77.65 |
-| **+ IM (Ours)** | **ResNet-50** | **72.53** *(+7.60)* | **74.47** *(+4.27)* | **77.95** *(+3.73)* | **78.78** *(+1.13)* |
-| U²PL | ResNet-50 | 72.53 | 74.89 | 77.16 | 78.39 |
-| **+ IM (Ours)** | **ResNet-50** | **74.52** *(+1.99)* | **76.90** *(+2.01)* | **77.77** *(+0.61)* | **78.91** *(+0.52)* |
-| UniMatch | ResNet-50 | 73.49 | 76.26 | 78.05 | 79.05 |
-| **+ IM (Ours)** | **ResNet-50** | **74.10** *(+0.61)* | **77.38** *(+1.12)* | **78.58** *(+0.53)* | **79.60** *(+0.55)* |
-| iMAS | ResNet-50 | 74.07 | 76.32 | 77.80 | 79.01 |
-| **+ IM (Ours)** | **ResNet-50** | **75.15** *(+1.08)* | **77.45** *(+1.13)* | **78.43** *(+0.63)* | **79.41** *(+0.40)* |
+| Supervised Only | ResNet-50 | 64.53 ± 0.35 | 70.39 ± 0.24 | 73.61 ± 0.56 | 77.82 ± 0.15 |
+| **+ IM (Ours)** | ResNet-50 | 71.77 ± 0.80 (+7.24\*\*) | 74.45 ± 0.17 (+4.07\*\*\*) | 77.04 ± 0.79 (+3.43\*\*) | 78.86 ± 0.37 (+1.04\*) |
+| U²PL | ResNet-50 | 72.98 ± 0.41 | 75.16 ± 0.24 | 77.71 ± 0.50 | 78.71 ± 0.28 |
+| **+ IM (Ours)** | ResNet-50 | 74.84 ± 0.35 (+1.86\*\*) | 76.83 ± 0.19 (+1.68\*) | 78.26 ± 0.43 (+0.55\*) | 79.18 ± 0.24 (+0.47\*\*) |
+| UniMatch | ResNet-50 | 74.14 ± 0.59 | 76.70 ± 0.38 | 78.30 ± 0.22 | 79.11 ± 0.13 |
+| **+ IM (Ours)** | ResNet-50 | 74.53 ± 0.45 (+0.39) | **77.57 ± 0.17** (+0.87\*) | **78.96 ± 0.35** (+0.66\*) | **79.64 ± 0.08** (+0.53\*\*) |
+| iMAS | ResNet-50 | 73.96 ± 0.18 | 76.24 ± 0.36 | 77.93 ± 0.14 | 78.79 ± 0.21 |
+| **+ IM (Ours)** | ResNet-50 | **75.20 ± 0.13** (+1.24\*\*) | 77.36 ± 0.21 (+1.11\*\*) | 78.45 ± 0.06 (+0.52\*) | 79.14 ± 0.26 (+0.35\*\*) |
 | **Foundation Models** | | | | | |
-| UniMatch v2 | DINOv2-S | 80.67 | 81.71 | 82.32 | 82.84 |
-| **+ IM (Ours)** | **DINOv2-S** | **80.97** *(+0.30)* | **81.93** *(+0.22)* | **82.59** *(+0.27)* | **83.07** *(+0.23)* |
-| SegKC | DINOv2-S | 80.98 | 82.43 | 82.87 | 83.05 |
-| **+ IM (Ours)** | **DINOv2-S** | **81.61** *(+0.63)* | **82.80** *(+0.37)* | **83.14** *(+0.27)* | **83.31** *(+0.26)* |
+| UniMatch v2 | DINOv2-S | 80.64 ± 0.10 | 81.59 ± 0.11 | 82.27 ± 0.04 | 82.89 ± 0.10 |
+| **+ IM (Ours)** | DINOv2-S | 80.99 ± 0.14 (+0.34\*\*) | 81.89 ± 0.04 (+0.30\*) | 82.61 ± 0.04 (+0.34\*) | 83.15 ± 0.08 (+0.27\*) |
+| SegKC | DINOv2-S | 80.33 ± 0.57 | 82.20 ± 0.20 | 82.88 ± 0.17 | 83.09 ± 0.07 |
+| **+ IM (Ours)** | DINOv2-S | **81.23 ± 0.34** (+0.90\*) | **82.64 ± 0.15** (+0.44\*\*) | **83.16 ± 0.07** (+0.27\*) | **83.24 ± 0.10** (+0.15) |
 
 
 ---
@@ -50,29 +50,36 @@ We demonstrate IM's effectiveness as a general performance enhancer. When applie
 
 We evaluate IM in challenging scenarios: **training entirely from scratch** (random initialization) with only **10% labeled data**. IM significantly outperforms standard SSL baselines, which often suffer from model collapse or stagnation in these regimes.
 
-*   **Codebase:** PyTorch
+*   **Codebase:** TensorFlow / Keras
 *   **Protocol:** Lightweight `1x1 U-Net` trained from scratch on 10% labeled data.
 *   **Datasets:** Medical (ISIC 2018), Microscopy (HeLa), Underwater (SUIM), Urban (Cityscapes).
 
 | Method | ISIC 2018 <br> (IoU ↑) | HeLa <br> (MCCE ↓) | SUIM <br> (mIoU ↑) | Cityscapes <br> (mIoU ↑) |
-| :--- | :--- | :--- | :--- | :--- |
+| :--- | :---: | :---: | :---: | :---: |
 | **Reference** | | | | |
-| Labeled Only (LDT) | 67.1 | 9.9 | 35.7 | 32.0 |
-| Aug. Labeled (ALDT) | 72.4 | 3.3 | 43.2 | 37.4 |
-| Full Dataset (FDT) | 75.1 | 2.5 | 51.7 | 45.6 |
-| Aug. Full Dataset (AFDT) | 77.3 | 2.4 | 52.7 | 45.8 |
-| **SOTA Baselines** | | | | |
-| FixMatch | 70.3 | 42.6 | 36.1 | 36.6 |
-| FPL | 68.4 | 30.6 | 25.7 | 15.2 |
-| CrossMatch | 65.7 | 3.6 | 36.5 | 34.7 |
-| iMAS | 66.1 | 13.8 | 33.7 | 35.2 |
-| U²PL | 67.5 | 22.6 | 36.6 | 35.5 |
-| UniMatch | 64.0 | 7.7 | 26.5 | 24.3 |
+| Labeled Only (LDT) | 65.2 ± 1.8 | 12.62 ± 4.29 | 32.8 ± 1.6 | 30.9 ± 1.7 |
+| Aug. Labeled (ALDT) | 72.0 ± 0.7 | 3.76 ± 0.77 | 42.5 ± 0.5 | 37.1 ± 0.3 |
+| Full Dataset (FDT) | 74.5 ± 0.6 | 2.55 ± 0.08 | 50.6 ± 1.0 | 45.3 ± 0.4 |
+| Aug. Full Dataset (AFDT) | 77.1 ± 0.2 | 2.64 ± 0.20 | 51.3 ± 0.5 | 45.6 ± 0.2 |
+| **Internal Baselines** | | | | |
+| Model Ensemble (ME) | 68.7 ± 0.8 | 5.08 ± 0.90 | 34.6 ± 2.3 | 34.5 ± 0.2 |
+| Noisy Student (NS) | 72.4 ± 1.8 | 2.94 ± 0.12 | 42.2 ± 0.9 | 39.8 ± 0.2 |
+| **SSL Baselines** | | | | |
+| FixMatch | 68.3 ± 2.6 | 43.78 ± 1.26 | 33.3 ± 2.6 | 35.5 ± 1.1 |
+| FPL | 62.6 ± 5.7 | 41.96 ± 9.98 | 24.0 ± 3.4 | 13.3 ± 1.9 |
+| CrossMatch | 64.8 ± 0.3 | 4.55 ± 1.02 | 35.6 ± 0.2 | 33.2 ± 2.1 |
+| iMAS | 63.2 ± 4.0 | 16.43 ± 3.49 | 32.7 ± 1.5 | 35.1 ± 0.1 |
+| UPS | 34.6 ± 3.0 | 28.96 ± 4.45 | 22.8 ± 3.5 | – |
+| U²PL | 64.2 ± 2.9 | 27.20 ± 5.50 | 35.5 ± 1.0 | 35.4 ± 0.2 |
+| UniMatch | 57.7 ± 7.4 | 34.62 ± 23.40 | 25.2 ± 1.2 | 23.3 ± 1.2 |
 | **Ours** | | | | |
-| Model Ensemble (ME) | 69.0 | 3.9 | 37.1 | 35.0 |
-| **IM (Ours)** | **72.3** | **2.8** | **44.3** | **40.7** |
+| IM (Ours) | 71.6 ± 0.6 | 2.99 ± 0.25 | 43.1 ± 1.4 | 40.4 ± 0.3 |
+| IM+ (Ours) | 72.7 ± 0.7 | **2.71 ± 0.07** | 44.6 ± 0.7 | 42.3 ± 0.3 |
+| IM++ (Ours) | 75.6 ± 0.6 | 2.72 ± 0.17 | 45.7 ± 0.3 | **42.5 ± 0.3** |
+| AIM+ (Ours) | 75.0 ± 0.2 | **2.71 ± 0.19** | **47.1 ± 1.0** | 41.0 ± 0.1 |
+| AIM++ (Ours) | **76.4 ± 0.6** | 2.82 ± 0.04 | **47.1 ± 1.2** | 42.1 ± 0.4 |
 
-*(Note: For HeLa, MCCE represents cell count error, so lower is better.)*
+*Mean ± s.d. over 3 runs on the test sets. In each run, the model with the best validation score is selected and its test score is reported; generations and settings are also chosen on the validation set. Best SSL result per dataset in bold. For HeLa, MCCE is the mean cell count error, so lower is better. UPS could not be run on Cityscapes (memory).*
 
 
 ---
@@ -91,5 +98,3 @@ I would like to extend my heartfelt gratitude to the Deep Learning and Open Sour
 
 ## Paper
 https://arxiv.org/abs/2401.14387
-
-
